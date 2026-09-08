@@ -8,6 +8,11 @@ export function CartProvider({ children }) {
     return stored ? JSON.parse(stored) : [];
   });
 
+  const [shippingAddress, setShippingAddressState] = useState(() => {
+    const stored = localStorage.getItem('shippingAddress');
+    return stored ? JSON.parse(stored) : null;
+  });
+
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
@@ -40,8 +45,15 @@ export function CartProvider({ children }) {
     setCartItems((prev) => prev.filter((item) => item._id !== id));
   };
 
+  const saveShippingAddress = (address) => {
+    setShippingAddressState(address);
+    localStorage.setItem('shippingAddress', JSON.stringify(address));
+  };
+
   const clearCart = () => {
     setCartItems([]);
+    setShippingAddressState(null);
+    localStorage.removeItem('shippingAddress');
   };
 
   const itemsCount = cartItems.reduce((sum, item) => sum + item.qty, 0);
@@ -55,8 +67,10 @@ export function CartProvider({ children }) {
     <CartContext.Provider
       value={{
         cartItems,
+        shippingAddress,
         addToCart,
         removeFromCart,
+        saveShippingAddress,
         clearCart,
         itemsCount,
         totalPrice,

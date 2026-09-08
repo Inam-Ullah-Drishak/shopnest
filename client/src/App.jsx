@@ -6,6 +6,9 @@ import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import ProfilePage from './pages/ProfilePage.jsx';
 import CartPage from './pages/CartPage.jsx';
+import ShippingPage from './pages/ShippingPage.jsx';
+import PlaceOrderPage from './pages/PlaceOrderPage.jsx';
+import OrderPage from './pages/OrderPage.jsx';
 
 function App() {
   return (
@@ -19,6 +22,9 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/cart" element={<CartPage />} />
+          <Route path="/shipping" element={<ShippingPage />} />
+          <Route path="/placeorder" element={<PlaceOrderPage />} />
+          <Route path="/order/:id" element={<OrderPage />} />
         </Routes>
       </main>
     </>

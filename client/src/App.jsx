@@ -1,38 +1,27 @@
-import { useState, useEffect } from 'react';
-import axios from 'axios';
+import { Routes, Route } from 'react-router-dom';
+import Header from './components/Header.jsx';
+import HomePage from './pages/HomePage.jsx';
+import ProductPage from './pages/ProductPage.jsx';
+import LoginPage from './pages/LoginPage.jsx';
+import RegisterPage from './pages/RegisterPage.jsx';
+import ProfilePage from './pages/ProfilePage.jsx';
+import CartPage from './pages/CartPage.jsx';
 
 function App() {
-  const [products, setProducts] = useState([]);
-  const [loading, setLoading] = useState(true);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const { data } = await axios.get('/api/products');
-        setProducts(data);
-      } catch (error) {
-        console.error(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  if (loading) return <p className="p-8">Loading...</p>;
-
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Products</h1>
-      <ul className="space-y-2">
-        {products.map((product) => (
-          <li key={product._id} className="border p-3 rounded">
-            {product.name} — Rs {product.price}
-          </li>
-        ))}
-      </ul>
-    </div>
+    <>
+      <Header />
+      <main className="max-w-6xl mx-auto">
+        <Routes>
+          <Route path="/" element={<HomePage />} />
+          <Route path="/product/:id" element={<ProductPage />} />
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/cart" element={<CartPage />} />
+        </Routes>
+      </main>
+    </>
   );
 }
 

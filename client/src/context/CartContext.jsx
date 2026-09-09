@@ -24,13 +24,14 @@ export function CartProvider({ children }) {
 
   const addToCart = (product, qty, variant = null) => {
     const key = lineKey(product._id, variant?._id);
+    const quantity = Number(qty) || 1;
 
     setCartItems((prev) => {
       const exists = prev.find((item) => item.key === key);
 
       if (exists) {
         return prev.map((item) =>
-          item.key === key ? { ...item, qty } : item
+          item.key === key ? { ...item, qty: quantity } : item
         );
       }
 
@@ -47,7 +48,7 @@ export function CartProvider({ children }) {
           price: variant ? variant.price : product.price,
           image: variant?.image || product.image,
           countInStock: variant ? variant.countInStock : product.countInStock,
-          qty,
+          qty: quantity,
         },
       ];
     });
@@ -74,10 +75,14 @@ export function CartProvider({ children }) {
     localStorage.removeItem('shippingAddress');
   };
 
-  const itemsCount = cartItems.reduce((sum, item) => sum + item.qty, 0);
+  // qty can briefly be '' while the user is typing, so coerce it
+  const itemsCount = cartItems.reduce(
+    (sum, item) => sum + (Number(item.qty) || 0),
+    0
+  );
 
   const totalPrice = cartItems.reduce(
-    (sum, item) => sum + item.price * item.qty,
+    (sum, item) => sum + item.price * (Number(item.qty) || 0),
     0
   );
 

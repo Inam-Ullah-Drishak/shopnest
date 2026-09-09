@@ -12,6 +12,7 @@ import {
   Link2,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
+import VariantEditor from '../../components/admin/VariantEditor.jsx';
 
 function ProductFormPage() {
   const { id } = useParams();
@@ -29,6 +30,9 @@ function ProductFormPage() {
   });
 
   const [images, setImages] = useState([]);
+  const [optionTypes, setOptionTypes] = useState([]);
+  const [variants, setVariants] = useState([]);
+
   const [urlInput, setUrlInput] = useState('');
   const [categories, setCategories] = useState([]);
 
@@ -36,6 +40,8 @@ function ProductFormPage() {
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
+
+  const hasVariants = variants.length > 0;
 
   const setField = (field, value) =>
     setForm((prev) => ({ ...prev, [field]: value }));
@@ -59,6 +65,7 @@ function ProductFormPage() {
     const fetchProduct = async () => {
       try {
         const { data } = await axios.get(`/api/products/${id}`);
+
         setForm({
           name: data.name,
           description: data.description,
@@ -66,7 +73,23 @@ function ProductFormPage() {
           category: data.category,
           countInStock: data.countInStock,
         });
+
         setImages(data.images || []);
+        setOptionTypes(
+          (data.optionTypes || []).map((t) => ({
+            name: t.name,
+            values: [...t.values],
+          }))
+        );
+        setVariants(
+          (data.variants || []).map((v) => ({
+            options: v.options.map((o) => ({ name: o.name, value: o.value })),
+            sku: v.sku || '',
+            price: v.price,
+            countInStock: v.countInStock,
+            image: v.image || '',
+          }))
+        );
       } catch (err) {
         setError(err.response?.data?.message || 'Could not load this product');
       } finally {
@@ -96,7 +119,9 @@ function ProductFormPage() {
         setImages((prev) => [...prev, data.image]);
       }
     } catch (err) {
-      setError(err.response?.data?.message || 'Upload failed. Try another file.');
+      setError(
+        err.response?.data?.message || 'Upload failed. Try another file.'
+      );
     } finally {
       setUploading(false);
       e.target.value = '';
@@ -117,27 +142,45 @@ function ProductFormPage() {
     setError('');
   };
 
-  const removeImage = (index) =>
+  const removeImage = (index) => {
+    const removed = images[index];
     setImages((prev) => prev.filter((_, i) => i !== index));
 
+    // Any variant pointing at this image falls back to the main one
+    setVariants((prev) =>
+      prev.map((v) => (v.image === removed ? { ...v, image: '' } : v))
+    );
+  };
+
   const makePrimary = (index) =>
-    setImages((prev) => [
-      prev[index],
-      ...prev.filter((_, i) => i !== index),
-    ]);
+    setImages((prev) => [prev[index], ...prev.filter((_, i) => i !== index)]);
 
   const submitHandler = async (e) => {
     e.preventDefault();
     setError('');
+
+    if (hasVariants && variants.some((v) => v.price <= 0)) {
+      setError('Every variant needs a price above zero');
+      return;
+    }
+
     setSaving(true);
 
     const payload = {
       name: form.name,
       description: form.description,
-      price: Number(form.price) || 0,
+      price: hasVariants
+        ? Math.min(...variants.map((v) => v.price))
+        : Number(form.price) || 0,
       category: form.category,
-      countInStock: Number(form.countInStock) || 0,
+      countInStock: hasVariants
+        ? variants.reduce((sum, v) => sum + v.countInStock, 0)
+        : Number(form.countInStock) || 0,
       images,
+      optionTypes: hasVariants
+        ? optionTypes.filter((t) => t.name.trim() && t.values.length > 0)
+        : [],
+      variants,
     };
 
     try {
@@ -164,7 +207,7 @@ function ProductFormPage() {
   }
 
   return (
-    <div className="max-w-2xl mx-auto p-8">
+    <div className="max-w-3xl mx-auto p-8">
       <Link
         to="/admin/products"
         className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
@@ -195,7 +238,11 @@ function ProductFormPage() {
                   key={`${src}-${index}`}
                   className="relative aspect-square border rounded-lg overflow-hidden bg-gray-50 group"
                 >
-                  <img src={src} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={src}
+                    alt=""
+                    className="w-full h-full object-cover"
+                  />
 
                   {index === 0 && (
                     <span className="absolute bottom-0 inset-x-0 bg-gray-900/75 text-white text-[11px] text-center py-0.5">
@@ -234,30 +281,28 @@ function ProductFormPage() {
             </div>
           )}
 
-          <div className="flex flex-wrap gap-2">
-            <label
-              className={`inline-flex items-center gap-2 border rounded-lg px-4 py-2 text-sm ${
-                uploading
-                  ? 'opacity-50 cursor-wait'
-                  : 'cursor-pointer hover:bg-gray-50'
-              }`}
-            >
-              {uploading ? (
-                <Loader2 size={16} className="animate-spin" />
-              ) : (
-                <Upload size={16} />
-              )}
-              {uploading ? 'Uploading' : 'Upload images'}
-              <input
-                type="file"
-                accept="image/jpeg,image/png,image/webp"
-                multiple
-                onChange={uploadHandler}
-                disabled={uploading}
-                className="hidden"
-              />
-            </label>
-          </div>
+          <label
+            className={`inline-flex items-center gap-2 border rounded-lg px-4 py-2 text-sm ${
+              uploading
+                ? 'opacity-50 cursor-wait'
+                : 'cursor-pointer hover:bg-gray-50'
+            }`}
+          >
+            {uploading ? (
+              <Loader2 size={16} className="animate-spin" />
+            ) : (
+              <Upload size={16} />
+            )}
+            {uploading ? 'Uploading' : 'Upload images'}
+            <input
+              type="file"
+              accept="image/jpeg,image/png,image/webp"
+              multiple
+              onChange={uploadHandler}
+              disabled={uploading}
+              className="hidden"
+            />
+          </label>
 
           <div className="flex gap-2 mt-2">
             <div className="relative flex-1">
@@ -358,11 +403,21 @@ function ProductFormPage() {
               id="price"
               type="number"
               min="0"
-              value={form.price}
+              value={
+                hasVariants
+                  ? Math.min(...variants.map((v) => v.price))
+                  : form.price
+              }
               onChange={(e) => setField('price', e.target.value)}
-              className="w-full border rounded-lg p-2.5"
-              required
+              disabled={hasVariants}
+              className="w-full border rounded-lg p-2.5 disabled:bg-gray-100 disabled:text-gray-500"
+              required={!hasVariants}
             />
+            {hasVariants && (
+              <p className="text-xs text-gray-500 mt-1">
+                Set per variant below.
+              </p>
+            )}
           </div>
 
           <div>
@@ -373,13 +428,32 @@ function ProductFormPage() {
               id="stock"
               type="number"
               min="0"
-              value={form.countInStock}
+              value={
+                hasVariants
+                  ? variants.reduce((sum, v) => sum + v.countInStock, 0)
+                  : form.countInStock
+              }
               onChange={(e) => setField('countInStock', e.target.value)}
-              className="w-full border rounded-lg p-2.5"
-              required
+              disabled={hasVariants}
+              className="w-full border rounded-lg p-2.5 disabled:bg-gray-100 disabled:text-gray-500"
+              required={!hasVariants}
             />
+            {hasVariants && (
+              <p className="text-xs text-gray-500 mt-1">
+                Total across variants.
+              </p>
+            )}
           </div>
         </div>
+
+        <VariantEditor
+          optionTypes={optionTypes}
+          setOptionTypes={setOptionTypes}
+          variants={variants}
+          setVariants={setVariants}
+          basePrice={form.price}
+          images={images}
+        />
 
         <div className="flex gap-3 pt-2">
           <button
@@ -392,7 +466,7 @@ function ProductFormPage() {
           </button>
 
           <Link
-            to="/admin/product/new"
+            to="/admin/products"
             className="px-5 py-2.5 rounded-lg border hover:bg-gray-50"
           >
             Cancel

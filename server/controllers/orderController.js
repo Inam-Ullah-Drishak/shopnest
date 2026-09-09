@@ -24,26 +24,70 @@ export const createOrder = asyncHandler(async (req, res) => {
 
     if (!dbProduct) {
       res.status(404);
-      throw new Error(`Product not found: ${item.name}`);
+      throw new Error('One of the products is no longer available');
     }
 
-    if (item.qty < 1) {
+    const qty = Number(item.qty);
+
+    if (!Number.isInteger(qty) || qty < 1) {
       res.status(400);
-      throw new Error('Invalid quantity');
+      throw new Error(`Invalid quantity for ${dbProduct.name}`);
     }
 
-    if (dbProduct.countInStock < item.qty) {
-      res.status(400);
-      throw new Error(`Not enough stock for ${dbProduct.name}`);
-    }
+    const hasVariants = dbProduct.variants.length > 0;
 
-    finalItems.push({
-      name: dbProduct.name,
-      qty: item.qty,
-      image: dbProduct.image,
-      price: dbProduct.price,
-      product: dbProduct._id,
-    });
+    if (hasVariants) {
+      if (!item.variantId) {
+        res.status(400);
+        throw new Error(`Choose an option for ${dbProduct.name}`);
+      }
+
+      // Mongoose subdocument lookup by _id
+      const variant = dbProduct.variants.id(item.variantId);
+
+      if (!variant) {
+        res.status(400);
+        throw new Error(`That option is no longer available for ${dbProduct.name}`);
+      }
+
+      if (variant.countInStock < qty) {
+        res.status(400);
+        throw new Error(
+          `Only ${variant.countInStock} left of ${dbProduct.name} (${variant.options
+            .map((o) => o.value)
+            .join(' / ')})`
+        );
+      }
+
+      finalItems.push({
+        name: dbProduct.name,
+        qty,
+        image: variant.image || dbProduct.image,
+        price: variant.price,
+        product: dbProduct._id,
+        variantId: variant._id,
+        variantLabel: variant.options.map((o) => o.value).join(' / '),
+        sku: variant.sku,
+      });
+    } else {
+      if (dbProduct.countInStock < qty) {
+        res.status(400);
+        throw new Error(
+          `Only ${dbProduct.countInStock} left of ${dbProduct.name}`
+        );
+      }
+
+      finalItems.push({
+        name: dbProduct.name,
+        qty,
+        image: dbProduct.image,
+        price: dbProduct.price,
+        product: dbProduct._id,
+        variantId: null,
+        variantLabel: '',
+        sku: '',
+      });
+    }
   }
 
   const itemsPrice = finalItems.reduce(
@@ -131,10 +175,18 @@ export const updateOrderToDelivered = asyncHandler(async (req, res) => {
   }
 
   for (const item of order.orderItems) {
-    await Product.updateOne(
-      { _id: item.product },
-      { $inc: { countInStock: -item.qty } }
-    );
+    if (item.variantId) {
+      // Positional operator: decrement the matched variant only
+      await Product.updateOne(
+        { _id: item.product, 'variants._id': item.variantId },
+        { $inc: { 'variants.$.countInStock': -item.qty } }
+      );
+    } else {
+      await Product.updateOne(
+        { _id: item.product },
+        { $inc: { countInStock: -item.qty } }
+      );
+    }
   }
 
   const updated = await order.save();

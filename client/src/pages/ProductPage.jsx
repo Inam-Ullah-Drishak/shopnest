@@ -5,6 +5,7 @@ import { ArrowLeft, ShoppingCart, Loader2 } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 import ImageGallery from '../components/ImageGallery.jsx';
 import VariantSelector from '../components/VariantSelector.jsx';
+import QuantityInput from '../components/QuantityInput.jsx';
 import { formatPrice } from '../utils/format.js';
 
 function ProductPage() {
@@ -77,7 +78,7 @@ function ProductPage() {
   const canBuy = hasVariants ? Boolean(activeVariant) && inStock : inStock;
 
   const addToCartHandler = () => {
-    addToCart(product, qty, activeVariant);
+    addToCart(product, Number(qty) || 1, activeVariant);
     navigate('/cart');
   };
 
@@ -163,18 +164,12 @@ function ProductPage() {
               <label htmlFor="qty" className="block mb-1 font-medium text-sm">
                 Quantity
               </label>
-              <select
+              <QuantityInput
                 id="qty"
                 value={qty}
-                onChange={(e) => setQty(Number(e.target.value))}
-                className="border rounded-lg p-2.5 w-24"
-              >
-                {[...Array(stock).keys()].map((x) => (
-                  <option key={x + 1} value={x + 1}>
-                    {x + 1}
-                  </option>
-                ))}
-              </select>
+                onChange={setQty}
+                max={stock}
+              />
             </div>
           )}
 

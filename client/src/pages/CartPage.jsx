@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ImageOff, Trash2, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import QuantityInput from '../components/QuantityInput.jsx';
 import { formatPrice } from '../utils/format.js';
 
 function CartPage() {
@@ -75,19 +76,11 @@ function CartPage() {
                 </p>
               </div>
 
-              <select
+              <QuantityInput
                 value={item.qty}
-                onChange={(e) => updateQty(item.key, Number(e.target.value))}
-                className="border rounded-lg p-2"
-              >
-                {[...Array(Math.max(item.countInStock, item.qty)).keys()].map(
-                  (x) => (
-                    <option key={x + 1} value={x + 1}>
-                      {x + 1}
-                    </option>
-                  )
-                )}
-              </select>
+                onChange={(qty) => updateQty(item.key, qty)}
+                max={Math.max(item.countInStock, item.qty)}
+              />
 
               <button
                 onClick={() => removeFromCart(item.key)}
@@ -105,7 +98,7 @@ function CartPage() {
 
           <div className="flex justify-between mb-2 text-sm">
             <span className="text-gray-600">Items</span>
-            <span>{cartItems.reduce((sum, i) => sum + i.qty, 0)}</span>
+            <span>{cartItems.reduce((sum, i) => sum + Number(i.qty || 0), 0)}</span>
           </div>
 
           <div className="flex justify-between font-bold text-lg border-t pt-3 mt-3">

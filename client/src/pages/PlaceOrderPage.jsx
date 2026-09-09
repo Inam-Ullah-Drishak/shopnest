@@ -38,8 +38,8 @@ function PlaceOrderPage() {
       const { data } = await axios.post('/api/orders', {
         orderItems: cartItems.map((item) => ({
           _id: item._id,
-          name: item.name,
-          qty: item.qty,
+          variantId: item.variantId,
+          qty: Number(item.qty) || 1,
         })),
         shippingAddress,
         paymentMethod: 'Cash on Delivery',
@@ -105,7 +105,7 @@ function PlaceOrderPage() {
 
             <div className="space-y-3">
               {cartItems.map((item) => (
-                <div key={item._id} className="flex items-center gap-3">
+                <div key={item.key} className="flex items-center gap-3">
                   <div className="w-12 h-12 shrink-0 rounded border bg-gray-50 overflow-hidden flex items-center justify-center">
                     {item.image ? (
                       <img
@@ -118,19 +118,26 @@ function PlaceOrderPage() {
                     )}
                   </div>
 
-                  <Link
-                    to={`/product/${item._id}`}
-                    className="flex-1 min-w-0 truncate text-sm hover:underline"
-                  >
-                    {item.name}
-                  </Link>
+                  <div className="flex-1 min-w-0">
+                    <Link
+                      to={`/product/${item._id}`}
+                      className="text-sm hover:underline block truncate"
+                    >
+                      {item.name}
+                    </Link>
+                    {item.variantLabel && (
+                      <p className="text-xs text-gray-500">
+                        {item.variantLabel}
+                      </p>
+                    )}
+                  </div>
 
                   <span className="text-sm text-gray-600 shrink-0">
-                    {item.qty} × {formatPrice(item.price)}
+                    {Number(item.qty) || 0} × {formatPrice(item.price)}
                   </span>
 
                   <span className="text-sm font-medium shrink-0 w-28 text-right">
-                    {formatPrice(item.qty * item.price)}
+                    {formatPrice(item.price * (Number(item.qty) || 0))}
                   </span>
                 </div>
               ))}

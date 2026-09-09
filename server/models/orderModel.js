@@ -18,6 +18,11 @@ const orderSchema = new mongoose.Schema(
           required: true,
           ref: 'Product',
         },
+
+        // Snapshot of the chosen variant, if any
+        variantId: { type: mongoose.Schema.Types.ObjectId, default: null },
+        variantLabel: { type: String, default: '' },
+        sku: { type: String, default: '' },
       },
     ],
     shippingAddress: {

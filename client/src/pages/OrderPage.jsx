@@ -137,12 +137,21 @@ function OrderPage() {
                     )}
                   </div>
 
-                  <Link
-                    to={`/product/${item.product}`}
-                    className="flex-1 min-w-0 truncate text-sm hover:underline"
-                  >
-                    {item.name}
-                  </Link>
+                  <div className="flex-1 min-w-0">
+                    <Link
+                      to={`/product/${item.product}`}
+                      className="text-sm hover:underline block truncate"
+                    >
+                      {item.name}
+                    </Link>
+
+                    {item.variantLabel && (
+                      <p className="text-xs text-gray-500">
+                        {item.variantLabel}
+                        {item.sku && ` · SKU ${item.sku}`}
+                      </p>
+                    )}
+                  </div>
 
                   <span className="text-sm text-gray-600 shrink-0">
                     {item.qty} × {formatPrice(item.price)}

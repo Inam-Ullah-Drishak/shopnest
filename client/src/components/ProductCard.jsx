@@ -3,7 +3,11 @@ import { ImageOff } from 'lucide-react';
 import { formatPrice } from '../utils/format.js';
 
 function ProductCard({ product }) {
-  const outOfStock = product.countInStock === 0;
+  const stock = product.totalStock ?? product.countInStock;
+  const outOfStock = stock === 0;
+
+  const hasRange =
+    product.hasVariants && product.minPrice !== product.maxPrice;
 
   return (
     <Link
@@ -37,7 +41,21 @@ function ProductCard({ product }) {
       <div className="p-4">
         <h2 className="font-medium truncate">{product.name}</h2>
         <p className="text-sm text-gray-500">{product.category}</p>
-        <p className="text-lg font-bold mt-2">{formatPrice(product.price)}</p>
+
+        <p className="text-lg font-bold mt-2">
+          {hasRange
+            ? `${formatPrice(product.minPrice)} – ${formatPrice(
+                product.maxPrice
+              )}`
+            : formatPrice(product.minPrice ?? product.price)}
+        </p>
+
+        {product.hasVariants && (
+          <p className="text-xs text-gray-500 mt-1">
+            {product.variants.length}{' '}
+            {product.optionTypes[0]?.name.toLowerCase() || 'option'}s
+          </p>
+        )}
       </div>
     </Link>
   );

@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { ArrowLeft, ShoppingCart, Loader2 } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
+import ImageGallery from '../components/ImageGallery.jsx';
+import { formatPrice } from '../utils/format.js';
 
 function ProductPage() {
   const { id } = useParams();
@@ -10,15 +13,19 @@ function ProductPage() {
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState('');
   const [qty, setQty] = useState(1);
 
   useEffect(() => {
     const fetchProduct = async () => {
+      setLoading(true);
+
       try {
         const { data } = await axios.get(`/api/products/${id}`);
         setProduct(data);
-      } catch (error) {
-        console.error(error.message);
+        setQty(1);
+      } catch (err) {
+        setError(err.response?.data?.message || 'Could not load this product');
       } finally {
         setLoading(false);
       }
@@ -32,41 +39,64 @@ function ProductPage() {
     navigate('/cart');
   };
 
-  if (loading) return <p className="p-8">Loading...</p>;
-  if (!product) return <p className="p-8">Product not found</p>;
+  if (loading) {
+    return (
+      <div className="p-8 flex items-center gap-2 text-gray-500">
+        <Loader2 size={18} className="animate-spin" />
+        Loading
+      </div>
+    );
+  }
+
+  if (error) return <p className="p-8 text-red-600">{error}</p>;
+  if (!product) return null;
+
+  const inStock = product.countInStock > 0;
 
   return (
     <div className="p-8">
-      <Link to="/" className="text-blue-600 underline">
-        Back
+      <Link
+        to="/"
+        className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
+      >
+        <ArrowLeft size={16} />
+        All products
       </Link>
 
-      <div className="grid md:grid-cols-2 gap-8 mt-4">
-        <div className="h-80 bg-gray-100 rounded flex items-center justify-center text-gray-400">
-          No image
-        </div>
+      <div className="grid md:grid-cols-2 gap-10 mt-6">
+        <ImageGallery images={product.images} alt={product.name} />
 
         <div>
-          <h1 className="text-3xl font-bold">{product.name}</h1>
-          <p className="text-sm text-gray-500 mt-1">{product.category}</p>
-          <p className="text-gray-600 mt-4">{product.description}</p>
-          <p className="text-2xl font-semibold mt-4">Rs {product.price}</p>
+          <p className="text-sm text-gray-500">{product.category}</p>
+          <h1 className="text-3xl font-bold mt-1">{product.name}</h1>
+          <p className="text-2xl font-semibold mt-4">
+            {formatPrice(product.price)}
+          </p>
 
-          <p className="mt-2">
-            {product.countInStock > 0 ? (
-              <span className="text-green-600">In Stock ({product.countInStock})</span>
+          <p className="text-gray-600 mt-4 leading-relaxed">
+            {product.description}
+          </p>
+
+          <p className="mt-6 text-sm">
+            {inStock ? (
+              <span className="text-green-700">
+                In stock · {product.countInStock} available
+              </span>
             ) : (
-              <span className="text-red-600">Out of Stock</span>
+              <span className="text-red-600">Out of stock</span>
             )}
           </p>
 
-          {product.countInStock > 0 && (
+          {inStock && (
             <div className="mt-4">
-              <label className="block mb-1 font-medium">Quantity</label>
+              <label htmlFor="qty" className="block mb-1 font-medium text-sm">
+                Quantity
+              </label>
               <select
+                id="qty"
                 value={qty}
                 onChange={(e) => setQty(Number(e.target.value))}
-                className="border rounded p-2 w-24"
+                className="border rounded-lg p-2.5 w-24"
               >
                 {[...Array(product.countInStock).keys()].map((x) => (
                   <option key={x + 1} value={x + 1}>
@@ -79,10 +109,11 @@ function ProductPage() {
 
           <button
             onClick={addToCartHandler}
-            disabled={product.countInStock === 0}
-            className="mt-6 w-full bg-gray-900 text-white p-3 rounded hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed"
+            disabled={!inStock}
+            className="mt-6 w-full inline-flex items-center justify-center gap-2 bg-gray-900 text-white p-3 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
-            Add to Cart
+            <ShoppingCart size={18} />
+            {inStock ? 'Add to cart' : 'Out of stock'}
           </button>
         </div>
       </div>

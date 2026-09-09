@@ -11,12 +11,14 @@ function ProductEditPage() {
   const [name, setName] = useState('');
   const [description, setDescription] = useState('');
   const [price, setPrice] = useState(0);
+  const [image, setImage] = useState('');
   const [category, setCategory] = useState('');
   const [countInStock, setCountInStock] = useState(0);
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (!userInfo || !userInfo.isAdmin) {
@@ -30,6 +32,7 @@ function ProductEditPage() {
         setName(data.name);
         setDescription(data.description);
         setPrice(data.price);
+        setImage(data.image);
         setCategory(data.category);
         setCountInStock(data.countInStock);
       } catch (err) {
@@ -42,6 +45,29 @@ function ProductEditPage() {
     fetchProduct();
   }, [id, userInfo, navigate]);
 
+  const uploadHandler = async (e) => {
+    const file = e.target.files[0];
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append('image', file);
+
+    setError('');
+    setUploading(true);
+
+    try {
+      const { data } = await axios.post('/api/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      });
+
+      setImage(data.image);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Upload failed');
+    } finally {
+      setUploading(false);
+    }
+  };
+
   const submitHandler = async (e) => {
     e.preventDefault();
     setError('');
@@ -52,6 +78,7 @@ function ProductEditPage() {
         name,
         description,
         price: Number(price),
+        image,
         category,
         countInStock: Number(countInStock),
       });
@@ -102,6 +129,44 @@ function ProductEditPage() {
         </div>
 
         <div>
+          <label className="block mb-1 font-medium">Image</label>
+
+          <div className="w-40 h-40 border rounded overflow-hidden bg-gray-100 flex items-center justify-center mb-2">
+            {image ? (
+              <img
+                src={image}
+                alt={name}
+                className="w-full h-full object-cover"
+                onError={(e) => {
+                  e.target.style.display = 'none';
+                }}
+              />
+            ) : (
+              <span className="text-gray-400 text-sm">No image</span>
+            )}
+          </div>
+
+          <input
+            type="file"
+            accept="image/jpeg,image/png,image/webp"
+            onChange={uploadHandler}
+            className="w-full border rounded p-2 text-sm"
+          />
+
+          {uploading && (
+            <p className="text-sm text-gray-500 mt-1">Uploading...</p>
+          )}
+
+          <input
+            type="text"
+            value={image}
+            onChange={(e) => setImage(e.target.value)}
+            placeholder="/uploads/example.jpg"
+            className="w-full border rounded p-2 mt-2 text-sm"
+          />
+        </div>
+
+        <div>
           <label className="block mb-1 font-medium">Price</label>
           <input
             type="number"
@@ -138,7 +203,7 @@ function ProductEditPage() {
 
         <button
           type="submit"
-          disabled={saving}
+          disabled={saving || uploading}
           className="w-full bg-gray-900 text-white p-3 rounded hover:bg-gray-700 disabled:opacity-50 cursor-pointer"
         >
           {saving ? 'Saving...' : 'Update'}

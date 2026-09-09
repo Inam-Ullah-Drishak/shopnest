@@ -1,7 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import {
+  Package,
+  ChevronRight,
+  Loader2,
+  CheckCircle2,
+  Clock,
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
+import { formatPrice, formatDate } from '../utils/format.js';
 
 function MyOrdersPage() {
   const { userInfo } = useAuth();
@@ -22,7 +30,7 @@ function MyOrdersPage() {
         const { data } = await axios.get('/api/orders/mine');
         setOrders(data);
       } catch (err) {
-        setError(err.response?.data?.message || 'Could not load orders');
+        setError(err.response?.data?.message || 'Could not load your orders');
       } finally {
         setLoading(false);
       }
@@ -31,68 +39,71 @@ function MyOrdersPage() {
     fetchOrders();
   }, [userInfo, navigate]);
 
-  if (loading) return <p className="p-8">Loading...</p>;
-  if (error) return <p className="p-8 text-red-600">{error}</p>;
-
-  if (orders.length === 0) {
+  if (loading) {
     return (
-      <div className="p-8">
-        <h1 className="text-3xl font-bold mb-4">My Orders</h1>
-        <p className="text-gray-600">
-          You have no orders yet.{' '}
-          <Link to="/" className="text-blue-600 underline">
-            Start shopping
-          </Link>
-        </p>
+      <div className="p-8 flex items-center gap-2 text-gray-500">
+        <Loader2 size={18} className="animate-spin" />
+        Loading your orders
       </div>
     );
   }
 
+  if (error) return <p className="p-8 text-red-600">{error}</p>;
+
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">My Orders</h1>
+      <h1 className="text-2xl font-bold mb-6">Your orders</h1>
 
-      <div className="space-y-3">
-        {orders.map((order) => (
+      {orders.length === 0 ? (
+        <div className="border rounded-lg py-16 text-center">
+          <Package size={36} className="mx-auto text-gray-300" />
+          <p className="mt-3 font-medium">No orders yet</p>
+          <p className="text-sm text-gray-500 mt-1">
+            Anything you buy will show up here.
+          </p>
           <Link
-            key={order._id}
-            to={`/order/${order._id}`}
-            className="block border rounded p-4 hover:bg-gray-50"
+            to="/"
+            className="inline-block bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 mt-5"
           >
-            <div className="flex flex-wrap justify-between gap-2">
-              <div>
-                <p className="font-medium">Rs {order.totalPrice}</p>
+            Start shopping
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {orders.map((order) => (
+            <Link
+              key={order._id}
+              to={`/order/${order._id}`}
+              className="flex items-center gap-4 border rounded-lg p-4 hover:bg-gray-50"
+            >
+              <div className="flex-1 min-w-0">
+                <p className="font-medium">{formatPrice(order.totalPrice)}</p>
                 <p className="text-sm text-gray-500">
-                  {new Date(order.createdAt).toLocaleDateString()} ·{' '}
-                  {order.orderItems.length} item(s)
+                  {formatDate(order.createdAt)} · {order.orderItems.length} item
+                  {order.orderItems.length > 1 ? 's' : ''}
                 </p>
               </div>
 
-              <div className="flex gap-2 items-center">
-                <span
-                  className={`px-2 py-1 rounded text-xs ${
-                    order.isPaid
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-yellow-100 text-yellow-700'
-                  }`}
-                >
-                  {order.isPaid ? 'Paid' : 'Not Paid'}
-                </span>
+              <span
+                className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs shrink-0 ${
+                  order.isDelivered
+                    ? 'bg-green-100 text-green-700'
+                    : 'bg-amber-100 text-amber-700'
+                }`}
+              >
+                {order.isDelivered ? (
+                  <CheckCircle2 size={13} />
+                ) : (
+                  <Clock size={13} />
+                )}
+                {order.isDelivered ? 'Delivered' : 'On the way'}
+              </span>
 
-                <span
-                  className={`px-2 py-1 rounded text-xs ${
-                    order.isDelivered
-                      ? 'bg-green-100 text-green-700'
-                      : 'bg-gray-100 text-gray-700'
-                  }`}
-                >
-                  {order.isDelivered ? 'Delivered' : 'Pending'}
-                </span>
-              </div>
-            </div>
-          </Link>
-        ))}
-      </div>
+              <ChevronRight size={18} className="text-gray-400 shrink-0" />
+            </Link>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

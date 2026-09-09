@@ -50,13 +50,20 @@ export const getProductById = asyncHandler(async (req, res) => {
 
 // POST /api/products  — admin
 export const createProduct = asyncHandler(async (req, res) => {
+  const { name, description, price, images, category, countInStock } = req.body;
+
+  if (!name?.trim() || !description?.trim() || !category?.trim()) {
+    res.status(400);
+    throw new Error('Name, description and category are required');
+  }
+
   const product = await Product.create({
-    name: 'Sample Product',
-    description: 'Sample description',
-    price: 0,
-    image: '/images/sample.jpg',
-    category: 'Sample',
-    countInStock: 0,
+    name: name.trim(),
+    description: description.trim(),
+    price: Number(price) || 0,
+    images: Array.isArray(images) ? images.filter(Boolean) : [],
+    category: category.trim(),
+    countInStock: Number(countInStock) || 0,
   });
 
   res.status(201).json(product);
@@ -64,7 +71,7 @@ export const createProduct = asyncHandler(async (req, res) => {
 
 // PUT /api/products/:id  — admin
 export const updateProduct = asyncHandler(async (req, res) => {
-  const { name, description, price, image, category, countInStock } = req.body;
+  const { name, description, price, images, category, countInStock } = req.body;
 
   const product = await Product.findById(req.params.id);
 
@@ -76,14 +83,16 @@ export const updateProduct = asyncHandler(async (req, res) => {
   product.name = name ?? product.name;
   product.description = description ?? product.description;
   product.price = price ?? product.price;
-  product.image = image ?? product.image;
   product.category = category ?? product.category;
   product.countInStock = countInStock ?? product.countInStock;
+
+  if (Array.isArray(images)) {
+    product.images = images.filter(Boolean);
+  }
 
   const updated = await product.save();
   res.json(updated);
 });
-
 // DELETE /api/products/:id  — admin
 export const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);

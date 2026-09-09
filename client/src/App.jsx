@@ -11,7 +11,7 @@ import PlaceOrderPage from './pages/PlaceOrderPage.jsx';
 import OrderPage from './pages/OrderPage.jsx';
 import MyOrdersPage from './pages/MyOrdersPage.jsx';
 import ProductListPage from './pages/admin/ProductListPage.jsx';
-import ProductEditPage from './pages/admin/ProductEditPage.jsx';
+import ProductFormPage from './pages/admin/ProductFormPage.jsx';
 import OrderListPage from './pages/admin/OrderListPage.jsx';
 
 function App() {
@@ -32,10 +32,8 @@ function App() {
           <Route path="/order/:id" element={<OrderPage />} />
 
           <Route path="/admin/products" element={<ProductListPage />} />
-          <Route
-            path="/admin/product/:id/edit"
-            element={<ProductEditPage />}
-          />
+          <Route path="/admin/product/new" element={<ProductFormPage />} />
+          <Route path="/admin/product/:id/edit" element={<ProductFormPage />} />
           <Route path="/admin/orders" element={<OrderListPage />} />
         </Routes>
       </main>

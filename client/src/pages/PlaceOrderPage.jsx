@@ -1,8 +1,10 @@
 import { useState, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
+import { ImageOff, AlertCircle, Loader2, MapPin, Wallet } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import { formatPrice } from '../utils/format.js';
 
 const SHIPPING_PRICE = 200;
 const FREE_SHIPPING_OVER = 5000;
@@ -46,8 +48,7 @@ function PlaceOrderPage() {
       clearCart();
       navigate(`/order/${data._id}`);
     } catch (err) {
-      setError(err.response?.data?.message || 'Could not place order');
-    } finally {
+      setError(err.response?.data?.message || 'Could not place your order');
       setLoading(false);
     }
   };
@@ -56,45 +57,80 @@ function PlaceOrderPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Review Order</h1>
+      <h1 className="text-2xl font-bold mb-6">Review your order</h1>
 
       {error && (
-        <p className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</p>
+        <div className="flex gap-2 bg-red-50 border border-red-200 text-red-700 p-3 rounded mb-6">
+          <AlertCircle size={18} className="shrink-0 mt-0.5" />
+          <p className="text-sm">{error}</p>
+        </div>
       )}
 
       <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-6">
-          <div className="border rounded p-4">
-            <h2 className="font-bold mb-2">Shipping</h2>
-            <p className="text-gray-600">
+        <div className="lg:col-span-2 space-y-4">
+          <div className="border rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <MapPin size={16} className="text-gray-500" />
+              <h2 className="font-bold">Delivering to</h2>
+            </div>
+
+            <p className="text-gray-600 text-sm">
               {shippingAddress.address}, {shippingAddress.city},{' '}
               {shippingAddress.postalCode}, {shippingAddress.country}
             </p>
-            <p className="text-gray-600">Phone: {shippingAddress.phone}</p>
-            <Link to="/shipping" className="text-blue-600 underline text-sm">
-              Edit
+            <p className="text-gray-600 text-sm">
+              Phone {shippingAddress.phone}
+            </p>
+
+            <Link
+              to="/shipping"
+              className="text-blue-600 hover:underline text-sm inline-block mt-2"
+            >
+              Change address
             </Link>
           </div>
 
-          <div className="border rounded p-4">
-            <h2 className="font-bold mb-2">Payment Method</h2>
-            <p className="text-gray-600">Cash on Delivery</p>
+          <div className="border rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Wallet size={16} className="text-gray-500" />
+              <h2 className="font-bold">Payment</h2>
+            </div>
+            <p className="text-gray-600 text-sm">Cash on delivery</p>
           </div>
 
-          <div className="border rounded p-4">
-            <h2 className="font-bold mb-4">Items</h2>
+          <div className="border rounded-lg p-4">
+            <h2 className="font-bold mb-4">
+              {cartItems.length} item{cartItems.length > 1 ? 's' : ''}
+            </h2>
 
             <div className="space-y-3">
               {cartItems.map((item) => (
-                <div key={item._id} className="flex justify-between text-sm">
+                <div key={item._id} className="flex items-center gap-3">
+                  <div className="w-12 h-12 shrink-0 rounded border bg-gray-50 overflow-hidden flex items-center justify-center">
+                    {item.image ? (
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <ImageOff size={14} className="text-gray-300" />
+                    )}
+                  </div>
+
                   <Link
                     to={`/product/${item._id}`}
-                    className="hover:underline flex-1 min-w-0 truncate"
+                    className="flex-1 min-w-0 truncate text-sm hover:underline"
                   >
                     {item.name}
                   </Link>
-                  <span className="ml-4 shrink-0">
-                    {item.qty} x Rs {item.price} = Rs {item.qty * item.price}
+
+                  <span className="text-sm text-gray-600 shrink-0">
+                    {item.qty} × {formatPrice(item.price)}
+                  </span>
+
+                  <span className="text-sm font-medium shrink-0 w-28 text-right">
+                    {formatPrice(item.qty * item.price)}
                   </span>
                 </div>
               ))}
@@ -102,30 +138,33 @@ function PlaceOrderPage() {
           </div>
         </div>
 
-        <div className="border rounded p-6 h-fit">
-          <h2 className="text-xl font-bold mb-4">Summary</h2>
+        <div className="border rounded-lg p-6 h-fit">
+          <h2 className="font-bold mb-4">Summary</h2>
 
-          <div className="flex justify-between mb-2">
-            <span>Items</span>
-            <span>Rs {totalPrice}</span>
+          <div className="flex justify-between mb-2 text-sm">
+            <span className="text-gray-600">Items</span>
+            <span>{formatPrice(totalPrice)}</span>
           </div>
 
-          <div className="flex justify-between mb-2">
-            <span>Shipping</span>
-            <span>{shippingPrice === 0 ? 'Free' : `Rs ${shippingPrice}`}</span>
+          <div className="flex justify-between mb-2 text-sm">
+            <span className="text-gray-600">Shipping</span>
+            <span>
+              {shippingPrice === 0 ? 'Free' : formatPrice(shippingPrice)}
+            </span>
           </div>
 
-          <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2">
+          <div className="flex justify-between font-bold text-lg border-t pt-3 mt-3">
             <span>Total</span>
-            <span>Rs {grandTotal}</span>
+            <span>{formatPrice(grandTotal)}</span>
           </div>
 
           <button
             onClick={placeOrderHandler}
             disabled={loading}
-            className="w-full bg-gray-900 text-white p-3 rounded mt-6 hover:bg-gray-700 disabled:opacity-50 cursor-pointer"
+            className="w-full inline-flex items-center justify-center gap-2 bg-gray-900 text-white p-3 rounded-lg mt-6 hover:bg-gray-700 disabled:opacity-50 cursor-pointer"
           >
-            {loading ? 'Placing order...' : 'Place Order'}
+            {loading && <Loader2 size={16} className="animate-spin" />}
+            Place order
           </button>
         </div>
       </div>

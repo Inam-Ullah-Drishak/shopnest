@@ -1,6 +1,7 @@
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import Product from './models/productModel.js';
+import Order from './models/orderModel.js';
 import products from './data/products.js';
 
 dotenv.config();
@@ -8,9 +9,12 @@ await connectDB();
 
 const importData = async () => {
   try {
+    await Order.deleteMany();
     await Product.deleteMany();
-    await Product.insertMany(products);
-    console.log('Data imported');
+
+    const created = await Product.insertMany(products);
+
+    console.log(`Imported ${created.length} products`);
     process.exit();
   } catch (error) {
     console.error(error.message);
@@ -20,8 +24,10 @@ const importData = async () => {
 
 const destroyData = async () => {
   try {
+    await Order.deleteMany();
     await Product.deleteMany();
-    console.log('Data destroyed');
+
+    console.log('Products and orders destroyed');
     process.exit();
   } catch (error) {
     console.error(error.message);

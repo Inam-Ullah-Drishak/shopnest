@@ -1,6 +1,28 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
+import {
+  CheckCircle2,
+  Clock,
+  ImageOff,
+  Loader2,
+  MapPin,
+  Wallet,
+} from 'lucide-react';
+import { formatPrice, formatDate } from '../utils/format.js';
+
+function StatusBadge({ done, doneLabel, pendingLabel }) {
+  return (
+    <span
+      className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs ${
+        done ? 'bg-green-100 text-green-700' : 'bg-amber-100 text-amber-700'
+      }`}
+    >
+      {done ? <CheckCircle2 size={14} /> : <Clock size={14} />}
+      {done ? doneLabel : pendingLabel}
+    </span>
+  );
+}
 
 function OrderPage() {
   const { id } = useParams();
@@ -15,7 +37,7 @@ function OrderPage() {
         const { data } = await axios.get(`/api/orders/${id}`);
         setOrder(data);
       } catch (err) {
-        setError(err.response?.data?.message || 'Could not load order');
+        setError(err.response?.data?.message || 'Could not load this order');
       } finally {
         setLoading(false);
       }
@@ -24,72 +46,110 @@ function OrderPage() {
     fetchOrder();
   }, [id]);
 
-  if (loading) return <p className="p-8">Loading...</p>;
+  if (loading) {
+    return (
+      <div className="p-8 flex items-center gap-2 text-gray-500">
+        <Loader2 size={18} className="animate-spin" />
+        Loading order
+      </div>
+    );
+  }
+
   if (error) return <p className="p-8 text-red-600">{error}</p>;
   if (!order) return null;
 
   return (
     <div className="p-8">
-      <h1 className="text-2xl font-bold mb-2">Order Placed</h1>
-      <p className="text-gray-500 text-sm mb-6">Order ID: {order._id}</p>
+      <div className="flex items-center gap-2">
+        <CheckCircle2 size={22} className="text-green-600" />
+        <h1 className="text-2xl font-bold">Order placed</h1>
+      </div>
+
+      <p className="text-gray-500 text-sm mt-1 mb-6">
+        Order {order._id} · placed {formatDate(order.createdAt)}
+      </p>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-6">
-          <div className="border rounded p-4">
-            <h2 className="font-bold mb-2">Shipping</h2>
-            <p className="text-gray-600">
+        <div className="lg:col-span-2 space-y-4">
+          <div className="border rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <MapPin size={16} className="text-gray-500" />
+              <h2 className="font-bold">Delivering to</h2>
+            </div>
+
+            <p className="text-gray-600 text-sm">
               {order.shippingAddress.address}, {order.shippingAddress.city},{' '}
               {order.shippingAddress.postalCode},{' '}
               {order.shippingAddress.country}
             </p>
-            <p className="text-gray-600">
-              Phone: {order.shippingAddress.phone}
+            <p className="text-gray-600 text-sm">
+              Phone {order.shippingAddress.phone}
             </p>
 
-            <p className="mt-3">
-              {order.isDelivered ? (
-                <span className="bg-green-100 text-green-700 px-3 py-1 rounded text-sm">
-                  Delivered
-                </span>
-              ) : (
-                <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded text-sm">
-                  Not Delivered
-                </span>
-              )}
-            </p>
+            <div className="mt-3">
+              <StatusBadge
+                done={order.isDelivered}
+                doneLabel={
+                  order.deliveredAt
+                    ? `Delivered ${formatDate(order.deliveredAt)}`
+                    : 'Delivered'
+                }
+                pendingLabel="On the way"
+              />
+            </div>
           </div>
 
-          <div className="border rounded p-4">
-            <h2 className="font-bold mb-2">Payment</h2>
-            <p className="text-gray-600">{order.paymentMethod}</p>
+          <div className="border rounded-lg p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Wallet size={16} className="text-gray-500" />
+              <h2 className="font-bold">Payment</h2>
+            </div>
 
-            <p className="mt-3">
-              {order.isPaid ? (
-                <span className="bg-green-100 text-green-700 px-3 py-1 rounded text-sm">
-                  Paid
-                </span>
-              ) : (
-                <span className="bg-yellow-100 text-yellow-700 px-3 py-1 rounded text-sm">
-                  Not Paid
-                </span>
-              )}
-            </p>
+            <p className="text-gray-600 text-sm">{order.paymentMethod}</p>
+
+            <div className="mt-3">
+              <StatusBadge
+                done={order.isPaid}
+                doneLabel="Paid"
+                pendingLabel="Payment on delivery"
+              />
+            </div>
           </div>
 
-          <div className="border rounded p-4">
-            <h2 className="font-bold mb-4">Items</h2>
+          <div className="border rounded-lg p-4">
+            <h2 className="font-bold mb-4">
+              {order.orderItems.length} item
+              {order.orderItems.length > 1 ? 's' : ''}
+            </h2>
 
             <div className="space-y-3">
               {order.orderItems.map((item) => (
-                <div key={item._id} className="flex justify-between text-sm">
+                <div key={item._id} className="flex items-center gap-3">
+                  <div className="w-12 h-12 shrink-0 rounded border bg-gray-50 overflow-hidden flex items-center justify-center">
+                    {item.image ? (
+                      <img
+                        src={item.image}
+                        alt={item.name}
+                        className="w-full h-full object-cover"
+                      />
+                    ) : (
+                      <ImageOff size={14} className="text-gray-300" />
+                    )}
+                  </div>
+
                   <Link
                     to={`/product/${item.product}`}
-                    className="hover:underline flex-1 min-w-0 truncate"
+                    className="flex-1 min-w-0 truncate text-sm hover:underline"
                   >
                     {item.name}
                   </Link>
-                  <span className="ml-4 shrink-0">
-                    {item.qty} x Rs {item.price} = Rs {item.qty * item.price}
+
+                  <span className="text-sm text-gray-600 shrink-0">
+                    {item.qty} × {formatPrice(item.price)}
+                  </span>
+
+                  <span className="text-sm font-medium shrink-0 w-28 text-right">
+                    {formatPrice(item.qty * item.price)}
                   </span>
                 </div>
               ))}
@@ -97,31 +157,33 @@ function OrderPage() {
           </div>
         </div>
 
-        <div className="border rounded p-6 h-fit">
-          <h2 className="text-xl font-bold mb-4">Summary</h2>
+        <div className="border rounded-lg p-6 h-fit">
+          <h2 className="font-bold mb-4">Summary</h2>
 
-          <div className="flex justify-between mb-2">
-            <span>Items</span>
-            <span>Rs {order.itemsPrice}</span>
+          <div className="flex justify-between mb-2 text-sm">
+            <span className="text-gray-600">Items</span>
+            <span>{formatPrice(order.itemsPrice)}</span>
           </div>
 
-          <div className="flex justify-between mb-2">
-            <span>Shipping</span>
+          <div className="flex justify-between mb-2 text-sm">
+            <span className="text-gray-600">Shipping</span>
             <span>
-              {order.shippingPrice === 0 ? 'Free' : `Rs ${order.shippingPrice}`}
+              {order.shippingPrice === 0
+                ? 'Free'
+                : formatPrice(order.shippingPrice)}
             </span>
           </div>
 
-          <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2">
+          <div className="flex justify-between font-bold text-lg border-t pt-3 mt-3">
             <span>Total</span>
-            <span>Rs {order.totalPrice}</span>
+            <span>{formatPrice(order.totalPrice)}</span>
           </div>
 
           <Link
             to="/"
-            className="block text-center w-full bg-gray-900 text-white p-3 rounded mt-6 hover:bg-gray-700"
+            className="block text-center w-full border p-3 rounded-lg mt-6 hover:bg-gray-50"
           >
-            Continue Shopping
+            Continue shopping
           </Link>
         </div>
       </div>

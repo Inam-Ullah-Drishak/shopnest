@@ -1,6 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
+import { ImageOff, Trash2, ShoppingBag } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import { formatPrice } from '../utils/format.js';
 
 function CartPage() {
   const { cartItems, addToCart, removeFromCart, totalPrice } = useCart();
@@ -8,56 +10,70 @@ function CartPage() {
   const navigate = useNavigate();
 
   const checkoutHandler = () => {
-    if (userInfo) {
-      navigate('/shipping');
-    } else {
-      navigate('/login');
-    }
+    navigate(userInfo ? '/shipping' : '/login');
   };
 
   if (cartItems.length === 0) {
     return (
       <div className="p-8">
-        <h1 className="text-3xl font-bold mb-4">Shopping Cart</h1>
-        <p className="text-gray-600">
-          Your cart is empty.{' '}
-          <Link to="/" className="text-blue-600 underline">
-            Go shopping
+        <h1 className="text-2xl font-bold mb-6">Your cart</h1>
+
+        <div className="border rounded-lg py-16 text-center">
+          <ShoppingBag size={36} className="mx-auto text-gray-300" />
+          <p className="mt-3 font-medium">Your cart is empty</p>
+          <p className="text-sm text-gray-500 mt-1">
+            Browse the store and add something you like.
+          </p>
+          <Link
+            to="/"
+            className="inline-block bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 mt-5"
+          >
+            Start shopping
           </Link>
-        </p>
+        </div>
       </div>
     );
   }
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
+      <h1 className="text-2xl font-bold mb-6">Your cart</h1>
 
       <div className="grid lg:grid-cols-3 gap-8">
-        <div className="lg:col-span-2 space-y-4">
+        <div className="lg:col-span-2 space-y-3">
           {cartItems.map((item) => (
             <div
               key={item._id}
-              className="flex items-center gap-4 border rounded p-4"
+              className="flex items-center gap-4 border rounded-lg p-4"
             >
-              <div className="w-20 h-20 bg-gray-100 rounded flex items-center justify-center text-xs text-gray-400 shrink-0">
-                No image
+              <div className="w-16 h-16 shrink-0 rounded border bg-gray-50 overflow-hidden flex items-center justify-center">
+                {item.image ? (
+                  <img
+                    src={item.image}
+                    alt={item.name}
+                    className="w-full h-full object-cover"
+                  />
+                ) : (
+                  <ImageOff size={18} className="text-gray-300" />
+                )}
               </div>
 
               <div className="flex-1 min-w-0">
                 <Link
                   to={`/product/${item._id}`}
-                  className="font-medium hover:underline"
+                  className="font-medium hover:underline block truncate"
                 >
                   {item.name}
                 </Link>
-                <p className="text-gray-600">Rs {item.price}</p>
+                <p className="text-gray-600 text-sm">
+                  {formatPrice(item.price)}
+                </p>
               </div>
 
               <select
                 value={item.qty}
                 onChange={(e) => addToCart(item, Number(e.target.value))}
-                className="border rounded p-2"
+                className="border rounded-lg p-2"
               >
                 {[...Array(item.countInStock).keys()].map((x) => (
                   <option key={x + 1} value={x + 1}>
@@ -68,32 +84,33 @@ function CartPage() {
 
               <button
                 onClick={() => removeFromCart(item._id)}
-                className="text-red-600 hover:text-red-800 cursor-pointer"
+                title="Remove"
+                className="p-2 rounded hover:bg-red-100 text-red-600 cursor-pointer"
               >
-                Remove
+                <Trash2 size={16} />
               </button>
             </div>
           ))}
         </div>
 
-        <div className="border rounded p-6 h-fit">
-          <h2 className="text-xl font-bold mb-4">Summary</h2>
+        <div className="border rounded-lg p-6 h-fit">
+          <h2 className="font-bold mb-4">Summary</h2>
 
-          <div className="flex justify-between mb-2">
-            <span>Items</span>
+          <div className="flex justify-between mb-2 text-sm">
+            <span className="text-gray-600">Items</span>
             <span>{cartItems.reduce((sum, i) => sum + i.qty, 0)}</span>
           </div>
 
-          <div className="flex justify-between font-bold text-lg border-t pt-2 mt-2">
+          <div className="flex justify-between font-bold text-lg border-t pt-3 mt-3">
             <span>Total</span>
-            <span>Rs {totalPrice}</span>
+            <span>{formatPrice(totalPrice)}</span>
           </div>
 
           <button
             onClick={checkoutHandler}
-            className="w-full bg-gray-900 text-white p-3 rounded mt-6 hover:bg-gray-700 cursor-pointer"
+            className="w-full bg-gray-900 text-white p-3 rounded-lg mt-6 hover:bg-gray-700 cursor-pointer"
           >
-            Proceed to Checkout
+            Checkout
           </button>
         </div>
       </div>

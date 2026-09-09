@@ -1,10 +1,33 @@
 import Product from '../models/productModel.js';
 
-// GET /api/products
+// GET /api/products?keyword=&category=&pageNumber=
 export const getProducts = async (req, res) => {
   try {
-    const products = await Product.find({});
-    res.json(products);
+    const pageSize = 8;
+    const page = Number(req.query.pageNumber) || 1;
+
+    const filter = {};
+
+    if (req.query.keyword) {
+      filter.name = { $regex: req.query.keyword, $options: 'i' };
+    }
+
+    if (req.query.category && req.query.category !== 'All') {
+      filter.category = req.query.category;
+    }
+
+    const count = await Product.countDocuments(filter);
+
+    const products = await Product.find(filter)
+      .sort({ createdAt: -1 })
+      .limit(pageSize)
+      .skip(pageSize * (page - 1));
+
+    res.json({
+      products,
+      page,
+      pages: Math.ceil(count / pageSize),
+    });
   } catch (error) {
     res.status(500).json({ message: error.message });
   }
@@ -80,6 +103,15 @@ export const deleteProduct = async (req, res) => {
 
     await product.deleteOne();
     res.json({ message: 'Product removed' });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+// GET /api/products/categories
+export const getCategories = async (req, res) => {
+  try {
+    const categories = await Product.distinct('category');
+    res.json(categories);
   } catch (error) {
     res.status(500).json({ message: error.message });
   }

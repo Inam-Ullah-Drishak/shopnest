@@ -9,19 +9,10 @@ function ProductListPage() {
   const navigate = useNavigate();
 
   const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
+  const [pages, setPages] = useState(1);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-
-  const fetchProducts = async () => {
-    try {
-      const { data } = await axios.get('/api/products');
-      setProducts(data);
-    } catch (err) {
-      setError(err.response?.data?.message || 'Could not load products');
-    } finally {
-      setLoading(false);
-    }
-  };
 
   useEffect(() => {
     if (!userInfo || !userInfo.isAdmin) {
@@ -29,8 +20,25 @@ function ProductListPage() {
       return;
     }
 
+    const fetchProducts = async () => {
+      setLoading(true);
+
+      try {
+        const { data } = await axios.get('/api/products', {
+          params: { pageNumber: page },
+        });
+
+        setProducts(data.products);
+        setPages(data.pages);
+      } catch (err) {
+        setError(err.response?.data?.message || 'Could not load products');
+      } finally {
+        setLoading(false);
+      }
+    };
+
     fetchProducts();
-  }, [userInfo, navigate]);
+  }, [userInfo, navigate, page]);
 
   const createHandler = async () => {
     if (!window.confirm('Create a new sample product?')) return;
@@ -112,6 +120,24 @@ function ProductListPage() {
           </tbody>
         </table>
       </div>
+
+      {pages > 1 && (
+        <div className="flex justify-center gap-2 mt-6">
+          {[...Array(pages).keys()].map((x) => (
+            <button
+              key={x + 1}
+              onClick={() => setPage(x + 1)}
+              className={`px-4 py-2 rounded cursor-pointer ${
+                page === x + 1
+                  ? 'bg-gray-900 text-white'
+                  : 'bg-gray-100 hover:bg-gray-200'
+              }`}
+            >
+              {x + 1}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

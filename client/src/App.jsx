@@ -9,6 +9,10 @@ import CartPage from './pages/CartPage.jsx';
 import ShippingPage from './pages/ShippingPage.jsx';
 import PlaceOrderPage from './pages/PlaceOrderPage.jsx';
 import OrderPage from './pages/OrderPage.jsx';
+import MyOrdersPage from './pages/MyOrdersPage.jsx';
+import ProductListPage from './pages/admin/ProductListPage.jsx';
+import ProductEditPage from './pages/admin/ProductEditPage.jsx';
+import OrderListPage from './pages/admin/OrderListPage.jsx';
 
 function App() {
   return (
@@ -21,10 +25,18 @@ function App() {
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
+          <Route path="/myorders" element={<MyOrdersPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/shipping" element={<ShippingPage />} />
           <Route path="/placeorder" element={<PlaceOrderPage />} />
           <Route path="/order/:id" element={<OrderPage />} />
+
+          <Route path="/admin/products" element={<ProductListPage />} />
+          <Route
+            path="/admin/product/:id/edit"
+            element={<ProductEditPage />}
+          />
+          <Route path="/admin/orders" element={<OrderListPage />} />
         </Routes>
       </main>
     </>

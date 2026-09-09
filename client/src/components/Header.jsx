@@ -28,6 +28,12 @@ function Header() {
         </Link>
 
         <nav className="flex gap-6 items-center">
+          {userInfo?.isAdmin && (
+            <Link to="/admin/products" className="hover:text-gray-300">
+              Admin
+            </Link>
+          )}
+
           <Link to="/cart" className="hover:text-gray-300">
             Cart
             {itemsCount > 0 && (

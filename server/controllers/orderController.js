@@ -109,3 +109,51 @@ export const getOrderById = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+// GET /api/orders  — admin
+export const getAllOrders = async (req, res) => {
+  try {
+    const orders = await Order.find({})
+      .populate('user', 'name email')
+      .sort({ createdAt: -1 });
+
+    res.json(orders);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+// PUT /api/orders/:id/deliver  — admin
+export const updateOrderToDelivered = async (req, res) => {
+  try {
+    const order = await Order.findById(req.params.id);
+
+    if (!order) {
+      return res.status(404).json({ message: 'Order not found' });
+    }
+
+    if (order.isDelivered) {
+      return res.status(400).json({ message: 'Order already delivered' });
+    }
+
+    order.isDelivered = true;
+    order.deliveredAt = Date.now();
+
+    if (order.paymentMethod === 'Cash on Delivery') {
+      order.isPaid = true;
+      order.paidAt = Date.now();
+    }
+
+    for (const item of order.orderItems) {
+      await Product.updateOne(
+        { _id: item.product },
+        { $inc: { countInStock: -item.qty } }
+      );
+    }
+
+    const updated = await order.save();
+    res.json(updated);
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};

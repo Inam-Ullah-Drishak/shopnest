@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../context/AuthContext.jsx';
 
@@ -62,6 +62,13 @@ function ProfilePage() {
           <p className="font-medium">{profile.isAdmin ? 'Admin' : 'Customer'}</p>
         </div>
       </div>
+
+      <Link
+        to="/myorders"
+        className="block text-center w-full bg-gray-900 text-white p-3 rounded mt-6 hover:bg-gray-700"
+      >
+        My Orders
+      </Link>
     </div>
   );
 }

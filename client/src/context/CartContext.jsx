@@ -2,6 +2,11 @@ import { createContext, useContext, useState, useEffect } from 'react';
 
 const CartContext = createContext();
 
+// A cart line is identified by product + variant, so the same product in two
+// sizes occupies two separate lines.
+const lineKey = (productId, variantId) =>
+  variantId ? `${productId}::${variantId}` : productId;
+
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState(() => {
     const stored = localStorage.getItem('cartItems');
@@ -17,32 +22,45 @@ export function CartProvider({ children }) {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
   }, [cartItems]);
 
-  const addToCart = (product, qty) => {
+  const addToCart = (product, qty, variant = null) => {
+    const key = lineKey(product._id, variant?._id);
+
     setCartItems((prev) => {
-      const exists = prev.find((item) => item._id === product._id);
+      const exists = prev.find((item) => item.key === key);
 
       if (exists) {
         return prev.map((item) =>
-          item._id === product._id ? { ...item, qty } : item
+          item.key === key ? { ...item, qty } : item
         );
       }
 
       return [
         ...prev,
         {
+          key,
           _id: product._id,
+          variantId: variant?._id || null,
+          variantLabel: variant
+            ? variant.options.map((o) => o.value).join(' / ')
+            : '',
           name: product.name,
-          price: product.price,
-          image: product.image,
-          countInStock: product.countInStock,
+          price: variant ? variant.price : product.price,
+          image: variant?.image || product.image,
+          countInStock: variant ? variant.countInStock : product.countInStock,
           qty,
         },
       ];
     });
   };
 
-  const removeFromCart = (id) => {
-    setCartItems((prev) => prev.filter((item) => item._id !== id));
+  const updateQty = (key, qty) => {
+    setCartItems((prev) =>
+      prev.map((item) => (item.key === key ? { ...item, qty } : item))
+    );
+  };
+
+  const removeFromCart = (key) => {
+    setCartItems((prev) => prev.filter((item) => item.key !== key));
   };
 
   const saveShippingAddress = (address) => {
@@ -69,6 +87,7 @@ export function CartProvider({ children }) {
         cartItems,
         shippingAddress,
         addToCart,
+        updateQty,
         removeFromCart,
         saveShippingAddress,
         clearCart,

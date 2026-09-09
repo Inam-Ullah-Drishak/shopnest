@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext.jsx';
 import { formatPrice } from '../utils/format.js';
 
 function CartPage() {
-  const { cartItems, addToCart, removeFromCart, totalPrice } = useCart();
+  const { cartItems, updateQty, removeFromCart, totalPrice } = useCart();
   const { userInfo } = useAuth();
   const navigate = useNavigate();
 
@@ -43,7 +43,7 @@ function CartPage() {
         <div className="lg:col-span-2 space-y-3">
           {cartItems.map((item) => (
             <div
-              key={item._id}
+              key={item.key}
               className="flex items-center gap-4 border rounded-lg p-4"
             >
               <div className="w-16 h-16 shrink-0 rounded border bg-gray-50 overflow-hidden flex items-center justify-center">
@@ -65,6 +65,11 @@ function CartPage() {
                 >
                   {item.name}
                 </Link>
+
+                {item.variantLabel && (
+                  <p className="text-xs text-gray-500">{item.variantLabel}</p>
+                )}
+
                 <p className="text-gray-600 text-sm">
                   {formatPrice(item.price)}
                 </p>
@@ -72,18 +77,20 @@ function CartPage() {
 
               <select
                 value={item.qty}
-                onChange={(e) => addToCart(item, Number(e.target.value))}
+                onChange={(e) => updateQty(item.key, Number(e.target.value))}
                 className="border rounded-lg p-2"
               >
-                {[...Array(item.countInStock).keys()].map((x) => (
-                  <option key={x + 1} value={x + 1}>
-                    {x + 1}
-                  </option>
-                ))}
+                {[...Array(Math.max(item.countInStock, item.qty)).keys()].map(
+                  (x) => (
+                    <option key={x + 1} value={x + 1}>
+                      {x + 1}
+                    </option>
+                  )
+                )}
               </select>
 
               <button
-                onClick={() => removeFromCart(item._id)}
+                onClick={() => removeFromCart(item.key)}
                 title="Remove"
                 className="p-2 rounded hover:bg-red-100 text-red-600 cursor-pointer"
               >

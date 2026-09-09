@@ -6,6 +6,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/young-man-in-bright-fashion_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Classic Varsity Top",
@@ -14,6 +16,32 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/casual-fashion-woman_925x.jpg"],
     category: "Apparel",
     countInStock: 3,
+    optionTypes: [
+      { name: "Size", values: ["Small", "Medium", "Large"] },
+    ],
+    variants: [
+      {
+        options: [{ name: "Size", value: "Small" }],
+        sku: "",
+        price: 16800,
+        countInStock: 1,
+        image: "https://burst.shopifycdn.com/photos/casual-fashion-woman_925x.jpg",
+      },
+      {
+        options: [{ name: "Size", value: "Medium" }],
+        sku: "",
+        price: 16800,
+        countInStock: 1,
+        image: "",
+      },
+      {
+        options: [{ name: "Size", value: "Large" }],
+        sku: "",
+        price: 16800,
+        countInStock: 1,
+        image: "",
+      },
+    ],
   },
   {
     name: "Yellow Wool Jumper",
@@ -22,6 +50,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/autumn-photographer-taking-picture_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Floral White Top",
@@ -30,6 +60,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/city-woman-fashion_925x@2x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Striped Silk Blouse",
@@ -38,6 +70,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/striped-blouse-fashion_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Classic Leather Jacket",
@@ -46,6 +80,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/leather-jacket-and-tea_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Dark Denim Top",
@@ -54,6 +90,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/young-female-models-denim_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Navy Sports Jacket",
@@ -62,6 +100,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/mens-fall-fashion-jacket_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Soft Winter Jacket",
@@ -70,6 +110,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/smiling-woman-on-snowy-afternoon_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Black Leather Bag",
@@ -78,6 +120,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/black-bag-over-the-shoulder_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Zipped Jacket",
@@ -86,6 +130,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/menswear-blue-zip-up-jacket_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Silk Summer Top",
@@ -94,6 +140,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/young-hip-woman-at-carnival_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Long Sleeve Cotton Top",
@@ -102,6 +150,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/woman-outside-brownstone_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Chequered Red Shirt",
@@ -110,6 +160,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/red-plaid-shirt_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "White Cotton Shirt",
@@ -118,6 +170,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/smiling-woman-poses_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Olive Green Jacket",
@@ -126,6 +180,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/urban-fashion_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Blue Silk Tuxedo",
@@ -134,6 +190,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/man-adjusts-blue-tuxedo-bowtie_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Red Sports Tee",
@@ -142,6 +200,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/womens-red-t-shirt_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Striped Skirt and Top",
@@ -150,6 +210,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/woman-in-the-city_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "LED High Tops",
@@ -158,6 +220,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/putting-on-your-shoes_925x.jpg"],
     category: "Apparel",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Clay Plant Pot",
@@ -169,6 +233,25 @@ const products = [
     ],
     category: "Outdoor",
     countInStock: 4,
+    optionTypes: [
+      { name: "Size", values: ["Regular", "Large"] },
+    ],
+    variants: [
+      {
+        options: [{ name: "Size", value: "Regular" }],
+        sku: "",
+        price: 2800,
+        countInStock: 1,
+        image: "https://burst.shopifycdn.com/photos/single-sprout-in-a-pot_925x.jpg",
+      },
+      {
+        options: [{ name: "Size", value: "Large" }],
+        sku: "",
+        price: 4480,
+        countInStock: 3,
+        image: "https://burst.shopifycdn.com/photos/pot-with-a-single-sprout_925x.jpg",
+      },
+    ],
   },
   {
     name: "Copper Light",
@@ -177,6 +260,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/copper-light-in-bedroom_925x.jpg"],
     category: "Indoor",
     countInStock: 2,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Cream Sofa",
@@ -185,6 +270,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/condominium-interior-livingroom_925x.jpg"],
     category: "Indoor",
     countInStock: 4,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Antique Drawers",
@@ -193,6 +280,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/babys-room_925x.jpg"],
     category: "Indoor",
     countInStock: 2,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "White Bed Clothes",
@@ -201,6 +290,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/bright-hotel-room-bed_925x.jpg"],
     category: "Indoor",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Pink Armchair",
@@ -209,6 +300,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/soft-pink-cushioned-armchair-in-stately-salon_925x.jpg"],
     category: "Indoor",
     countInStock: 0,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Wooden Outdoor Table",
@@ -217,6 +310,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/cafe-patio_925x.jpg"],
     category: "Outdoor",
     countInStock: 3,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Brown Throw Pillows",
@@ -225,6 +320,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/bedroom-bed-with-brown-throw-pillows_925x.jpg"],
     category: "Indoor",
     countInStock: 5,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "White Ceramic Pot",
@@ -233,6 +330,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/house-plant-in-white-pot_925x.jpg"],
     category: "Indoor",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Yellow watering can",
@@ -241,6 +340,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/flowers-in-yellow-watering-can_925x.jpg"],
     category: "Outdoor",
     countInStock: 4,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Gardening hand trowel",
@@ -249,6 +350,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/spring-gardening-set-up_925x.jpg"],
     category: "Outdoor",
     countInStock: 2,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Biodegradable cardboard pots",
@@ -257,6 +360,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/potted-seeds_925x.jpg"],
     category: "Outdoor",
     countInStock: 8,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Grey Sofa",
@@ -265,6 +370,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/large-grey-sofa-by-brick-wall_925x.jpg"],
     category: "Indoor",
     countInStock: 6,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Wooden outdoor slats",
@@ -273,6 +380,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/house-plant-on-wooden-slat-wall_925x.jpg"],
     category: "Outdoor",
     countInStock: 0,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Wooden Fence",
@@ -281,6 +390,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/picket-fence-flowers_925x.jpg"],
     category: "Outdoor",
     countInStock: 5,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Yellow Sofa",
@@ -289,6 +400,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/yellow-couch-by-black-and-white-mural_925x.jpg"],
     category: "Indoor",
     countInStock: 5,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Knitted Throw Pillows",
@@ -297,6 +410,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/yellow-sofa-with-throw-pillows_925x.jpg"],
     category: "Indoor",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Vanilla candle",
@@ -305,6 +420,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/diy-organic-candle_925x.jpg"],
     category: "Indoor",
     countInStock: 5,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Black Beanbag",
@@ -313,6 +430,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/comfortable-living-room-cat_925x.jpg"],
     category: "Indoor",
     countInStock: 6,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Bedside Table",
@@ -321,6 +440,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/dark-wall-bedside-table_925x.jpg"],
     category: "Indoor",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "7 Shakra Bracelet",
@@ -332,6 +453,25 @@ const products = [
     ],
     category: "Bracelet",
     countInStock: 1,
+    optionTypes: [
+      { name: "Color", values: ["Blue", "Black"] },
+    ],
+    variants: [
+      {
+        options: [{ name: "Color", value: "Blue" }],
+        sku: "",
+        price: 12040,
+        countInStock: 1,
+        image: "https://burst.shopifycdn.com/photos/7-chakra-bracelet_925x.jpg",
+      },
+      {
+        options: [{ name: "Color", value: "Black" }],
+        sku: "",
+        price: 12040,
+        countInStock: 0,
+        image: "https://burst.shopifycdn.com/photos/navy-blue-chakra-bracelet_925x.jpg",
+      },
+    ],
   },
   {
     name: "Anchor Bracelet Mens",
@@ -344,6 +484,25 @@ const products = [
     ],
     category: "Bracelet",
     countInStock: 1,
+    optionTypes: [
+      { name: "Color", values: ["Gold", "Silver"] },
+    ],
+    variants: [
+      {
+        options: [{ name: "Color", value: "Gold" }],
+        sku: "",
+        price: 19600,
+        countInStock: 1,
+        image: "https://burst.shopifycdn.com/photos/anchor-bracelet-mens_925x.jpg",
+      },
+      {
+        options: [{ name: "Color", value: "Silver" }],
+        sku: "",
+        price: 15400,
+        countInStock: 0,
+        image: "https://burst.shopifycdn.com/photos/anchor-bracelet-for-men_925x.jpg",
+      },
+    ],
   },
   {
     name: "Bangle Bracelet",
@@ -352,6 +511,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/bangle-bracelet-with-jewels_925x.jpg"],
     category: "Bracelet",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Boho Bangle Bracelet",
@@ -360,6 +521,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/bangle-bracelet-with-feathers_925x.jpg"],
     category: "Bracelet",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Boho Earrings",
@@ -372,6 +535,8 @@ const products = [
     ],
     category: "Earrings",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Choker with Bead",
@@ -383,6 +548,8 @@ const products = [
     ],
     category: "Necklace",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Choker with Gold Pendant",
@@ -394,6 +561,8 @@ const products = [
     ],
     category: "Necklace",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Choker with Triangle",
@@ -402,6 +571,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/choker-with-triangle_925x.jpg"],
     category: "Necklace",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Dainty Gold Necklace",
@@ -413,6 +584,8 @@ const products = [
     ],
     category: "Necklace",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Dreamcatcher Pendant Necklace",
@@ -424,6 +597,8 @@ const products = [
     ],
     category: "Necklace",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Galaxy Earrings",
@@ -432,6 +607,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/galaxy-earrings_925x.jpg"],
     category: "Earrings",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Gemstone Necklace",
@@ -445,6 +622,25 @@ const products = [
     ],
     category: "Necklace",
     countInStock: 1,
+    optionTypes: [
+      { name: "Colour", values: ["Blue", "Purple"] },
+    ],
+    variants: [
+      {
+        options: [{ name: "Colour", value: "Blue" }],
+        sku: "",
+        price: 7840,
+        countInStock: 1,
+        image: "https://burst.shopifycdn.com/photos/blue-gemstone-pendant_925x.jpg",
+      },
+      {
+        options: [{ name: "Colour", value: "Purple" }],
+        sku: "",
+        price: 7840,
+        countInStock: 0,
+        image: "https://burst.shopifycdn.com/photos/gemstone-necklace_925x.jpg",
+      },
+    ],
   },
   {
     name: "Gold Bird Necklace",
@@ -453,6 +649,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/gold-bird-necklace_925x.jpg"],
     category: "Necklace",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Gold Elephant Earrings",
@@ -461,6 +659,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/elephant-earrings_925x.jpg"],
     category: "Earrings",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Guardian Angel Earrings",
@@ -472,6 +672,8 @@ const products = [
     ],
     category: "Earrings",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Moon Charm Bracelet",
@@ -484,6 +686,8 @@ const products = [
     ],
     category: "Bracelet",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Origami Crane Necklace",
@@ -497,6 +701,8 @@ const products = [
     ],
     category: "Necklace",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Pretty Gold Necklace",
@@ -509,6 +715,8 @@ const products = [
     ],
     category: "Necklace",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Silver Threader Necklace",
@@ -520,6 +728,8 @@ const products = [
     ],
     category: "Necklace",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
   {
     name: "Stylish Summer Necklace",
@@ -528,6 +738,8 @@ const products = [
     images: ["https://burst.shopifycdn.com/photos/stylish-summer-necklace_925x.jpg"],
     category: "Necklace",
     countInStock: 1,
+    optionTypes: [],
+    variants: [],
   },
 ];
 

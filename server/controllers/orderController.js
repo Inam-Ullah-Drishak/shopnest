@@ -1,3 +1,4 @@
+import asyncHandler from '../utils/asyncHandler.js';
 import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
 
@@ -5,155 +6,137 @@ const SHIPPING_PRICE = 200;
 const FREE_SHIPPING_OVER = 5000;
 
 // POST /api/orders  — protected
-export const createOrder = async (req, res) => {
-  try {
-    const { orderItems, shippingAddress, paymentMethod } = req.body;
+export const createOrder = asyncHandler(async (req, res) => {
+  const { orderItems, shippingAddress, paymentMethod } = req.body;
 
-    if (!orderItems || orderItems.length === 0) {
-      return res.status(400).json({ message: 'No order items' });
-    }
-
-    const ids = orderItems.map((item) => item._id);
-    const dbProducts = await Product.find({ _id: { $in: ids } });
-
-    const finalItems = [];
-
-    for (const item of orderItems) {
-      const dbProduct = dbProducts.find(
-        (p) => p._id.toString() === item._id
-      );
-
-      if (!dbProduct) {
-        return res
-          .status(404)
-          .json({ message: `Product not found: ${item.name}` });
-      }
-
-      if (item.qty < 1) {
-        return res.status(400).json({ message: 'Invalid quantity' });
-      }
-
-      if (dbProduct.countInStock < item.qty) {
-        return res
-          .status(400)
-          .json({ message: `Not enough stock for ${dbProduct.name}` });
-      }
-
-      finalItems.push({
-        name: dbProduct.name,
-        qty: item.qty,
-        image: dbProduct.image,
-        price: dbProduct.price,
-        product: dbProduct._id,
-      });
-    }
-
-    const itemsPrice = finalItems.reduce(
-      (sum, item) => sum + item.price * item.qty,
-      0
-    );
-
-    const shippingPrice = itemsPrice > FREE_SHIPPING_OVER ? 0 : SHIPPING_PRICE;
-    const totalPrice = itemsPrice + shippingPrice;
-
-    const order = await Order.create({
-      user: req.user._id,
-      orderItems: finalItems,
-      shippingAddress,
-      paymentMethod: paymentMethod || 'Cash on Delivery',
-      itemsPrice,
-      shippingPrice,
-      totalPrice,
-    });
-
-    res.status(201).json(order);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  if (!orderItems || orderItems.length === 0) {
+    res.status(400);
+    throw new Error('No order items');
   }
-};
+
+  const ids = orderItems.map((item) => item._id);
+  const dbProducts = await Product.find({ _id: { $in: ids } });
+
+  const finalItems = [];
+
+  for (const item of orderItems) {
+    const dbProduct = dbProducts.find((p) => p._id.toString() === item._id);
+
+    if (!dbProduct) {
+      res.status(404);
+      throw new Error(`Product not found: ${item.name}`);
+    }
+
+    if (item.qty < 1) {
+      res.status(400);
+      throw new Error('Invalid quantity');
+    }
+
+    if (dbProduct.countInStock < item.qty) {
+      res.status(400);
+      throw new Error(`Not enough stock for ${dbProduct.name}`);
+    }
+
+    finalItems.push({
+      name: dbProduct.name,
+      qty: item.qty,
+      image: dbProduct.image,
+      price: dbProduct.price,
+      product: dbProduct._id,
+    });
+  }
+
+  const itemsPrice = finalItems.reduce(
+    (sum, item) => sum + item.price * item.qty,
+    0
+  );
+
+  const shippingPrice = itemsPrice > FREE_SHIPPING_OVER ? 0 : SHIPPING_PRICE;
+  const totalPrice = itemsPrice + shippingPrice;
+
+  const order = await Order.create({
+    user: req.user._id,
+    orderItems: finalItems,
+    shippingAddress,
+    paymentMethod: paymentMethod || 'Cash on Delivery',
+    itemsPrice,
+    shippingPrice,
+    totalPrice,
+  });
+
+  res.status(201).json(order);
+});
 
 // GET /api/orders/mine  — protected
-export const getMyOrders = async (req, res) => {
-  try {
-    const orders = await Order.find({ user: req.user._id }).sort({
-      createdAt: -1,
-    });
+export const getMyOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({ user: req.user._id }).sort({
+    createdAt: -1,
+  });
 
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-// GET /api/orders/:id  — protected
-export const getOrderById = async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id).populate(
-      'user',
-      'name email'
-    );
-
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-
-    if (
-      order.user._id.toString() !== req.user._id.toString() &&
-      !req.user.isAdmin
-    ) {
-      return res.status(401).json({ message: 'Not authorized' });
-    }
-
-    res.json(order);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
+  res.json(orders);
+});
 
 // GET /api/orders  — admin
-export const getAllOrders = async (req, res) => {
-  try {
-    const orders = await Order.find({})
-      .populate('user', 'name email')
-      .sort({ createdAt: -1 });
+export const getAllOrders = asyncHandler(async (req, res) => {
+  const orders = await Order.find({})
+    .populate('user', 'name email')
+    .sort({ createdAt: -1 });
 
-    res.json(orders);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  res.json(orders);
+});
+
+// GET /api/orders/:id  — protected
+export const getOrderById = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id).populate(
+    'user',
+    'name email'
+  );
+
+  if (!order) {
+    res.status(404);
+    throw new Error('Order not found');
   }
-};
+
+  if (
+    order.user._id.toString() !== req.user._id.toString() &&
+    !req.user.isAdmin
+  ) {
+    res.status(401);
+    throw new Error('Not authorized');
+  }
+
+  res.json(order);
+});
 
 // PUT /api/orders/:id/deliver  — admin
-export const updateOrderToDelivered = async (req, res) => {
-  try {
-    const order = await Order.findById(req.params.id);
+export const updateOrderToDelivered = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
 
-    if (!order) {
-      return res.status(404).json({ message: 'Order not found' });
-    }
-
-    if (order.isDelivered) {
-      return res.status(400).json({ message: 'Order already delivered' });
-    }
-
-    order.isDelivered = true;
-    order.deliveredAt = Date.now();
-
-    if (order.paymentMethod === 'Cash on Delivery') {
-      order.isPaid = true;
-      order.paidAt = Date.now();
-    }
-
-    for (const item of order.orderItems) {
-      await Product.updateOne(
-        { _id: item.product },
-        { $inc: { countInStock: -item.qty } }
-      );
-    }
-
-    const updated = await order.save();
-    res.json(updated);
-  } catch (error) {
-    res.status(500).json({ message: error.message });
+  if (!order) {
+    res.status(404);
+    throw new Error('Order not found');
   }
-};
+
+  if (order.isDelivered) {
+    res.status(400);
+    throw new Error('Order already delivered');
+  }
+
+  order.isDelivered = true;
+  order.deliveredAt = Date.now();
+
+  if (order.paymentMethod === 'Cash on Delivery') {
+    order.isPaid = true;
+    order.paidAt = Date.now();
+  }
+
+  for (const item of order.orderItems) {
+    await Product.updateOne(
+      { _id: item.product },
+      { $inc: { countInStock: -item.qty } }
+    );
+  }
+
+  const updated = await order.save();
+  res.json(updated);
+});

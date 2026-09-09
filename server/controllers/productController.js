@@ -68,9 +68,9 @@ const sanitizeVariants = (variants, optionTypes) => {
   return { optionTypes: cleanTypes, variants: cleanVariants };
 };
 
-// GET /api/products?keyword=&category=&pageNumber=
+// GET /api/products?keyword=&category=&pageNumber=&pageSize=&stock=&sort=
 export const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = 8;
+  const pageSize = Number(req.query.pageSize) || 8;
   const page = Number(req.query.pageNumber) || 1;
 
   const filter = {};
@@ -83,10 +83,35 @@ export const getProducts = asyncHandler(async (req, res) => {
     filter.category = req.query.category;
   }
 
+  // 'available' is for the storefront; the rest are admin inventory views
+  if (req.query.stock === 'out') {
+    filter.countInStock = 0;
+  } else if (req.query.stock === 'low') {
+    filter.countInStock = { $gt: 0, $lt: 5 };
+  } else if (req.query.stock === 'in') {
+    filter.countInStock = { $gte: 5 };
+  } else if (req.query.stock === 'available') {
+    filter.countInStock = { $gt: 0 };
+  }
+
+  // Whitelist: never pass user input straight into .sort()
+  const sortMap = {
+    newest: { createdAt: -1 },
+    oldest: { createdAt: 1 },
+    'price-asc': { price: 1 },
+    'price-desc': { price: -1 },
+    'name-asc': { name: 1 },
+    'name-desc': { name: -1 },
+    'stock-asc': { countInStock: 1 },
+    'stock-desc': { countInStock: -1 },
+  };
+
+  const sort = sortMap[req.query.sort] || sortMap.newest;
+
   const count = await Product.countDocuments(filter);
 
   const products = await Product.find(filter)
-    .sort({ createdAt: -1 })
+    .sort(sort)
     .limit(pageSize)
     .skip(pageSize * (page - 1));
 
@@ -94,11 +119,14 @@ export const getProducts = asyncHandler(async (req, res) => {
     products,
     page,
     pages: Math.ceil(count / pageSize),
+    count,
   });
 });
 
 // GET /api/products/categories
-export const getCategories = asyncHandler(async (req, res) => {
+// Distinct category strings actually in use. The managed list lives at
+// /api/categories — this stays for quick filter dropdowns.
+export const getProductCategories = asyncHandler(async (req, res) => {
   const categories = await Product.distinct('category');
   res.json(categories);
 });

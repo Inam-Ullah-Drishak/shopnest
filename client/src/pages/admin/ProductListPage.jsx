@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import {
   Plus,
@@ -9,38 +9,71 @@ import {
   Loader2,
   AlertCircle,
   PackageOpen,
+  Search,
+  X,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import AdminNav from '../../components/AdminNav.jsx';
+import Dropdown from '../../components/Dropdown.jsx';
 import { formatPrice } from '../../utils/format.js';
+
+const PAGE_SIZE = 20;
 
 function ProductListPage() {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
 
+  const keyword = searchParams.get('keyword') || '';
+  const category = searchParams.get('category') || 'All';
+  const stock = searchParams.get('stock') || 'all';
+  const sort = searchParams.get('sort') || 'newest';
+  const page = Number(searchParams.get('page')) || 1;
+
+  const [searchInput, setSearchInput] = useState(keyword);
   const [products, setProducts] = useState([]);
-  const [page, setPage] = useState(1);
+  const [categories, setCategories] = useState([]);
   const [pages, setPages] = useState(1);
+  const [count, setCount] = useState(0);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
 
+  const filtersActive =
+    keyword || category !== 'All' || stock !== 'all' || sort !== 'newest';
+
   useEffect(() => {
     if (!userInfo || !userInfo.isAdmin) {
       navigate('/login');
-      return;
     }
+  }, [userInfo, navigate]);
 
+  useEffect(() => {
+    axios
+      .get('/api/products/categories')
+      .then(({ data }) => setCategories(data))
+      .catch(() => {});
+  }, []);
+
+  useEffect(() => {
     const fetchProducts = async () => {
       setLoading(true);
 
       try {
         const { data } = await axios.get('/api/products', {
-          params: { pageNumber: page },
+          params: {
+            keyword,
+            category,
+            stock,
+            sort,
+            pageNumber: page,
+            pageSize: PAGE_SIZE,
+          },
         });
 
         setProducts(data.products);
         setPages(data.pages);
+        setCount(data.count);
       } catch (err) {
         setError(err.response?.data?.message || 'Could not load products');
       } finally {
@@ -49,7 +82,23 @@ function ProductListPage() {
     };
 
     fetchProducts();
-  }, [userInfo, navigate, page]);
+  }, [keyword, category, stock, sort, page]);
+
+  // Merge one change into the URL, resetting to page 1
+  const setParam = (changes) => {
+    const next = { keyword, category, stock, sort, page: 1, ...changes };
+
+    Object.keys(next).forEach((k) => {
+      if (!next[k] || next[k] === 'All' || next[k] === 'all') delete next[k];
+    });
+
+    setSearchParams(next);
+  };
+
+  const clearFilters = () => {
+    setSearchInput('');
+    setSearchParams({});
+  };
 
   const deleteHandler = async (id, name) => {
     if (!window.confirm(`Delete "${name}"? This cannot be undone.`)) return;
@@ -60,6 +109,7 @@ function ProductListPage() {
     try {
       await axios.delete(`/api/products/${id}`);
       setProducts((prev) => prev.filter((p) => p._id !== id));
+      setCount((c) => c - 1);
     } catch (err) {
       setError(err.response?.data?.message || 'Could not delete this product');
     } finally {
@@ -71,8 +121,14 @@ function ProductListPage() {
     <div className="p-8">
       <AdminNav />
 
-      <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
-        <h1 className="text-2xl font-bold">Products</h1>
+      <div className="flex flex-wrap justify-between items-center gap-4 mb-5">
+        <div>
+          <h1 className="text-2xl font-bold">Products</h1>
+          <p className="text-sm text-gray-500 mt-0.5">
+            {loading ? 'Loading' : `${count} product${count === 1 ? '' : 's'}`}
+            {filtersActive && !loading && ' matching your filters'}
+          </p>
+        </div>
 
         <Link
           to="/admin/product/new"
@@ -81,6 +137,77 @@ function ProductListPage() {
           <Plus size={18} />
           New product
         </Link>
+      </div>
+
+      <div className="flex flex-wrap gap-2 mb-6">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            setParam({ keyword: searchInput });
+          }}
+          className="relative flex-1 min-w-56"
+        >
+          <Search
+            size={16}
+            className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400"
+          />
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            placeholder="Search by name"
+            className="w-full border rounded-lg py-2.5 pl-9 pr-3 text-sm"
+          />
+        </form>
+
+        <Dropdown
+          value={category}
+          onChange={(v) => setParam({ category: v })}
+          options={[
+            { value: 'All', label: 'All categories' },
+            ...categories.map((cat) => ({ value: cat, label: cat })),
+          ]}
+          className="w-44"
+        />
+
+        <Dropdown
+          value={stock}
+          onChange={(v) => setParam({ stock: v })}
+          options={[
+            { value: 'all', label: 'Any stock' },
+            { value: 'in', label: 'In stock' },
+            { value: 'low', label: 'Low stock' },
+            { value: 'out', label: 'Out of stock' },
+          ]}
+          className="w-36"
+        />
+
+        <Dropdown
+          value={sort}
+          onChange={(v) => setParam({ sort: v })}
+          options={[
+            { value: 'newest', label: 'Newest first' },
+            { value: 'oldest', label: 'Oldest first' },
+            { value: 'name-asc', label: 'Name A–Z' },
+            { value: 'name-desc', label: 'Name Z–A' },
+            { value: 'price-asc', label: 'Price low to high' },
+            { value: 'price-desc', label: 'Price high to low' },
+            { value: 'stock-asc', label: 'Stock low to high' },
+            { value: 'stock-desc', label: 'Stock high to low' },
+          ]}
+          className="w-48"
+        />
+
+        {filtersActive && (
+          <button
+            type="button"
+            onClick={clearFilters}
+            className="inline-flex items-center gap-1.5 border rounded-lg px-3 py-2.5 text-sm hover:bg-gray-50 cursor-pointer"
+          >
+            <X size={15} />
+            Clear
+          </button>
+        )}
       </div>
 
       {error && (
@@ -97,18 +224,38 @@ function ProductListPage() {
         </div>
       ) : products.length === 0 ? (
         <div className="border rounded-lg py-16 text-center">
-          <PackageOpen size={36} className="mx-auto text-gray-300" />
-          <p className="mt-3 font-medium">No products yet</p>
-          <p className="text-sm text-gray-500 mt-1">
-            Add your first product to start selling.
-          </p>
-          <Link
-            to="/admin/product/new"
-            className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700 mt-5"
-          >
-            <Plus size={18} />
-            New product
-          </Link>
+          {filtersActive ? (
+            <>
+              <Search size={36} className="mx-auto text-gray-300" />
+              <p className="mt-3 font-medium">No products match</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Try a different search or clear the filters.
+              </p>
+              <button
+                type="button"
+                onClick={clearFilters}
+                className="inline-flex items-center gap-2 border px-4 py-2.5 rounded-lg hover:bg-gray-50 mt-5 cursor-pointer"
+              >
+                <X size={16} />
+                Clear filters
+              </button>
+            </>
+          ) : (
+            <>
+              <PackageOpen size={36} className="mx-auto text-gray-300" />
+              <p className="mt-3 font-medium">No products yet</p>
+              <p className="text-sm text-gray-500 mt-1">
+                Add your first product to start selling.
+              </p>
+              <Link
+                to="/admin/product/new"
+                className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700 mt-5"
+              >
+                <Plus size={18} />
+                New product
+              </Link>
+            </>
+          )}
         </div>
       ) : (
         <>
@@ -143,21 +290,33 @@ function ProductListPage() {
 
                         <div className="min-w-0">
                           <p className="font-medium truncate">{product.name}</p>
-                          {product.images?.length > 1 && (
-                            <p className="text-xs text-gray-500">
-                              {product.images.length} photos
-                            </p>
-                          )}
+                          <p className="text-xs text-gray-500">
+                            {product.hasVariants &&
+                              `${product.variants.length} variants`}
+                            {product.hasVariants &&
+                              product.images?.length > 1 &&
+                              ' · '}
+                            {product.images?.length > 1 &&
+                              `${product.images.length} photos`}
+                          </p>
                         </div>
                       </div>
                     </td>
 
                     <td className="p-3 text-gray-600">{product.category}</td>
-                    <td className="p-3">{formatPrice(product.price)}</td>
+
+                    <td className="p-3 whitespace-nowrap">
+                      {product.hasVariants &&
+                      product.minPrice !== product.maxPrice
+                        ? `${formatPrice(product.minPrice)} – ${formatPrice(
+                            product.maxPrice
+                          )}`
+                        : formatPrice(product.price)}
+                    </td>
 
                     <td className="p-3">
                       <span
-                        className={`px-2 py-1 rounded text-xs ${
+                        className={`px-2 py-1 rounded text-xs whitespace-nowrap ${
                           product.countInStock === 0
                             ? 'bg-red-100 text-red-700'
                             : product.countInStock < 5
@@ -208,7 +367,7 @@ function ProductListPage() {
               {[...Array(pages).keys()].map((x) => (
                 <button
                   key={x + 1}
-                  onClick={() => setPage(x + 1)}
+                  onClick={() => setParam({ page: x + 1 })}
                   className={`px-4 py-2 rounded-lg cursor-pointer ${
                     page === x + 1
                       ? 'bg-gray-900 text-white'

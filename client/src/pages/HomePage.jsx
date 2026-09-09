@@ -1,139 +1,246 @@
 import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import axios from 'axios';
+import { Loader2, Truck, Wallet, RotateCcw, ImageOff } from 'lucide-react';
 import ProductCard from '../components/ProductCard.jsx';
+import { formatPrice } from '../utils/format.js';
 
 function HomePage() {
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  const keyword = searchParams.get('keyword') || '';
-  const category = searchParams.get('category') || 'All';
-  const pageNumber = Number(searchParams.get('page')) || 1;
-
-  const [searchInput, setSearchInput] = useState(keyword);
   const [products, setProducts] = useState([]);
-  const [categories, setCategories] = useState([]);
-  const [pages, setPages] = useState(1);
-  const [error, setError] = useState('');
+  const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const fetchCategories = async () => {
+    const load = async () => {
       try {
-        const { data } = await axios.get('/api/products/categories');
-        setCategories(data);
-      } catch (err) {
-        console.error(err.message);
-      }
-    };
+        const [productRes, collectionRes] = await Promise.all([
+          axios.get('/api/products', {
+            params: { sort: 'newest', pageSize: 60 },
+          }),
+          axios.get('/api/collections', { params: { published: 'true' } }),
+        ]);
 
-    fetchCategories();
-  }, []);
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
-
-      try {
-        const { data } = await axios.get('/api/products', {
-          params: { keyword, category, pageNumber },
-        });
-
-        setProducts(data.products);
-        setPages(data.pages);
-      } catch (err) {
-        setError(err.response?.data?.message || 'Could not load products');
+        setProducts(productRes.data.products);
+        setCollections(collectionRes.data);
+      } catch (error) {
+        console.error(error.message);
       } finally {
         setLoading(false);
       }
     };
 
-    fetchProducts();
-  }, [keyword, category, pageNumber]);
+    load();
+  }, []);
 
-  const searchHandler = (e) => {
-    e.preventDefault();
-    setSearchParams({ keyword: searchInput, category, page: 1 });
-  };
+  if (loading) {
+    return (
+      <div className="p-8 flex items-center gap-2 text-gray-500">
+        <Loader2 size={18} className="animate-spin" />
+        Loading
+      </div>
+    );
+  }
 
-  const categoryHandler = (value) => {
-    setSearchParams({ keyword, category: value, page: 1 });
-  };
+  const inStock = products.filter((p) => p.countInStock > 0 && p.image);
+  const hero = inStock[0];
+  const arrivals = products.slice(0, 6);
 
-  const pageHandler = (value) => {
-    setSearchParams({ keyword, category, page: value });
-  };
+  // One representative photo per category, taken from the products we already have
+  const categories = [];
+  const seen = new Set();
+
+  for (const product of products) {
+    if (!product.category || seen.has(product.category)) continue;
+    seen.add(product.category);
+    categories.push({ name: product.category, image: product.image });
+  }
 
   return (
-    <div className="p-8">
-      <h1 className="text-3xl font-bold mb-6">Products</h1>
+    <div>
+      {/* Hero */}
+      <section className="grid md:grid-cols-2 gap-8 items-center px-8 py-12 md:py-20">
+        <div>
+          <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.05]">
+            Things worth
+            <br />
+            keeping.
+          </h1>
 
-      <div className="flex flex-wrap gap-4 mb-6">
-        <form onSubmit={searchHandler} className="flex gap-2 flex-1 min-w-64">
-          <input
-            type="text"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search products..."
-            className="border rounded p-2 flex-1"
-          />
-          <button
-            type="submit"
-            className="bg-gray-900 text-white px-4 rounded hover:bg-gray-700 cursor-pointer"
-          >
-            Search
-          </button>
-        </form>
+          <p className="text-gray-600 mt-5 max-w-md leading-relaxed">
+            Clothing, jewellery and pieces for the home. Chosen carefully,
+            priced honestly, delivered across Pakistan.
+          </p>
 
-        <select
-          value={category}
-          onChange={(e) => categoryHandler(e.target.value)}
-          className="border rounded p-2"
-        >
-          <option value="All">All Categories</option>
-          {categories.map((cat) => (
-            <option key={cat} value={cat}>
-              {cat}
-            </option>
-          ))}
-        </select>
-      </div>
+          <div className="flex flex-wrap gap-3 mt-8">
+            <Link
+              to="/shop"
+              className="bg-gray-900 text-white px-6 py-3 rounded-lg hover:bg-gray-700"
+            >
+              Shop everything
+            </Link>
 
-      {error && (
-        <p className="bg-red-100 text-red-700 p-3 rounded mb-4">{error}</p>
+            <Link
+              to="/collections"
+              className="border px-6 py-3 rounded-lg hover:bg-gray-50"
+            >
+              Browse collections
+            </Link>
+          </div>
+        </div>
+
+        {hero && (
+          <Link to={`/product/${hero._id}`} className="group block">
+            <div className="aspect-4/5 bg-gray-50 rounded-lg overflow-hidden">
+              <img
+                src={hero.image}
+                alt={hero.name}
+                className="w-full h-full object-cover group-hover:scale-105 transition duration-500"
+              />
+            </div>
+
+            <div className="flex items-baseline justify-between mt-3">
+              <p className="font-medium">{hero.name}</p>
+              <p className="text-gray-600">{formatPrice(hero.price)}</p>
+            </div>
+          </Link>
+        )}
+      </section>
+
+      {/* Categories */}
+      {categories.length > 0 && (
+        <section className="px-8 py-10 border-t">
+          <div className="flex items-baseline justify-between mb-6">
+            <h2 className="text-2xl font-bold">Shop by category</h2>
+            <Link
+              to="/shop"
+              className="text-sm text-gray-600 hover:text-gray-900"
+            >
+              See all
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {categories.map((category) => (
+              <Link
+                key={category.name}
+                to={`/shop?category=${encodeURIComponent(category.name)}`}
+                className="group"
+              >
+                <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
+                  {category.image ? (
+                    <img
+                      src={category.image}
+                      alt=""
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                    />
+                  ) : (
+                    <ImageOff size={20} className="text-gray-300" />
+                  )}
+                </div>
+
+                <p className="text-sm font-medium mt-2 text-center">
+                  {category.name}
+                </p>
+              </Link>
+            ))}
+          </div>
+        </section>
       )}
 
-      {loading ? (
-        <p>Loading...</p>
-      ) : products.length === 0 ? (
-        <p className="text-gray-600">No products found.</p>
-      ) : (
-        <>
+      {/* Collections */}
+      {collections.length > 0 && (
+        <section className="px-8 py-10 border-t">
+          <div className="flex items-baseline justify-between mb-6">
+            <h2 className="text-2xl font-bold">Collections</h2>
+            <Link
+              to="/collections"
+              className="text-sm text-gray-600 hover:text-gray-900"
+            >
+              See all
+            </Link>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {collections.slice(0, 3).map((collection) => (
+              <Link
+                key={collection._id}
+                to={`/collection/${collection.slug}`}
+                className="group"
+              >
+                <div className="aspect-3/2 bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
+                  {collection.image ? (
+                    <img
+                      src={collection.image}
+                      alt={collection.title}
+                      className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
+                    />
+                  ) : (
+                    <ImageOff size={24} className="text-gray-300" />
+                  )}
+                </div>
+
+                <h3 className="font-medium mt-3">{collection.title}</h3>
+
+                {collection.description && (
+                  <p className="text-sm text-gray-500 mt-1 line-clamp-2">
+                    {collection.description}
+                  </p>
+                )}
+              </Link>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* New arrivals */}
+      {arrivals.length > 0 && (
+        <section className="px-8 py-10 border-t">
+          <div className="flex items-baseline justify-between mb-6">
+            <h2 className="text-2xl font-bold">Just arrived</h2>
+            <Link
+              to="/shop?sort=newest"
+              className="text-sm text-gray-600 hover:text-gray-900"
+            >
+              See all
+            </Link>
+          </div>
+
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {products.map((product) => (
+            {arrivals.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
           </div>
-
-          {pages > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
-              {[...Array(pages).keys()].map((x) => (
-                <button
-                  key={x + 1}
-                  onClick={() => pageHandler(x + 1)}
-                  className={`px-4 py-2 rounded cursor-pointer ${
-                    pageNumber === x + 1
-                      ? 'bg-gray-900 text-white'
-                      : 'bg-gray-100 hover:bg-gray-200'
-                  }`}
-                >
-                  {x + 1}
-                </button>
-              ))}
-            </div>
-          )}
-        </>
+        </section>
       )}
+
+      {/* Service promises */}
+      <section className="px-8 py-12 border-t">
+        <div className="grid sm:grid-cols-3 gap-8">
+          <div>
+            <Truck size={20} className="text-gray-400" />
+            <p className="font-medium mt-3">Free delivery over Rs 5,000</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Flat Rs 200 on everything below that.
+            </p>
+          </div>
+
+          <div>
+            <Wallet size={20} className="text-gray-400" />
+            <p className="font-medium mt-3">Pay when it arrives</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Cash on delivery, nationwide.
+            </p>
+          </div>
+
+          <div>
+            <RotateCcw size={20} className="text-gray-400" />
+            <p className="font-medium mt-3">Seven day returns</p>
+            <p className="text-sm text-gray-500 mt-1">
+              Unworn and unused, no questions asked.
+            </p>
+          </div>
+        </div>
+      </section>
     </div>
   );
 }

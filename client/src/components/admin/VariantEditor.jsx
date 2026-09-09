@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Plus, X, Wand2, ImageOff } from 'lucide-react';
+import Dropdown from '../Dropdown.jsx';
 
 // "navy blue" -> "Navy Blue"
 const titleCase = (str) =>
@@ -302,20 +303,18 @@ function VariantEditor({
                         )}
                       </div>
 
-                      <select
+                      <Dropdown
                         value={variant.image}
-                        onChange={(e) =>
-                          updateVariant(index, 'image', e.target.value)
-                        }
-                        className="border rounded p-1.5 max-w-32"
-                      >
-                        <option value="">Use main</option>
-                        {images.map((src, i) => (
-                          <option key={src} value={src}>
-                            Photo {i + 1}
-                          </option>
-                        ))}
-                      </select>
+                        onChange={(v) => updateVariant(index, 'image', v)}
+                        options={[
+                          { value: '', label: 'Use main' },
+                          ...images.map((src, i) => ({
+                            value: src,
+                            label: `Photo ${i + 1}`,
+                          })),
+                        ]}
+                        className="w-32"
+                      />
                     </div>
                   </td>
 

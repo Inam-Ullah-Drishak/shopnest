@@ -103,7 +103,7 @@ function HomePage() {
 
         {hero && (
           <Link to={`/product/${hero._id}`} className="group block">
-            <div className="aspect-[4/5] bg-gray-50 rounded-lg overflow-hidden">
+            <div className="aspect-4/5 bg-gray-50 rounded-lg overflow-hidden">
               <img
                 src={hero.image}
                 alt={hero.name}
@@ -186,7 +186,7 @@ function HomePage() {
                 to={`/collection/${collection.slug}`}
                 className="group block"
               >
-                <div className="aspect-[3/2] bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
+                <div className="aspect-3/2 bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
                   {collection.image ? (
                     <img
                       src={collection.image}

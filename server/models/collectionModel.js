@@ -26,7 +26,7 @@ const collectionSchema = new mongoose.Schema(
 );
 
 collectionSchema.pre('validate', function () {
-  if (this.isModified('title') || !this.slug) {
+  if (!this.slug) {
     this.slug = slugify(this.title);
   }
 });

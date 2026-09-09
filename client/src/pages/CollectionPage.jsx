@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Loader2, PackageOpen, ArrowLeft } from 'lucide-react';
 import ProductCard from '../components/ProductCard.jsx';
 import Dropdown from '../components/Dropdown.jsx';
+import Pagination from '../components/Pagination.jsx';
 
 function CollectionPage() {
   const { slug } = useParams();
@@ -45,8 +46,12 @@ function CollectionPage() {
     fetchCollection();
   }, [slug, sort, page]);
 
-  const setParam = (changes) =>
-    setSearchParams({ sort, page: 1, ...changes });
+  const setParam = (changes) => setSearchParams({ sort, page: 1, ...changes });
+
+  const pageHandler = (n) => {
+    setParam({ page: n });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   if (loading) {
     return (
@@ -62,11 +67,11 @@ function CollectionPage() {
       <div className="p-8">
         <p className="text-red-600">{error}</p>
         <Link
-          to="/"
+          to="/shop"
           className="inline-flex items-center gap-1 text-sm text-blue-600 hover:underline mt-3"
         >
           <ArrowLeft size={15} />
-          Back to all products
+          Back to the shop
         </Link>
       </div>
     );
@@ -76,7 +81,7 @@ function CollectionPage() {
 
   return (
     <div className="p-8">
-      {collection.image && (
+      {collection.image ? (
         <div className="h-48 md:h-60 rounded-lg overflow-hidden mb-6 relative">
           <img
             src={collection.image}
@@ -89,9 +94,7 @@ function CollectionPage() {
             </h1>
           </div>
         </div>
-      )}
-
-      {!collection.image && (
+      ) : (
         <h1 className="text-3xl font-bold mb-2">{collection.title}</h1>
       )}
 
@@ -130,7 +133,7 @@ function CollectionPage() {
             This collection has no products at the moment.
           </p>
           <Link
-            to="/"
+            to="/shop"
             className="inline-block bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 mt-5"
           >
             Browse all products
@@ -138,29 +141,13 @@ function CollectionPage() {
         </div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {products.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
           </div>
 
-          {pages > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
-              {[...Array(pages).keys()].map((x) => (
-                <button
-                  key={x + 1}
-                  onClick={() => setParam({ page: x + 1 })}
-                  className={`px-4 py-2 rounded-lg cursor-pointer ${
-                    page === x + 1
-                      ? 'bg-gray-900 text-white'
-                      : 'border hover:bg-gray-50'
-                  }`}
-                >
-                  {x + 1}
-                </button>
-              ))}
-            </div>
-          )}
+          <Pagination page={page} pages={pages} onChange={pageHandler} />
         </>
       )}
     </div>

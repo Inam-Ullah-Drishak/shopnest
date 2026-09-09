@@ -6,6 +6,8 @@ import { useCart } from '../context/CartContext.jsx';
 import ImageGallery from '../components/ImageGallery.jsx';
 import VariantSelector from '../components/VariantSelector.jsx';
 import QuantityInput from '../components/QuantityInput.jsx';
+import StarRating from '../components/StarRating.jsx';
+import ProductReviews from '../components/ProductReviews.jsx';
 import { formatPrice } from '../utils/format.js';
 
 function ProductPage() {
@@ -22,6 +24,8 @@ function ProductPage() {
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
+      setError('');
+      window.scrollTo({ top: 0 });
 
       try {
         const { data } = await axios.get(`/api/products/${id}`);
@@ -53,7 +57,6 @@ function ProductPage() {
 
   const hasVariants = product?.variants?.length > 0;
 
-  // The variant matching every currently selected option
   const activeVariant = useMemo(() => {
     if (!hasVariants) return null;
 
@@ -70,6 +73,16 @@ function ProductPage() {
   };
 
   const price = hasVariants ? activeVariant?.price : product?.price;
+
+  const compareAt = hasVariants
+    ? activeVariant?.compareAtPrice
+    : product?.compareAtPrice;
+
+  const onSale = Boolean(compareAt && price && compareAt > price);
+  const discount = onSale
+    ? Math.round(((compareAt - price) / compareAt) * 100)
+    : 0;
+
   const stock = hasVariants
     ? activeVariant?.countInStock ?? 0
     : product?.countInStock ?? 0;
@@ -94,7 +107,8 @@ function ProductPage() {
   if (error) return <p className="p-8 text-red-600">{error}</p>;
   if (!product) return null;
 
-  // Variant image takes priority, falling back to the product gallery
+  const categoryName = product.categoryName || product.category?.name || '';
+
   const galleryImages =
     activeVariant?.image && !product.images.includes(activeVariant.image)
       ? [activeVariant.image, ...product.images]
@@ -102,24 +116,60 @@ function ProductPage() {
 
   return (
     <div className="p-8">
-      <Link
-        to="/"
-        className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
-      >
-        <ArrowLeft size={16} />
-        All products
-      </Link>
+      <div className="flex items-center gap-2 text-sm text-gray-500 flex-wrap">
+        <Link
+          to="/shop"
+          className="inline-flex items-center gap-1 hover:text-gray-900"
+        >
+          <ArrowLeft size={15} />
+          Shop
+        </Link>
+
+        {categoryName && (
+          <>
+            <span>/</span>
+            <Link
+              to={`/shop?category=${encodeURIComponent(categoryName)}`}
+              className="hover:text-gray-900"
+            >
+              {categoryName}
+            </Link>
+          </>
+        )}
+      </div>
 
       <div className="grid md:grid-cols-2 gap-10 mt-6">
         <ImageGallery images={galleryImages} alt={product.name} />
 
         <div>
-          <p className="text-sm text-gray-500">{product.category}</p>
-          <h1 className="text-3xl font-bold mt-1">{product.name}</h1>
+          <h1 className="text-3xl font-bold">{product.name}</h1>
 
-          <p className="text-2xl font-semibold mt-4">
-            {price != null ? formatPrice(price) : 'Select an option'}
-          </p>
+          {product.numReviews > 0 && (
+            <div className="mt-2">
+              <StarRating
+                value={product.rating}
+                count={product.numReviews}
+                size={16}
+              />
+            </div>
+          )}
+
+          <div className="flex items-baseline gap-3 mt-4 flex-wrap">
+            <p className="text-2xl font-semibold">
+              {price != null ? formatPrice(price) : 'Select an option'}
+            </p>
+
+            {onSale && (
+              <>
+                <p className="text-lg text-gray-400 line-through">
+                  {formatPrice(compareAt)}
+                </p>
+                <span className="bg-red-600 text-white text-xs px-2 py-1 rounded">
+                  {discount}% off
+                </span>
+              </>
+            )}
+          </div>
 
           {hasVariants && product.minPrice !== product.maxPrice && (
             <p className="text-sm text-gray-500 mt-1">
@@ -181,8 +231,28 @@ function ProductPage() {
             <ShoppingCart size={18} />
             {canBuy ? 'Add to cart' : 'Out of stock'}
           </button>
+
+          {product.tags?.length > 0 && (
+            <div className="flex flex-wrap gap-2 mt-6">
+              {product.tags.map((tag) => (
+                <Link
+                  key={tag}
+                  to={`/shop?keyword=${encodeURIComponent(tag)}`}
+                  className="text-xs bg-gray-100 hover:bg-gray-200 rounded-full px-3 py-1"
+                >
+                  {tag}
+                </Link>
+              ))}
+            </div>
+          )}
         </div>
       </div>
+
+      <ProductReviews
+        productId={product._id}
+        rating={product.rating || 0}
+        numReviews={product.numReviews || 0}
+      />
     </div>
   );
 }

@@ -1,0 +1,98 @@
+[
+  {
+    "_id": "6ecc8f8f8884d6401d2eb4a0",
+    "title": "New Arrivals",
+    "slug": "new-arrivals",
+    "description": "Freshly stocked pieces added in the last few weeks.",
+    "type": "manual",
+    "image": "https://picsum.photos/seed/col-new-arrivals/1200/600",
+    "position": 0,
+    "isActive": true,
+    "createdAt": "2025-08-26T12:00:00.000Z",
+    "updatedAt": "2026-08-29T12:00:00.000Z"
+  },
+  {
+    "_id": "623b4a2ed32b2392e4f05671",
+    "title": "Best Sellers",
+    "slug": "best-sellers",
+    "description": "Our most ordered designs across every category.",
+    "type": "manual",
+    "image": "https://picsum.photos/seed/col-best-sellers/1200/600",
+    "position": 1,
+    "isActive": true,
+    "createdAt": "2025-08-26T12:00:00.000Z",
+    "updatedAt": "2026-08-29T12:00:00.000Z"
+  },
+  {
+    "_id": "7f325ecd6be0a8673ce8e12b",
+    "title": "Sale",
+    "slug": "sale",
+    "description": "Discounted stock while quantities last.",
+    "type": "auto",
+    "image": "https://picsum.photos/seed/col-sale/1200/600",
+    "position": 2,
+    "isActive": true,
+    "createdAt": "2025-08-26T12:00:00.000Z",
+    "updatedAt": "2026-08-29T12:00:00.000Z"
+  },
+  {
+    "_id": "d4122693e9cc950ef15b81e7",
+    "title": "Bridal Edit",
+    "slug": "bridal-edit",
+    "description": "Curated heavy sets for the full wedding week.",
+    "type": "manual",
+    "image": "https://picsum.photos/seed/col-bridal-edit/1200/600",
+    "position": 3,
+    "isActive": true,
+    "createdAt": "2025-08-26T12:00:00.000Z",
+    "updatedAt": "2026-08-29T12:00:00.000Z"
+  },
+  {
+    "_id": "54004a3fb3fbc2f7148c00d5",
+    "title": "Under Rs.1000",
+    "slug": "under-rs1000",
+    "description": "Budget-friendly picks that still look premium.",
+    "type": "auto",
+    "image": "https://picsum.photos/seed/col-under-rs1000/1200/600",
+    "position": 4,
+    "isActive": true,
+    "createdAt": "2025-08-26T12:00:00.000Z",
+    "updatedAt": "2026-08-29T12:00:00.000Z"
+  },
+  {
+    "_id": "a8cf87492dafcd2c107ffed1",
+    "title": "Party Wear",
+    "slug": "party-wear",
+    "description": "Light, sparkly pieces for dinners and dholkis.",
+    "type": "manual",
+    "image": "https://picsum.photos/seed/col-party-wear/1200/600",
+    "position": 5,
+    "isActive": true,
+    "createdAt": "2025-08-26T12:00:00.000Z",
+    "updatedAt": "2026-08-29T12:00:00.000Z"
+  },
+  {
+    "_id": "70ccab901ca268f9ebaa153f",
+    "title": "Antique Finish",
+    "slug": "antique-finish",
+    "description": "Oxidised and antique-gold pieces with deep carving.",
+    "type": "manual",
+    "image": "https://picsum.photos/seed/col-antique-finish/1200/600",
+    "position": 6,
+    "isActive": true,
+    "createdAt": "2025-08-26T12:00:00.000Z",
+    "updatedAt": "2026-08-29T12:00:00.000Z"
+  },
+  {
+    "_id": "54a1d0f7c16228ec9e3cbdc9",
+    "title": "Everyday Essentials",
+    "slug": "everyday-essentials",
+    "description": "Lightweight designs comfortable enough for daily wear.",
+    "type": "manual",
+    "image": "https://picsum.photos/seed/col-everyday-essentials/1200/600",
+    "position": 7,
+    "isActive": true,
+    "createdAt": "2025-08-26T12:00:00.000Z",
+    "updatedAt": "2026-08-29T12:00:00.000Z"
+  }
+]

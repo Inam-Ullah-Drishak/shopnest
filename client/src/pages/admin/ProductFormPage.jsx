@@ -13,6 +13,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import VariantEditor from '../../components/admin/VariantEditor.jsx';
+import Dropdown from '../../components/Dropdown.jsx';
 
 function ProductFormPage() {
   const { id } = useParams();
@@ -25,11 +26,16 @@ function ProductFormPage() {
     name: '',
     description: '',
     price: '',
+    compareAtPrice: '',
     category: '',
     countInStock: '',
+    status: 'active',
+    isFeatured: false,
   });
 
   const [images, setImages] = useState([]);
+  const [tags, setTags] = useState([]);
+  const [tagInput, setTagInput] = useState('');
   const [optionTypes, setOptionTypes] = useState([]);
   const [variants, setVariants] = useState([]);
 
@@ -47,14 +53,12 @@ function ProductFormPage() {
     setForm((prev) => ({ ...prev, [field]: value }));
 
   useEffect(() => {
-    if (!userInfo || !userInfo.isAdmin) {
-      navigate('/login');
-    }
+    if (!userInfo || !userInfo.isAdmin) navigate('/login');
   }, [userInfo, navigate]);
 
   useEffect(() => {
     axios
-      .get('/api/products/categories')
+      .get('/api/categories')
       .then(({ data }) => setCategories(data))
       .catch(() => {});
   }, []);
@@ -70,17 +74,24 @@ function ProductFormPage() {
           name: data.name,
           description: data.description,
           price: data.price,
-          category: data.category,
+          compareAtPrice: data.compareAtPrice ?? '',
+          // category is populated now, so fall back through both shapes
+          category: data.categoryName || data.category?.name || '',
           countInStock: data.countInStock,
+          status: data.status || 'active',
+          isFeatured: Boolean(data.isFeatured),
         });
 
         setImages(data.images || []);
+        setTags(data.tags || []);
+
         setOptionTypes(
           (data.optionTypes || []).map((t) => ({
             name: t.name,
             values: [...t.values],
           }))
         );
+
         setVariants(
           (data.variants || []).map((v) => ({
             options: v.options.map((o) => ({ name: o.name, value: o.value })),
@@ -146,7 +157,6 @@ function ProductFormPage() {
     const removed = images[index];
     setImages((prev) => prev.filter((_, i) => i !== index));
 
-    // Any variant pointing at this image falls back to the main one
     setVariants((prev) =>
       prev.map((v) => (v.image === removed ? { ...v, image: '' } : v))
     );
@@ -154,6 +164,17 @@ function ProductFormPage() {
 
   const makePrimary = (index) =>
     setImages((prev) => [prev[index], ...prev.filter((_, i) => i !== index)]);
+
+  const addTag = () => {
+    const tag = tagInput.trim().toLowerCase();
+    if (!tag || tags.includes(tag)) {
+      setTagInput('');
+      return;
+    }
+
+    setTags((prev) => [...prev, tag]);
+    setTagInput('');
+  };
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -166,17 +187,23 @@ function ProductFormPage() {
 
     setSaving(true);
 
+    const basePrice = hasVariants
+      ? Math.min(...variants.map((v) => v.price))
+      : Number(form.price) || 0;
+
     const payload = {
       name: form.name,
       description: form.description,
-      price: hasVariants
-        ? Math.min(...variants.map((v) => v.price))
-        : Number(form.price) || 0,
+      price: basePrice,
+      compareAtPrice: form.compareAtPrice === '' ? null : Number(form.compareAtPrice),
       category: form.category,
       countInStock: hasVariants
         ? variants.reduce((sum, v) => sum + v.countInStock, 0)
         : Number(form.countInStock) || 0,
       images,
+      tags,
+      status: form.status,
+      isFeatured: form.isFeatured,
       optionTypes: hasVariants
         ? optionTypes.filter((t) => t.name.trim() && t.values.length > 0)
         : [],
@@ -205,6 +232,22 @@ function ProductFormPage() {
       </div>
     );
   }
+
+  // Nested categories, indented so the tree is readable in a flat dropdown
+  const categoryOptions = [
+    { value: '', label: 'Choose a category' },
+    ...categories
+      .filter((c) => !c.parent)
+      .flatMap((parent) => [
+        { value: parent.name, label: parent.name },
+        ...categories
+          .filter((c) => c.parent === parent._id)
+          .map((child) => ({
+            value: child.name,
+            label: `\u00A0\u00A0\u00A0\u00A0${child.name}`,
+          })),
+      ]),
+  ];
 
   return (
     <div className="max-w-3xl mx-auto p-8">
@@ -238,11 +281,7 @@ function ProductFormPage() {
                   key={`${src}-${index}`}
                   className="relative aspect-square border rounded-lg overflow-hidden bg-gray-50 group"
                 >
-                  <img
-                    src={src}
-                    alt=""
-                    className="w-full h-full object-cover"
-                  />
+                  <img src={src} alt="" className="w-full h-full object-cover" />
 
                   {index === 0 && (
                     <span className="absolute bottom-0 inset-x-0 bg-gray-900/75 text-white text-[11px] text-center py-0.5">
@@ -333,11 +372,6 @@ function ProductFormPage() {
               Add
             </button>
           </div>
-
-          <p className="text-xs text-gray-500 mt-2">
-            The first image is shown on cards and in the cart. JPG, PNG or WEBP,
-            up to 2 MB each.
-          </p>
         </div>
 
         <div>
@@ -371,30 +405,84 @@ function ProductFormPage() {
           />
         </div>
 
+        <div className="grid sm:grid-cols-2 gap-4">
+          <div>
+            <p className="block mb-1 font-medium text-sm">Category</p>
+            <Dropdown
+              value={form.category}
+              onChange={(v) => setField('category', v)}
+              options={categoryOptions}
+              placeholder="Choose a category"
+            />
+          </div>
+
+          <div>
+            <p className="block mb-1 font-medium text-sm">Status</p>
+            <Dropdown
+              value={form.status}
+              onChange={(v) => setField('status', v)}
+              options={[
+                { value: 'active', label: 'Active — visible in store' },
+                { value: 'draft', label: 'Draft — hidden' },
+              ]}
+            />
+          </div>
+        </div>
+
         <div>
-          <label htmlFor="category" className="block mb-1 font-medium text-sm">
-            Category
+          <label htmlFor="tags" className="block mb-1 font-medium text-sm">
+            Tags
           </label>
-          <input
-            id="category"
-            type="text"
-            list="category-options"
-            value={form.category}
-            onChange={(e) => setField('category', e.target.value)}
-            className="w-full border rounded-lg p-2.5"
-            required
-          />
-          <datalist id="category-options">
-            {categories.map((cat) => (
-              <option key={cat} value={cat} />
-            ))}
-          </datalist>
+
+          {tags.length > 0 && (
+            <div className="flex flex-wrap gap-2 mb-2">
+              {tags.map((tag) => (
+                <span
+                  key={tag}
+                  className="inline-flex items-center gap-1.5 bg-gray-100 rounded-full pl-3 pr-1.5 py-1 text-sm"
+                >
+                  {tag}
+                  <button
+                    type="button"
+                    onClick={() => setTags(tags.filter((t) => t !== tag))}
+                    className="text-gray-400 hover:text-red-600 cursor-pointer"
+                  >
+                    <X size={13} />
+                  </button>
+                </span>
+              ))}
+            </div>
+          )}
+
+          <div className="flex gap-2">
+            <input
+              id="tags"
+              type="text"
+              value={tagInput}
+              onChange={(e) => setTagInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === 'Enter') {
+                  e.preventDefault();
+                  addTag();
+                }
+              }}
+              placeholder="ruby, matte-gold"
+              className="flex-1 border rounded-lg p-2.5 text-sm"
+            />
+            <button
+              type="button"
+              onClick={addTag}
+              className="border rounded-lg px-4 text-sm hover:bg-gray-50 cursor-pointer"
+            >
+              Add tag
+            </button>
+          </div>
           <p className="text-xs text-gray-500 mt-1">
-            Pick an existing category or type a new one.
+            Tags are searchable by customers.
           </p>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid sm:grid-cols-3 gap-4">
           <div>
             <label htmlFor="price" className="block mb-1 font-medium text-sm">
               Price (Rs)
@@ -418,6 +506,24 @@ function ProductFormPage() {
                 Set per variant below.
               </p>
             )}
+          </div>
+
+          <div>
+            <label htmlFor="compare" className="block mb-1 font-medium text-sm">
+              Compare at (Rs)
+            </label>
+            <input
+              id="compare"
+              type="number"
+              min="0"
+              value={form.compareAtPrice}
+              onChange={(e) => setField('compareAtPrice', e.target.value)}
+              placeholder="Optional"
+              className="w-full border rounded-lg p-2.5"
+            />
+            <p className="text-xs text-gray-500 mt-1">
+              Shown struck through if higher than the price.
+            </p>
           </div>
 
           <div>
@@ -445,6 +551,16 @@ function ProductFormPage() {
             )}
           </div>
         </div>
+
+        <label className="inline-flex items-center gap-2 cursor-pointer">
+          <input
+            type="checkbox"
+            checked={form.isFeatured}
+            onChange={(e) => setField('isFeatured', e.target.checked)}
+            className="w-4 h-4 cursor-pointer"
+          />
+          <span className="text-sm">Feature this product on the home page</span>
+        </label>
 
         <VariantEditor
           optionTypes={optionTypes}

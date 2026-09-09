@@ -4,6 +4,7 @@ import Product from '../models/productModel.js';
 
 const SHIPPING_PRICE = 200;
 const FREE_SHIPPING_OVER = 5000;
+const DEFAULT_PAGE_SIZE = 8;
 
 // POST /api/orders  — protected
 export const createOrder = asyncHandler(async (req, res) => {
@@ -27,6 +28,12 @@ export const createOrder = asyncHandler(async (req, res) => {
       throw new Error('One of the products is no longer available');
     }
 
+    // Drafts aren't for sale, even if someone still has one in their cart
+    if (dbProduct.status === 'draft') {
+      res.status(400);
+      throw new Error(`${dbProduct.name} is no longer available`);
+    }
+
     const qty = Number(item.qty);
 
     if (!Number.isInteger(qty) || qty < 1) {
@@ -47,15 +54,17 @@ export const createOrder = asyncHandler(async (req, res) => {
 
       if (!variant) {
         res.status(400);
-        throw new Error(`That option is no longer available for ${dbProduct.name}`);
+        throw new Error(
+          `That option is no longer available for ${dbProduct.name}`
+        );
       }
 
       if (variant.countInStock < qty) {
         res.status(400);
         throw new Error(
-          `Only ${variant.countInStock} left of ${dbProduct.name} (${variant.options
-            .map((o) => o.value)
-            .join(' / ')})`
+          `Only ${variant.countInStock} left of ${
+            dbProduct.name
+          } (${variant.options.map((o) => o.value).join(' / ')})`
         );
       }
 
@@ -111,22 +120,57 @@ export const createOrder = asyncHandler(async (req, res) => {
   res.status(201).json(order);
 });
 
-// GET /api/orders/mine  — protected
+// GET /api/orders/mine?pageNumber=&pageSize=  — protected
 export const getMyOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({ user: req.user._id }).sort({
-    createdAt: -1,
-  });
+  const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
+  const page = Number(req.query.pageNumber) || 1;
 
-  res.json(orders);
+  const filter = { user: req.user._id };
+
+  const count = await Order.countDocuments(filter);
+
+  const orders = await Order.find(filter)
+    .sort({ createdAt: -1 })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  res.json({
+    orders,
+    page,
+    pages: Math.ceil(count / pageSize),
+    count,
+  });
 });
 
-// GET /api/orders  — admin
+// GET /api/orders?pageNumber=&pageSize=&status=&keyword=  — admin
 export const getAllOrders = asyncHandler(async (req, res) => {
-  const orders = await Order.find({})
-    .populate('user', 'name email')
-    .sort({ createdAt: -1 });
+  const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
+  const page = Number(req.query.pageNumber) || 1;
 
-  res.json(orders);
+  const filter = {};
+
+  if (req.query.status === 'pending') {
+    filter.isDelivered = false;
+  } else if (req.query.status === 'delivered') {
+    filter.isDelivered = true;
+  } else if (req.query.status === 'unpaid') {
+    filter.isPaid = false;
+  }
+
+  const count = await Order.countDocuments(filter);
+
+  const orders = await Order.find(filter)
+    .populate('user', 'name email')
+    .sort({ createdAt: -1 })
+    .limit(pageSize)
+    .skip(pageSize * (page - 1));
+
+  res.json({
+    orders,
+    page,
+    pages: Math.ceil(count / pageSize),
+    count,
+  });
 });
 
 // GET /api/orders/:id  — protected

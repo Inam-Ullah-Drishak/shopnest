@@ -3,25 +3,36 @@ import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Loader2, Truck, Wallet, RotateCcw, ImageOff } from 'lucide-react';
 import ProductCard from '../components/ProductCard.jsx';
+import Carousel from '../components/Carousel.jsx';
 import { formatPrice } from '../utils/format.js';
 
 function HomePage() {
-  const [products, setProducts] = useState([]);
+  const [featured, setFeatured] = useState([]);
+  const [arrivals, setArrivals] = useState([]);
+  const [onSale, setOnSale] = useState([]);
+  const [categories, setCategories] = useState([]);
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const load = async () => {
       try {
-        const [productRes, collectionRes] = await Promise.all([
+        const [newest, sale, cats, cols] = await Promise.all([
           axios.get('/api/products', {
-            params: { sort: 'newest', pageSize: 60 },
+            params: { sort: 'newest', pageSize: 12 },
           }),
+          axios.get('/api/products', {
+            params: { onSale: 'true', pageSize: 12 },
+          }),
+          axios.get('/api/categories'),
           axios.get('/api/collections', { params: { published: 'true' } }),
         ]);
 
-        setProducts(productRes.data.products);
-        setCollections(collectionRes.data);
+        setArrivals(newest.data.products);
+        setOnSale(sale.data.products);
+        setFeatured(newest.data.products.filter((p) => p.isFeatured));
+        setCategories(cats.data);
+        setCollections(cols.data);
       } catch (error) {
         console.error(error.message);
       } finally {
@@ -41,19 +52,21 @@ function HomePage() {
     );
   }
 
-  const inStock = products.filter((p) => p.countInStock > 0 && p.image);
-  const hero = inStock[0];
-  const arrivals = products.slice(0, 6);
+  // Top level only — children show on the category page itself
+  const topCategories = categories.filter((c) => !c.parent);
 
-  // One representative photo per category, taken from the products we already have
-  const categories = [];
-  const seen = new Set();
+  const hero =
+    featured.find((p) => p.image && p.countInStock > 0) ||
+    arrivals.find((p) => p.image && p.countInStock > 0);
 
-  for (const product of products) {
-    if (!product.category || seen.has(product.category)) continue;
-    seen.add(product.category);
-    categories.push({ name: product.category, image: product.image });
-  }
+  const sectionHeading = (title, to, linkLabel = 'See all') => (
+    <div className="flex items-baseline justify-between mb-6">
+      <h2 className="text-2xl font-bold">{title}</h2>
+      <Link to={to} className="text-sm text-gray-600 hover:text-gray-900">
+        {linkLabel}
+      </Link>
+    </div>
+  );
 
   return (
     <div>
@@ -61,14 +74,14 @@ function HomePage() {
       <section className="grid md:grid-cols-2 gap-8 items-center px-8 py-12 md:py-20">
         <div>
           <h1 className="text-5xl md:text-6xl font-bold tracking-tight leading-[1.05]">
-            Things worth
+            Made to be
             <br />
-            keeping.
+            worn often.
           </h1>
 
           <p className="text-gray-600 mt-5 max-w-md leading-relaxed">
-            Clothing, jewellery and pieces for the home. Chosen carefully,
-            priced honestly, delivered across Pakistan.
+            Necklaces, bangles and earrings for everyday and for occasions.
+            Honest prices, cash on delivery across Pakistan.
           </p>
 
           <div className="flex flex-wrap gap-3 mt-8">
@@ -90,7 +103,7 @@ function HomePage() {
 
         {hero && (
           <Link to={`/product/${hero._id}`} className="group block">
-            <div className="aspect-4/5 bg-gray-50 rounded-lg overflow-hidden">
+            <div className="aspect-[4/5] bg-gray-50 rounded-lg overflow-hidden">
               <img
                 src={hero.image}
                 alt={hero.name}
@@ -98,39 +111,34 @@ function HomePage() {
               />
             </div>
 
-            <div className="flex items-baseline justify-between mt-3">
-              <p className="font-medium">{hero.name}</p>
-              <p className="text-gray-600">{formatPrice(hero.price)}</p>
+            <div className="flex items-baseline justify-between mt-3 gap-3">
+              <p className="font-medium truncate">{hero.name}</p>
+              <p className="text-gray-600 shrink-0">
+                {formatPrice(hero.price)}
+              </p>
             </div>
           </Link>
         )}
       </section>
 
       {/* Categories */}
-      {categories.length > 0 && (
+      {topCategories.length > 0 && (
         <section className="px-8 py-10 border-t">
-          <div className="flex items-baseline justify-between mb-6">
-            <h2 className="text-2xl font-bold">Shop by category</h2>
-            <Link
-              to="/shop"
-              className="text-sm text-gray-600 hover:text-gray-900"
-            >
-              See all
-            </Link>
-          </div>
+          {sectionHeading('Shop by category', '/shop')}
 
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {categories.map((category) => (
+          <Carousel itemClass="w-36 sm:w-40">
+            {topCategories.map((category) => (
               <Link
-                key={category.name}
+                key={category._id}
                 to={`/shop?category=${encodeURIComponent(category.name)}`}
-                className="group"
+                className="group block"
               >
                 <div className="aspect-square bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
                   {category.image ? (
                     <img
                       src={category.image}
                       alt=""
+                      loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                     />
                   ) : (
@@ -138,40 +146,52 @@ function HomePage() {
                   )}
                 </div>
 
-                <p className="text-sm font-medium mt-2 text-center">
+                <p className="text-sm font-medium mt-2 text-center truncate">
                   {category.name}
                 </p>
+
+                {category.productCount > 0 && (
+                  <p className="text-xs text-gray-400 text-center">
+                    {category.productCount} items
+                  </p>
+                )}
               </Link>
             ))}
-          </div>
+          </Carousel>
+        </section>
+      )}
+
+      {/* On sale */}
+      {onSale.length > 0 && (
+        <section className="px-8 py-10 border-t">
+          {sectionHeading('On sale', '/shop?onSale=true')}
+
+          <Carousel itemClass="w-56 sm:w-64">
+            {onSale.map((product) => (
+              <ProductCard key={product._id} product={product} />
+            ))}
+          </Carousel>
         </section>
       )}
 
       {/* Collections */}
       {collections.length > 0 && (
         <section className="px-8 py-10 border-t">
-          <div className="flex items-baseline justify-between mb-6">
-            <h2 className="text-2xl font-bold">Collections</h2>
-            <Link
-              to="/collections"
-              className="text-sm text-gray-600 hover:text-gray-900"
-            >
-              See all
-            </Link>
-          </div>
+          {sectionHeading('Collections', '/collections')}
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {collections.slice(0, 3).map((collection) => (
+          <Carousel itemClass="w-72 sm:w-80">
+            {collections.map((collection) => (
               <Link
                 key={collection._id}
                 to={`/collection/${collection.slug}`}
-                className="group"
+                className="group block"
               >
-                <div className="aspect-3/2 bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
+                <div className="aspect-[3/2] bg-gray-50 rounded-lg overflow-hidden flex items-center justify-center">
                   {collection.image ? (
                     <img
                       src={collection.image}
                       alt={collection.title}
+                      loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition duration-300"
                     />
                   ) : (
@@ -179,7 +199,9 @@ function HomePage() {
                   )}
                 </div>
 
-                <h3 className="font-medium mt-3">{collection.title}</h3>
+                <h3 className="font-medium mt-3 truncate">
+                  {collection.title}
+                </h3>
 
                 {collection.description && (
                   <p className="text-sm text-gray-500 mt-1 line-clamp-2">
@@ -188,28 +210,20 @@ function HomePage() {
                 )}
               </Link>
             ))}
-          </div>
+          </Carousel>
         </section>
       )}
 
       {/* New arrivals */}
       {arrivals.length > 0 && (
         <section className="px-8 py-10 border-t">
-          <div className="flex items-baseline justify-between mb-6">
-            <h2 className="text-2xl font-bold">Just arrived</h2>
-            <Link
-              to="/shop?sort=newest"
-              className="text-sm text-gray-600 hover:text-gray-900"
-            >
-              See all
-            </Link>
-          </div>
+          {sectionHeading('Just arrived', '/shop?sort=newest')}
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          <Carousel itemClass="w-56 sm:w-64">
             {arrivals.map((product) => (
               <ProductCard key={product._id} product={product} />
             ))}
-          </div>
+          </Carousel>
         </section>
       )}
 

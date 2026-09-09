@@ -4,6 +4,7 @@ import axios from 'axios';
 import { Search, X, Loader2, PackageOpen } from 'lucide-react';
 import ProductCard from '../components/ProductCard.jsx';
 import Dropdown from '../components/Dropdown.jsx';
+import Pagination from '../components/Pagination.jsx';
 
 function ShopPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -72,6 +73,12 @@ function ShopPage() {
     });
 
     setSearchParams(next);
+  };
+
+  // Paging shouldn't leave you scrolled at the bottom of the previous page
+  const pageHandler = (n) => {
+    setParam({ page: n });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
   const clearFilters = () => setSearchParams({});
@@ -190,23 +197,7 @@ function ShopPage() {
             ))}
           </div>
 
-          {pages > 1 && (
-            <div className="flex justify-center gap-2 mt-8">
-              {[...Array(pages).keys()].map((x) => (
-                <button
-                  key={x + 1}
-                  onClick={() => setParam({ page: x + 1 })}
-                  className={`px-4 py-2 rounded-lg cursor-pointer ${
-                    page === x + 1
-                      ? 'bg-gray-900 text-white'
-                      : 'border hover:bg-gray-50'
-                  }`}
-                >
-                  {x + 1}
-                </button>
-              ))}
-            </div>
-          )}
+          <Pagination page={page} pages={pages} onChange={pageHandler} />
         </>
       )}
     </div>

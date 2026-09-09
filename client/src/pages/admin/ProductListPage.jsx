@@ -15,6 +15,7 @@ import {
 import { useAuth } from '../../context/AuthContext.jsx';
 import AdminNav from '../../components/AdminNav.jsx';
 import Dropdown from '../../components/Dropdown.jsx';
+import Pagination from '../../components/Pagination.jsx';
 import { formatPrice } from '../../utils/format.js';
 
 const PAGE_SIZE = 20;
@@ -31,6 +32,13 @@ function ProductListPage() {
   const page = Number(searchParams.get('page')) || 1;
 
   const [searchInput, setSearchInput] = useState(keyword);
+  const [lastKeyword, setLastKeyword] = useState(keyword);
+
+  if (keyword !== lastKeyword) {
+    setLastKeyword(keyword);
+    setSearchInput(keyword);
+  }
+
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [pages, setPages] = useState(1);
@@ -95,10 +103,12 @@ function ProductListPage() {
     setSearchParams(next);
   };
 
-  const clearFilters = () => {
-    setSearchInput('');
-    setSearchParams({});
+  const pageHandler = (n) => {
+    setParam({ page: n });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   };
+
+  const clearFilters = () => setSearchParams({});
 
   const deleteHandler = async (id, name) => {
     if (!window.confirm(`Delete "${name}"? This cannot be undone.`)) return;
@@ -303,7 +313,9 @@ function ProductListPage() {
                       </div>
                     </td>
 
-                    <td className="p-3 text-gray-600">{product.category}</td>
+                    <td className="p-3 text-gray-600">
+                      {product.categoryName || product.category}
+                    </td>
 
                     <td className="p-3 whitespace-nowrap">
                       {product.hasVariants &&
@@ -362,23 +374,7 @@ function ProductListPage() {
             </table>
           </div>
 
-          {pages > 1 && (
-            <div className="flex justify-center gap-2 mt-6">
-              {[...Array(pages).keys()].map((x) => (
-                <button
-                  key={x + 1}
-                  onClick={() => setParam({ page: x + 1 })}
-                  className={`px-4 py-2 rounded-lg cursor-pointer ${
-                    page === x + 1
-                      ? 'bg-gray-900 text-white'
-                      : 'border hover:bg-gray-50'
-                  }`}
-                >
-                  {x + 1}
-                </button>
-              ))}
-            </div>
-          )}
+          <Pagination page={page} pages={pages} onChange={pageHandler} />
         </>
       )}
     </div>

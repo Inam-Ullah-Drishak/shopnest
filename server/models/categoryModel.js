@@ -10,18 +10,36 @@ const slugify = (str) =>
 
 const categorySchema = new mongoose.Schema(
   {
-    name: { type: String, required: true, trim: true, unique: true },
+    name: { type: String, required: true, trim: true },
     slug: { type: String, required: true, unique: true, lowercase: true },
     description: { type: String, default: '' },
     image: { type: String, default: '' },
+
+    // null means top level
+    parent: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: 'Category',
+      default: null,
+    },
+
+    position: { type: Number, default: 0 },
+    isActive: { type: Boolean, default: true },
   },
-  { timestamps: true }
+  {
+    timestamps: true,
+    toJSON: { virtuals: true },
+    toObject: { virtuals: true },
+  }
 );
 
 categorySchema.pre('validate', function () {
-  if (this.isModified('name') || !this.slug) {
+  if (!this.slug) {
     this.slug = slugify(this.name);
   }
+});
+
+categorySchema.virtual('isTopLevel').get(function () {
+  return this.parent === null;
 });
 
 const Category = mongoose.model('Category', categorySchema);

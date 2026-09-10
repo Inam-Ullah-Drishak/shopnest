@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import { ImageOff } from 'lucide-react';
 import StarRating from './StarRating.jsx';
+import WishlistButton from './WishlistButton.jsx';
 import { formatPrice } from '../utils/format.js';
 
 function ProductCard({ product }) {
@@ -46,6 +47,11 @@ function ProductCard({ product }) {
             {discount}% off
           </span>
         )}
+
+        <WishlistButton
+          productId={product._id}
+          className="absolute top-2 right-2 bg-white/90 hover:bg-white shadow-sm w-8 h-8"
+        />
 
         {product.images?.length > 1 && (
           <span className="absolute bottom-2 right-2 bg-gray-900/70 text-white text-xs px-2 py-0.5 rounded">

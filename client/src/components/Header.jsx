@@ -1,15 +1,24 @@
 import { useState } from 'react';
 import { Link, NavLink, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { ShoppingCart, User, Menu } from 'lucide-react';
+import {
+  ShoppingCart,
+  User,
+  LayoutGrid,
+  Store,
+  Menu,
+  Heart,
+} from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
 import { useCart } from '../context/CartContext.jsx';
+import { useWishlist } from '../context/WishlistContext.jsx';
 import UserMenu from './UserMenu.jsx';
 import MobileMenu from './MobileMenu.jsx';
 
 function Header() {
   const { userInfo, logout } = useAuth();
   const { itemsCount, clearCart } = useCart();
+  const { count: savedCount } = useWishlist();
   const navigate = useNavigate();
 
   const [menuOpen, setMenuOpen] = useState(false);
@@ -43,17 +52,32 @@ function Header() {
 
           <nav className="hidden md:flex gap-6 shrink-0">
             <NavLink to="/shop" className={navClass}>
-              
+              <Store size={15} />
               Shop
             </NavLink>
 
             <NavLink to="/collections" className={navClass}>
-              
+              <LayoutGrid size={15} />
               Collections
             </NavLink>
           </nav>
 
           <nav className="flex-1 flex gap-4 sm:gap-5 items-center justify-end">
+            {userInfo && (
+              <Link
+                to="/wishlist"
+                className="inline-flex items-center gap-1.5 text-sm text-gray-300 hover:text-white"
+              >
+                <Heart size={18} />
+                <span className="hidden sm:inline">Saved</span>
+                {savedCount > 0 && (
+                  <span className="bg-red-500 text-white text-xs rounded-full px-2 py-0.5">
+                    {savedCount}
+                  </span>
+                )}
+              </Link>
+            )}
+
             <Link
               to="/cart"
               className="inline-flex items-center gap-1.5 text-sm text-gray-300 hover:text-white"

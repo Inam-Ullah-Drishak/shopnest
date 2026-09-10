@@ -12,6 +12,7 @@ import ShippingPage from './pages/ShippingPage.jsx';
 import PlaceOrderPage from './pages/PlaceOrderPage.jsx';
 import OrderPage from './pages/OrderPage.jsx';
 import MyOrdersPage from './pages/MyOrdersPage.jsx';
+import WishlistPage from './pages/WishlistPage.jsx';
 import CollectionsPage from './pages/CollectionsPage.jsx';
 import CollectionPage from './pages/CollectionPage.jsx';
 import NotFoundPage from './pages/NotFoundPage.jsx';
@@ -48,6 +49,7 @@ function App() {
           <Route path="/register" element={<RegisterPage />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/myorders" element={<MyOrdersPage />} />
+          <Route path="/wishlist" element={<WishlistPage />} />
           <Route path="/cart" element={<CartPage />} />
           <Route path="/shipping" element={<ShippingPage />} />
           <Route path="/placeorder" element={<PlaceOrderPage />} />

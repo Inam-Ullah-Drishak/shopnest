@@ -2,6 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import {
   User,
+  Heart,
   Package,
   LayoutDashboard,
   LogOut,
@@ -33,6 +34,7 @@ function UserMenu({ userInfo, onLogout }) {
   }, [open]);
 
   const items = [
+    { to: '/wishlist', label: 'Saved items', icon: Heart },
     { to: '/profile', label: 'Profile', icon: User },
     { to: '/myorders', label: 'My orders', icon: Package },
   ];

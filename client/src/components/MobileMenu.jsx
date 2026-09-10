@@ -6,6 +6,7 @@ import {
   LayoutGrid,
   Tag,
   Sparkles,
+  Heart,
   User,
   Package,
   LayoutDashboard,
@@ -43,6 +44,7 @@ function MobileMenu({ open, onClose, userInfo, onLogout }) {
 
   const accountLinks = userInfo
     ? [
+        { to: '/wishlist', label: 'Saved items', icon: Heart },
         { to: '/profile', label: 'Profile', icon: User },
         { to: '/myorders', label: 'Your orders', icon: Package },
         ...(userInfo.isAdmin
@@ -73,6 +75,10 @@ function MobileMenu({ open, onClose, userInfo, onLogout }) {
           >
             <X size={18} />
           </button>
+
+          <Link to="/" onClick={onClose} className="text-lg font-bold">
+            ShopNest
+          </Link>
         </div>
 
         <nav className="flex-1 overflow-y-auto p-2">

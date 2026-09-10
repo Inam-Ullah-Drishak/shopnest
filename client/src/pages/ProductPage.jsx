@@ -7,6 +7,7 @@ import ImageGallery from '../components/ImageGallery.jsx';
 import VariantSelector from '../components/VariantSelector.jsx';
 import QuantityInput from '../components/QuantityInput.jsx';
 import StarRating from '../components/StarRating.jsx';
+import WishlistButton from '../components/WishlistButton.jsx';
 import ProductReviews from '../components/ProductReviews.jsx';
 import { formatPrice } from '../utils/format.js';
 
@@ -223,14 +224,22 @@ function ProductPage() {
             </div>
           )}
 
-          <button
-            onClick={addToCartHandler}
-            disabled={!canBuy}
-            className="mt-6 w-full inline-flex items-center justify-center gap-2 bg-gray-900 text-white p-3 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
-          >
-            <ShoppingCart size={18} />
-            {canBuy ? 'Add to cart' : 'Out of stock'}
-          </button>
+          <div className="flex gap-3 mt-6">
+            <button
+              onClick={addToCartHandler}
+              disabled={!canBuy}
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-900 text-white p-3 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            >
+              <ShoppingCart size={18} />
+              {canBuy ? 'Add to cart' : 'Out of stock'}
+            </button>
+
+            <WishlistButton
+              productId={product._id}
+              size={20}
+              className="border rounded-lg w-12 shrink-0 hover:bg-gray-50"
+            />
+          </div>
 
           {product.tags?.length > 0 && (
             <div className="flex flex-wrap gap-2 mt-6">

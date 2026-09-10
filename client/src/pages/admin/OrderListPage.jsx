@@ -218,8 +218,16 @@ function OrderListPage() {
                       {order.orderItems.length}
                     </td>
 
-                    <td className="p-3 font-medium whitespace-nowrap">
-                      {formatPrice(order.totalPrice)}
+                    <td className="p-3 whitespace-nowrap">
+                      <p className="font-medium">
+                        {formatPrice(order.totalPrice)}
+                      </p>
+                      {order.discountAmount > 0 && (
+                        <p className="text-xs text-green-700">
+                          {order.couponCode} · −
+                          {formatPrice(order.discountAmount)}
+                        </p>
+                      )}
                     </td>
 
                     <td className="p-3">

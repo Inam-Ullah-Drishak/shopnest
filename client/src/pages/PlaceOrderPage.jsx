@@ -4,6 +4,7 @@ import axios from 'axios';
 import { ImageOff, AlertCircle, Loader2, MapPin, Wallet } from 'lucide-react';
 import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import CouponInput from '../components/CouponInput.jsx';
 import { formatPrice } from '../utils/format.js';
 
 const SHIPPING_PRICE = 200;
@@ -13,6 +14,17 @@ function PlaceOrderPage() {
   const { cartItems, shippingAddress, totalPrice, clearCart } = useCart();
   const { userInfo } = useAuth();
   const navigate = useNavigate();
+
+  const [coupon, setCoupon] = useState(null);
+  const [lastSubtotal, setLastSubtotal] = useState(totalPrice);
+
+  // A coupon checked against an older subtotal may no longer be valid,
+  // so drop it whenever the cart total changes. Adjusting during render is
+  // React's recommended alternative to an effect.
+  if (totalPrice !== lastSubtotal) {
+    setLastSubtotal(totalPrice);
+    setCoupon(null);
+  }
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
@@ -27,8 +39,13 @@ function PlaceOrderPage() {
     }
   }, [userInfo, shippingAddress, cartItems, navigate]);
 
-  const shippingPrice = totalPrice > FREE_SHIPPING_OVER ? 0 : SHIPPING_PRICE;
-  const grandTotal = totalPrice + shippingPrice;
+  const discount = coupon?.discount || 0;
+  const discountedSubtotal = totalPrice - discount;
+
+  const shippingPrice =
+    discountedSubtotal > FREE_SHIPPING_OVER ? 0 : SHIPPING_PRICE;
+
+  const grandTotal = discountedSubtotal + shippingPrice;
 
   const placeOrderHandler = async () => {
     setError('');
@@ -43,6 +60,7 @@ function PlaceOrderPage() {
         })),
         shippingAddress,
         paymentMethod: 'Cash on Delivery',
+        couponCode: coupon?.code || '',
       });
 
       clearCart();
@@ -153,6 +171,13 @@ function PlaceOrderPage() {
             <span>{formatPrice(totalPrice)}</span>
           </div>
 
+          {discount > 0 && (
+            <div className="flex justify-between mb-2 text-sm text-green-700">
+              <span>Discount ({coupon.code})</span>
+              <span>− {formatPrice(discount)}</span>
+            </div>
+          )}
+
           <div className="flex justify-between mb-2 text-sm">
             <span className="text-gray-600">Shipping</span>
             <span>
@@ -160,10 +185,26 @@ function PlaceOrderPage() {
             </span>
           </div>
 
-          <div className="flex justify-between font-bold text-lg border-t pt-3 mt-3">
+          <div className="border-t pt-3 mt-3 mb-4">
+            <CouponInput
+              subtotal={totalPrice}
+              applied={coupon}
+              onApply={setCoupon}
+              onRemove={() => setCoupon(null)}
+            />
+          </div>
+
+          <div className="flex justify-between font-bold text-lg border-t pt-3">
             <span>Total</span>
             <span>{formatPrice(grandTotal)}</span>
           </div>
+
+          {shippingPrice > 0 && discountedSubtotal < FREE_SHIPPING_OVER && (
+            <p className="text-xs text-gray-500 mt-2">
+              Spend {formatPrice(FREE_SHIPPING_OVER - discountedSubtotal + 1)}{' '}
+              more for free delivery.
+            </p>
+          )}
 
           <button
             onClick={placeOrderHandler}

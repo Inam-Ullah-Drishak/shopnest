@@ -1,36 +1,38 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
-import Header from './components/Header.jsx';
-import HomePage from './pages/HomePage.jsx';
-import ShopPage from './pages/ShopPage.jsx';
-import ProductPage from './pages/ProductPage.jsx';
-import LoginPage from './pages/LoginPage.jsx';
-import RegisterPage from './pages/RegisterPage.jsx';
-import ProfilePage from './pages/ProfilePage.jsx';
-import CartPage from './pages/CartPage.jsx';
-import ShippingPage from './pages/ShippingPage.jsx';
-import PlaceOrderPage from './pages/PlaceOrderPage.jsx';
-import OrderPage from './pages/OrderPage.jsx';
-import MyOrdersPage from './pages/MyOrdersPage.jsx';
-import CollectionsPage from './pages/CollectionsPage.jsx';
-import CollectionPage from './pages/CollectionPage.jsx';
-import DashboardPage from './pages/admin/DashboardPage.jsx';
-import ProductListPage from './pages/admin/ProductListPage.jsx';
-import ProductFormPage from './pages/admin/ProductFormPage.jsx';
-import OrderListPage from './pages/admin/OrderListPage.jsx';
-import CategoryListPage from './pages/admin/CategoryListPage.jsx';
-import CollectionListPage from './pages/admin/CollectionListPage.jsx';
-import CollectionFormPage from './pages/admin/CollectionFormPage.jsx';
+import { Routes, Route, useLocation } from "react-router-dom";
+import Header from "./components/Header.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import ShopPage from "./pages/ShopPage.jsx";
+import ProductPage from "./pages/ProductPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
+import CartPage from "./pages/CartPage.jsx";
+import ShippingPage from "./pages/ShippingPage.jsx";
+import PlaceOrderPage from "./pages/PlaceOrderPage.jsx";
+import OrderPage from "./pages/OrderPage.jsx";
+import MyOrdersPage from "./pages/MyOrdersPage.jsx";
+import CollectionsPage from "./pages/CollectionsPage.jsx";
+import CollectionPage from "./pages/CollectionPage.jsx";
+import DashboardPage from "./pages/admin/DashboardPage.jsx";
+import ProductListPage from "./pages/admin/ProductListPage.jsx";
+import ProductFormPage from "./pages/admin/ProductFormPage.jsx";
+import OrderListPage from "./pages/admin/OrderListPage.jsx";
+import CategoryListPage from "./pages/admin/CategoryListPage.jsx";
+import CollectionListPage from "./pages/admin/CollectionListPage.jsx";
+import CollectionFormPage from "./pages/admin/CollectionFormPage.jsx";
+import CouponListPage from "./pages/admin/CouponListPage.jsx";
+import CouponFormPage from "./pages/admin/CouponFormPage.jsx";
 
 function App() {
   const { pathname } = useLocation();
-  const isAdmin = pathname.startsWith('/admin');
+  const isAdmin = pathname.startsWith("/admin");
 
   return (
     <>
       <Header />
 
       <main
-        className={isAdmin ? 'max-w-screen-2xl mx-auto' : 'max-w-6xl mx-auto'}
+        className={isAdmin ? "max-w-screen-2xl mx-auto" : "max-w-6xl mx-auto"}
       >
         <Routes>
           <Route path="/" element={<HomePage />} />
@@ -53,6 +55,9 @@ function App() {
           <Route path="/admin/product/:id/edit" element={<ProductFormPage />} />
           <Route path="/admin/categories" element={<CategoryListPage />} />
           <Route path="/admin/collections" element={<CollectionListPage />} />
+          <Route path="/admin/coupons" element={<CouponListPage />} />
+          <Route path="/admin/coupon/new" element={<CouponFormPage />} />
+          <Route path="/admin/coupon/:id/edit" element={<CouponFormPage />} />
           <Route
             path="/admin/collection/new"
             element={<CollectionFormPage />}

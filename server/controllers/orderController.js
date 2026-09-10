@@ -1,6 +1,7 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import Order from '../models/orderModel.js';
 import Product from '../models/productModel.js';
+import Coupon from '../models/couponModel.js';
 
 const SHIPPING_PRICE = 200;
 const FREE_SHIPPING_OVER = 5000;
@@ -8,7 +9,7 @@ const DEFAULT_PAGE_SIZE = 8;
 
 // POST /api/orders  — protected
 export const createOrder = asyncHandler(async (req, res) => {
-  const { orderItems, shippingAddress, paymentMethod } = req.body;
+  const { orderItems, shippingAddress, paymentMethod, couponCode } = req.body;
 
   if (!orderItems || orderItems.length === 0) {
     res.status(400);
@@ -49,7 +50,6 @@ export const createOrder = asyncHandler(async (req, res) => {
         throw new Error(`Choose an option for ${dbProduct.name}`);
       }
 
-      // Mongoose subdocument lookup by _id
       const variant = dbProduct.variants.id(item.variantId);
 
       if (!variant) {
@@ -104,8 +104,38 @@ export const createOrder = asyncHandler(async (req, res) => {
     0
   );
 
-  const shippingPrice = itemsPrice > FREE_SHIPPING_OVER ? 0 : SHIPPING_PRICE;
-  const totalPrice = itemsPrice + shippingPrice;
+  // The client sends only a code. The discount itself is recalculated here
+  // from the database, never trusted from the request.
+  let discountAmount = 0;
+  let appliedCode = '';
+  let coupon = null;
+
+  if (couponCode?.trim()) {
+    coupon = await Coupon.findOne({ code: couponCode.trim().toUpperCase() });
+
+    if (!coupon) {
+      res.status(400);
+      throw new Error('That code does not exist');
+    }
+
+    const check = coupon.checkValidity(req.user._id, itemsPrice);
+
+    if (!check.ok) {
+      res.status(400);
+      throw new Error(check.reason);
+    }
+
+    discountAmount = coupon.discountFor(itemsPrice);
+    appliedCode = coupon.code;
+  }
+
+  const discountedSubtotal = itemsPrice - discountAmount;
+
+  // Shipping is judged on what they actually pay, not the pre-discount total
+  const shippingPrice =
+    discountedSubtotal > FREE_SHIPPING_OVER ? 0 : SHIPPING_PRICE;
+
+  const totalPrice = discountedSubtotal + shippingPrice;
 
   const order = await Order.create({
     user: req.user._id,
@@ -113,9 +143,34 @@ export const createOrder = asyncHandler(async (req, res) => {
     shippingAddress,
     paymentMethod: paymentMethod || 'Cash on Delivery',
     itemsPrice,
+    couponCode: appliedCode,
+    discountAmount,
     shippingPrice,
     totalPrice,
   });
+
+  // Record the redemption only after the order exists, so a failed order
+  // doesn't burn someone's one allowed use
+  if (coupon) {
+    const existing = coupon.usedBy.find(
+      (u) => u.user.toString() === req.user._id.toString()
+    );
+
+    if (existing) {
+      await Coupon.updateOne(
+        { _id: coupon._id, 'usedBy.user': req.user._id },
+        { $inc: { usedCount: 1, 'usedBy.$.count': 1 } }
+      );
+    } else {
+      await Coupon.updateOne(
+        { _id: coupon._id },
+        {
+          $inc: { usedCount: 1 },
+          $push: { usedBy: { user: req.user._id, count: 1 } },
+        }
+      );
+    }
+  }
 
   res.status(201).json(order);
 });
@@ -142,7 +197,7 @@ export const getMyOrders = asyncHandler(async (req, res) => {
   });
 });
 
-// GET /api/orders?pageNumber=&pageSize=&status=&keyword=  — admin
+// GET /api/orders?pageNumber=&pageSize=&status=  — admin
 export const getAllOrders = asyncHandler(async (req, res) => {
   const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
   const page = Number(req.query.pageNumber) || 1;

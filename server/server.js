@@ -11,15 +11,22 @@ import uploadRoutes from './routes/uploadRoutes.js';
 import categoryRoutes from './routes/categoryRoutes.js';
 import collectionRoutes from './routes/collectionRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
-import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
+import couponRoutes from './routes/couponRoutes.js';
+import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
 dotenv.config();
 connectDB();
 
 const app = express();
 
-app.use(cors({ origin: 'http://localhost:5173', credentials: true }));
+app.use(
+  cors({
+    origin: process.env.CLIENT_URL || 'http://localhost:5173',
+    credentials: true,
+  })
+);
+
 app.use(express.json());
 app.use(cookieParser());
 
@@ -31,6 +38,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/collections', collectionRoutes);
 app.use('/api/reviews', reviewRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/coupons', couponRoutes);
 
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 

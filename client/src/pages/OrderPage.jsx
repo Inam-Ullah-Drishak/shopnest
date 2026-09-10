@@ -174,6 +174,15 @@ function OrderPage() {
             <span>{formatPrice(order.itemsPrice)}</span>
           </div>
 
+          {order.discountAmount > 0 && (
+            <div className="flex justify-between mb-2 text-sm text-green-700">
+              <span>
+                Discount{order.couponCode && ` (${order.couponCode})`}
+              </span>
+              <span>− {formatPrice(order.discountAmount)}</span>
+            </div>
+          )}
+
           <div className="flex justify-between mb-2 text-sm">
             <span className="text-gray-600">Shipping</span>
             <span>
@@ -189,7 +198,7 @@ function OrderPage() {
           </div>
 
           <Link
-            to="/"
+            to="/shop"
             className="block text-center w-full border p-3 rounded-lg mt-6 hover:bg-gray-50"
           >
             Continue shopping

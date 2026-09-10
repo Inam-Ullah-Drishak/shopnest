@@ -37,9 +37,17 @@ const orderSchema = new mongoose.Schema(
       required: true,
       default: 'Cash on Delivery',
     },
+
     itemsPrice: { type: Number, required: true, default: 0 },
+
+    // Stored as text, not a ref, so the order reads correctly even if the
+    // coupon is later deleted or renamed
+    couponCode: { type: String, default: '' },
+    discountAmount: { type: Number, required: true, default: 0 },
+
     shippingPrice: { type: Number, required: true, default: 0 },
     totalPrice: { type: Number, required: true, default: 0 },
+
     isPaid: { type: Boolean, required: true, default: false },
     paidAt: { type: Date },
     isDelivered: { type: Boolean, required: true, default: false },

@@ -5,6 +5,7 @@ import {
   Tags,
   LayoutGrid,
   Receipt,
+  Ticket,
 } from 'lucide-react';
 
 const links = [
@@ -12,6 +13,7 @@ const links = [
   { to: '/admin/products', label: 'Products', icon: Package },
   { to: '/admin/categories', label: 'Categories', icon: Tags },
   { to: '/admin/collections', label: 'Collections', icon: LayoutGrid },
+  { to: '/admin/coupons', label: 'Coupons', icon: Ticket },
   { to: '/admin/orders', label: 'Orders', icon: Receipt },
 ];
 

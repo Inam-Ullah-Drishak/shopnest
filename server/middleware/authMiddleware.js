@@ -23,6 +23,13 @@ export const protect = asyncHandler(async (req, res, next) => {
     throw new Error('Not authorized, user not found');
   }
 
+  // Blocking someone mid-session should take effect immediately, not
+  // whenever their 30-day cookie happens to expire
+  if (req.user.isBlocked) {
+    res.status(403);
+    throw new Error('This account has been suspended');
+  }
+
   next();
 });
 

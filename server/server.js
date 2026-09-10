@@ -15,6 +15,7 @@ import dashboardRoutes from './routes/dashboardRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
 import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import wishlistRoutes from './routes/wishlistRoutes.js';
+import customerRoutes from './routes/customerRoutes.js';
 
 dotenv.config();
 connectDB();
@@ -41,6 +42,7 @@ app.use('/api/reviews', reviewRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 app.use('/api/coupons', couponRoutes);
 app.use('/api/wishlist', wishlistRoutes);
+app.use('/api/customers', customerRoutes);
 
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 

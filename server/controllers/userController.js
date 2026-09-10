@@ -6,19 +6,28 @@ import generateToken from '../utils/generateToken.js';
 export const registerUser = asyncHandler(async (req, res) => {
   const { name, email, password } = req.body;
 
-  if (!name || !email || !password) {
+  if (!name?.trim() || !email?.trim() || !password) {
     res.status(400);
     throw new Error('Please fill all fields');
   }
 
-  const userExists = await User.findOne({ email });
+  if (password.length < 6) {
+    res.status(400);
+    throw new Error('Use a password of at least 6 characters');
+  }
+
+  const userExists = await User.findOne({ email: email.toLowerCase().trim() });
 
   if (userExists) {
     res.status(400);
-    throw new Error('User already exists');
+    throw new Error('An account with that email already exists');
   }
 
-  const user = await User.create({ name, email, password });
+  const user = await User.create({
+    name: name.trim(),
+    email: email.toLowerCase().trim(),
+    password,
+  });
 
   generateToken(res, user._id);
 
@@ -34,9 +43,18 @@ export const registerUser = asyncHandler(async (req, res) => {
 export const loginUser = asyncHandler(async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await User.findOne({ email });
+  const user = await User.findOne({ email: email?.toLowerCase().trim() });
 
   if (user && (await user.matchPassword(password))) {
+    // Checked after the password, so a suspended email can't be discovered
+    // by someone who doesn't know the password
+    if (user.isBlocked) {
+      res.status(403);
+      throw new Error(
+        'This account has been suspended. Get in touch if you think this is a mistake.'
+      );
+    }
+
     generateToken(res, user._id);
 
     return res.json({
@@ -68,5 +86,6 @@ export const getUserProfile = (req, res) => {
     name: req.user.name,
     email: req.user.email,
     isAdmin: req.user.isAdmin,
+    createdAt: req.user.createdAt,
   });
 };

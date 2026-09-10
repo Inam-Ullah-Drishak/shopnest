@@ -25,6 +25,8 @@ import CollectionListPage from './pages/admin/CollectionListPage.jsx';
 import CollectionFormPage from './pages/admin/CollectionFormPage.jsx';
 import CouponListPage from './pages/admin/CouponListPage.jsx';
 import CouponFormPage from './pages/admin/CouponFormPage.jsx';
+import CustomerListPage from './pages/admin/CustomerListPage.jsx';
+import CustomerDetailPage from './pages/admin/CustomerDetailPage.jsx';
 
 function App() {
   const { pathname } = useLocation();
@@ -73,6 +75,8 @@ function App() {
           <Route path="/admin/coupon/new" element={<CouponFormPage />} />
           <Route path="/admin/coupon/:id/edit" element={<CouponFormPage />} />
           <Route path="/admin/orders" element={<OrderListPage />} />
+          <Route path="/admin/customers" element={<CustomerListPage />} />
+          <Route path="/admin/customer/:id" element={<CustomerDetailPage />} />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

@@ -4,8 +4,9 @@ import {
   Package,
   Tags,
   LayoutGrid,
-  Receipt,
   Ticket,
+  Receipt,
+  Users,
 } from 'lucide-react';
 
 const links = [
@@ -15,6 +16,7 @@ const links = [
   { to: '/admin/collections', label: 'Collections', icon: LayoutGrid },
   { to: '/admin/coupons', label: 'Coupons', icon: Ticket },
   { to: '/admin/orders', label: 'Orders', icon: Receipt },
+  { to: '/admin/customers', label: 'Customers', icon: Users },
 ];
 
 function AdminNav() {

@@ -1,11 +1,17 @@
-import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-import axios from 'axios';
-import { Loader2, Truck, Wallet, RotateCcw, ImageOff } from 'lucide-react';
-import ProductCard from '../components/ProductCard.jsx';
-import Carousel from '../components/Carousel.jsx';
-import { formatPrice } from '../utils/format.js';
-
+import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
+import axios from "axios";
+import ProductCard from "../components/ProductCard.jsx";
+import Carousel from "../components/Carousel.jsx";
+import { formatPrice } from "../utils/format.js";
+import {
+  Loader2,
+  Truck,
+  Wallet,
+  RotateCcw,
+  ShieldCheck,
+  ImageOff,
+} from "lucide-react";
 function HomePage() {
   const [featured, setFeatured] = useState([]);
   const [arrivals, setArrivals] = useState([]);
@@ -18,14 +24,14 @@ function HomePage() {
     const load = async () => {
       try {
         const [newest, sale, cats, cols] = await Promise.all([
-          axios.get('/api/products', {
-            params: { sort: 'newest', pageSize: 12 },
+          axios.get("/api/products", {
+            params: { sort: "newest", pageSize: 12 },
           }),
-          axios.get('/api/products', {
-            params: { onSale: 'true', pageSize: 12 },
+          axios.get("/api/products", {
+            params: { onSale: "true", pageSize: 12 },
           }),
-          axios.get('/api/categories'),
-          axios.get('/api/collections', { params: { published: 'true' } }),
+          axios.get("/api/categories"),
+          axios.get("/api/collections", { params: { published: "true" } }),
         ]);
 
         setArrivals(newest.data.products);
@@ -59,7 +65,7 @@ function HomePage() {
     featured.find((p) => p.image && p.countInStock > 0) ||
     arrivals.find((p) => p.image && p.countInStock > 0);
 
-  const sectionHeading = (title, to, linkLabel = 'See all') => (
+  const sectionHeading = (title, to, linkLabel = "See all") => (
     <div className="flex items-baseline justify-between mb-6">
       <h2 className="text-2xl font-bold">{title}</h2>
       <Link to={to} className="text-sm text-gray-600 hover:text-gray-900">
@@ -124,7 +130,7 @@ function HomePage() {
       {/* Categories */}
       {topCategories.length > 0 && (
         <section className="px-8 py-10 border-t">
-          {sectionHeading('Shop by category', '/shop')}
+          {sectionHeading("Shop by category", "/shop")}
 
           <Carousel itemClass="w-36 sm:w-40">
             {topCategories.map((category) => (
@@ -164,7 +170,7 @@ function HomePage() {
       {/* On sale */}
       {onSale.length > 0 && (
         <section className="px-8 py-10 border-t">
-          {sectionHeading('On sale', '/shop?onSale=true')}
+          {sectionHeading("On sale", "/shop?onSale=true")}
 
           <Carousel itemClass="w-56 sm:w-64">
             {onSale.map((product) => (
@@ -177,7 +183,7 @@ function HomePage() {
       {/* Collections */}
       {collections.length > 0 && (
         <section className="px-8 py-10 border-t">
-          {sectionHeading('Collections', '/collections')}
+          {sectionHeading("Collections", "/collections")}
 
           <Carousel itemClass="w-72 sm:w-80">
             {collections.map((collection) => (
@@ -217,7 +223,7 @@ function HomePage() {
       {/* New arrivals */}
       {arrivals.length > 0 && (
         <section className="px-8 py-10 border-t">
-          {sectionHeading('Just arrived', '/shop?sort=newest')}
+          {sectionHeading("Just arrived", "/shop?sort=newest")}
 
           <Carousel itemClass="w-56 sm:w-64">
             {arrivals.map((product) => (
@@ -229,30 +235,38 @@ function HomePage() {
 
       {/* Service promises */}
       <section className="px-8 py-12 border-t">
-        <div className="grid sm:grid-cols-3 gap-8">
-          <div>
-            <Truck size={20} className="text-gray-400" />
-            <p className="font-medium mt-3">Free delivery over Rs 5,000</p>
-            <p className="text-sm text-gray-500 mt-1">
-              Flat Rs 200 on everything below that.
-            </p>
-          </div>
-
-          <div>
-            <Wallet size={20} className="text-gray-400" />
-            <p className="font-medium mt-3">Pay when it arrives</p>
-            <p className="text-sm text-gray-500 mt-1">
-              Cash on delivery, nationwide.
-            </p>
-          </div>
-
-          <div>
-            <RotateCcw size={20} className="text-gray-400" />
-            <p className="font-medium mt-3">Seven day returns</p>
-            <p className="text-sm text-gray-500 mt-1">
-              Unworn and unused, no questions asked.
-            </p>
-          </div>
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          {[
+            {
+              icon: Truck,
+              title: "Free delivery over Rs 5,000",
+              text: "Flat Rs 200 on everything below that.",
+            },
+            {
+              icon: Wallet,
+              title: "Pay when it arrives",
+              text: "Cash on delivery, nationwide.",
+            },
+            {
+              icon: RotateCcw,
+              title: "Seven day returns",
+              text: "Unworn and unused, no questions asked.",
+            },
+            {
+              icon: ShieldCheck,
+              title: "Checked before it ships",
+              text: "Every piece inspected and packed by hand.",
+            },
+          ].map(({ icon: Icon, title, text }) => (
+            <div
+              key={title}
+              className="flex flex-col items-center text-center  h-full"
+            >
+              <Icon size="50" className="text-gray-400" strokeWidth={1.5} />
+              <p className="font-medium mt-4">{title}</p>
+              <p className="text-sm text-gray-500 mt-1 max-w-56">{text}</p>
+            </div>
+          ))}
         </div>
       </section>
     </div>

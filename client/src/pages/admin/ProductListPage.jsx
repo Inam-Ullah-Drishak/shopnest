@@ -11,14 +11,14 @@ import {
   PackageOpen,
   Search,
   X,
+  EyeOff,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import AdminNav from '../../components/AdminNav.jsx';
 import Dropdown from '../../components/Dropdown.jsx';
 import Pagination from '../../components/Pagination.jsx';
 import { formatPrice } from '../../utils/format.js';
-
-const PAGE_SIZE = 20;
+import { PAGE_SIZE } from '../../utils/constants.js';
 
 function ProductListPage() {
   const { userInfo } = useAuth();
@@ -74,6 +74,7 @@ function ProductListPage() {
             category,
             stock,
             sort,
+            includeDrafts: 'true',
             pageNumber: page,
             pageSize: PAGE_SIZE,
           },
@@ -291,6 +292,7 @@ function ProductListPage() {
                             <img
                               src={product.image}
                               alt=""
+                              loading="lazy"
                               className="w-full h-full object-cover"
                             />
                           ) : (
@@ -299,7 +301,19 @@ function ProductListPage() {
                         </div>
 
                         <div className="min-w-0">
-                          <p className="font-medium truncate">{product.name}</p>
+                          <div className="flex items-center gap-2">
+                            <p className="font-medium truncate">
+                              {product.name}
+                            </p>
+
+                            {product.status === 'draft' && (
+                              <span className="inline-flex items-center gap-1 bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded shrink-0">
+                                <EyeOff size={11} />
+                                Draft
+                              </span>
+                            )}
+                          </div>
+
                           <p className="text-xs text-gray-500">
                             {product.hasVariants &&
                               `${product.variants.length} variants`}
@@ -314,7 +328,7 @@ function ProductListPage() {
                     </td>
 
                     <td className="p-3 text-gray-600">
-                      {product.categoryName || product.category}
+                      {product.categoryName}
                     </td>
 
                     <td className="p-3 whitespace-nowrap">

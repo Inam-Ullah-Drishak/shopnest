@@ -1,7 +1,14 @@
 import { NavLink } from 'react-router-dom';
-import { Package, Tags, LayoutGrid, Receipt } from 'lucide-react';
+import {
+  LayoutDashboard,
+  Package,
+  Tags,
+  LayoutGrid,
+  Receipt,
+} from 'lucide-react';
 
 const links = [
+  { to: '/admin', label: 'Dashboard', icon: LayoutDashboard, end: true },
   { to: '/admin/products', label: 'Products', icon: Package },
   { to: '/admin/categories', label: 'Categories', icon: Tags },
   { to: '/admin/collections', label: 'Collections', icon: LayoutGrid },
@@ -11,10 +18,11 @@ const links = [
 function AdminNav() {
   return (
     <nav className="flex flex-wrap gap-2 mb-6">
-      {links.map(({ to, label, icon: Icon }) => (
+      {links.map(({ to, label, icon: Icon, end }) => (
         <NavLink
           key={to}
           to={to}
+          end={end}
           className={({ isActive }) =>
             `inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm ${
               isActive

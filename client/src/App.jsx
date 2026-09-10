@@ -1,4 +1,4 @@
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, useLocation } from 'react-router-dom';
 import Header from './components/Header.jsx';
 import HomePage from './pages/HomePage.jsx';
 import ShopPage from './pages/ShopPage.jsx';
@@ -13,6 +13,7 @@ import OrderPage from './pages/OrderPage.jsx';
 import MyOrdersPage from './pages/MyOrdersPage.jsx';
 import CollectionsPage from './pages/CollectionsPage.jsx';
 import CollectionPage from './pages/CollectionPage.jsx';
+import DashboardPage from './pages/admin/DashboardPage.jsx';
 import ProductListPage from './pages/admin/ProductListPage.jsx';
 import ProductFormPage from './pages/admin/ProductFormPage.jsx';
 import OrderListPage from './pages/admin/OrderListPage.jsx';
@@ -21,10 +22,16 @@ import CollectionListPage from './pages/admin/CollectionListPage.jsx';
 import CollectionFormPage from './pages/admin/CollectionFormPage.jsx';
 
 function App() {
+  const { pathname } = useLocation();
+  const isAdmin = pathname.startsWith('/admin');
+
   return (
     <>
       <Header />
-      <main className="max-w-6xl mx-auto">
+
+      <main
+        className={isAdmin ? 'max-w-screen-2xl mx-auto' : 'max-w-6xl mx-auto'}
+      >
         <Routes>
           <Route path="/" element={<HomePage />} />
           <Route path="/shop" element={<ShopPage />} />
@@ -40,6 +47,7 @@ function App() {
           <Route path="/placeorder" element={<PlaceOrderPage />} />
           <Route path="/order/:id" element={<OrderPage />} />
 
+          <Route path="/admin" element={<DashboardPage />} />
           <Route path="/admin/products" element={<ProductListPage />} />
           <Route path="/admin/product/new" element={<ProductFormPage />} />
           <Route path="/admin/product/:id/edit" element={<ProductFormPage />} />

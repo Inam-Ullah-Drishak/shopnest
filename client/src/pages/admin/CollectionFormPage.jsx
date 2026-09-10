@@ -365,7 +365,7 @@ function CollectionFormPage() {
                       <div className="flex-1 min-w-0">
                         <p className="text-sm truncate">{product.name}</p>
                         <p className="text-xs text-gray-500">
-                          {product.category} · {formatPrice(product.price)}
+                          {product.categoryName} · {formatPrice(product.price)}
                         </p>
                       </div>
 
@@ -405,7 +405,7 @@ function CollectionFormPage() {
                   <div className="flex-1 min-w-0">
                     <p className="text-sm truncate">{product.name}</p>
                     <p className="text-xs text-gray-500">
-                      {product.category} · {formatPrice(product.price)}
+                      {product.categoryName} · {formatPrice(product.price)}
                     </p>
                   </div>
 

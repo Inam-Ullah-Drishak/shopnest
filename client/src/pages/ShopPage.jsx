@@ -1,10 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import { Search, X, Loader2, PackageOpen } from 'lucide-react';
+import { Search, X, Loader2, PackageOpen, Tag } from 'lucide-react';
 import ProductCard from '../components/ProductCard.jsx';
 import Dropdown from '../components/Dropdown.jsx';
 import Pagination from '../components/Pagination.jsx';
+import { PAGE_SIZE } from '../utils/constants.js';
 
 function ShopPage() {
   const [searchParams, setSearchParams] = useSearchParams();
@@ -13,6 +14,7 @@ function ShopPage() {
   const category = searchParams.get('category') || 'All';
   const stock = searchParams.get('stock') || 'all';
   const sort = searchParams.get('sort') || 'newest';
+  const onSale = searchParams.get('onSale') === 'true';
   const page = Number(searchParams.get('page')) || 1;
 
   const [searchInput, setSearchInput] = useState(keyword);
@@ -33,7 +35,11 @@ function ShopPage() {
   const [loading, setLoading] = useState(true);
 
   const filtersActive =
-    keyword || category !== 'All' || stock !== 'all' || sort !== 'newest';
+    keyword ||
+    category !== 'All' ||
+    stock !== 'all' ||
+    sort !== 'newest' ||
+    onSale;
 
   useEffect(() => {
     axios
@@ -48,7 +54,15 @@ function ShopPage() {
 
       try {
         const { data } = await axios.get('/api/products', {
-          params: { keyword, category, stock, sort, pageNumber: page },
+          params: {
+            keyword,
+            category,
+            stock,
+            sort,
+            onSale: onSale ? 'true' : undefined,
+            pageNumber: page,
+            pageSize: PAGE_SIZE,
+          },
         });
 
         setProducts(data.products);
@@ -62,11 +76,19 @@ function ShopPage() {
     };
 
     fetchProducts();
-  }, [keyword, category, stock, sort, page]);
+  }, [keyword, category, stock, sort, onSale, page]);
 
   // Merge one change into the URL, resetting to page 1
   const setParam = (changes) => {
-    const next = { keyword, category, stock, sort, page: 1, ...changes };
+    const next = {
+      keyword,
+      category,
+      stock,
+      sort,
+      onSale: onSale ? 'true' : '',
+      page: 1,
+      ...changes,
+    };
 
     Object.keys(next).forEach((k) => {
       if (!next[k] || next[k] === 'All' || next[k] === 'all') delete next[k];
@@ -75,7 +97,6 @@ function ShopPage() {
     setSearchParams(next);
   };
 
-  // Paging shouldn't leave you scrolled at the bottom of the previous page
   const pageHandler = (n) => {
     setParam({ page: n });
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -85,7 +106,9 @@ function ShopPage() {
 
   return (
     <div className="p-8">
-      <h1 className="text-3xl font-bold mb-5">Shop all</h1>
+      <h1 className="text-3xl font-bold mb-5">
+        {onSale ? 'On sale' : 'Shop all'}
+      </h1>
 
       <div className="flex flex-wrap gap-2 mb-4">
         <form
@@ -103,10 +126,23 @@ function ShopPage() {
             type="text"
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search by name"
+            placeholder="Search by name or tag"
             className="w-full border rounded-lg py-2.5 pl-9 pr-3 text-sm"
           />
         </form>
+
+        <button
+          type="button"
+          onClick={() => setParam({ onSale: onSale ? '' : 'true' })}
+          className={`inline-flex items-center gap-1.5 border rounded-lg px-4 py-2.5 text-sm cursor-pointer ${
+            onSale
+              ? 'bg-gray-900 text-white border-gray-900'
+              : 'hover:bg-gray-50'
+          }`}
+        >
+          <Tag size={15} />
+          On sale
+        </button>
 
         <Dropdown
           value={category}
@@ -133,6 +169,7 @@ function ShopPage() {
           onChange={(v) => setParam({ sort: v })}
           options={[
             { value: 'newest', label: 'Newest first' },
+            { value: 'rating-desc', label: 'Best rated' },
             { value: 'name-asc', label: 'Name A–Z' },
             { value: 'name-desc', label: 'Name Z–A' },
             { value: 'price-asc', label: 'Price low to high' },

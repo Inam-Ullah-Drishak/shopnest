@@ -39,7 +39,7 @@ function UserMenu({ userInfo, onLogout }) {
 
   if (userInfo.isAdmin) {
     items.push({
-      to: '/admin/products',
+      to: '/admin',
       label: 'Dashboard',
       icon: LayoutDashboard,
     });

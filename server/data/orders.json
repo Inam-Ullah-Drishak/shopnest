@@ -1,0 +1,4984 @@
+[
+  {
+    "_id": "fe64fa42c09230863a9aa71d",
+    "user": "00a532ea623f13b61008ab01",
+    "orderItems": [
+      {
+        "name": "Rose Gold Beaded Chandelier Earrings (FSE148)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/rose-gold-beaded-chandelier-earrings-fse148-0/800/1000",
+        "price": 3400,
+        "product": "88a9159af3997a8ca0a90e02",
+        "variantId": "f9922c0eee256d01880029e8",
+        "variantLabel": "Green",
+        "sku": "FSE148-GRE"
+      },
+      {
+        "name": "Onyx Beaded Kara Bangles (FSKB122)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/onyx-beaded-kara-bangles-fskb122-0/800/1000",
+        "price": 1350,
+        "product": "64f28e0a7e09d4487664ff77",
+        "variantId": "ba88608ed22ac638dc645654",
+        "variantLabel": "Two-Tone / 2.10",
+        "sku": "FSKB122-TWO-2.10"
+      },
+      {
+        "name": "Champagne Stone Beaded Set with Earrings (FDN132)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/champagne-stone-beaded-set-with-earrings-fdn132-0/800/1000",
+        "price": 4350,
+        "product": "2e5413e2ebbaea0a80513f7c",
+        "variantId": "90b93f7c05850cf1c81b0b0c",
+        "variantLabel": "Antique Gold",
+        "sku": "FDN132-ANT"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 24, Street 25",
+      "city": "Narowal",
+      "postalCode": "51600",
+      "country": "Pakistan",
+      "phone": "03184376418"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 14800,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 14800,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-06-12T10:36:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-12T23:36:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-14T22:36:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-14T10:36:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-16T06:36:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS891001753",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-06-16T06:36:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-06-16T06:36:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-06-12T10:36:00.000Z",
+    "updatedAt": "2026-06-16T06:36:00.000Z"
+  },
+  {
+    "_id": "acd25c371799dcb796b7f649",
+    "user": "f857292fb83beacf436d34cb",
+    "orderItems": [
+      {
+        "name": "Kundan Bird Men's Ring (FMN181)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/kundan-bird-mens-ring-fmn181-0/800/1000",
+        "price": 2750,
+        "product": "6521fd36f4ee3e2677785aaf",
+        "variantId": "9746639753f62ba3204023d1",
+        "variantLabel": "Antique Gold / 18mm",
+        "sku": "FMN181-ANT-18mm"
+      },
+      {
+        "name": "Champagne Gold Crescent Long Mala Set (FDM134)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/champagne-gold-crescent-long-mala-set-fdm134-0/800/1000",
+        "price": 1700,
+        "product": "0d5940de6852d5d1b002d00f",
+        "variantId": "393751850599810be8bb7930",
+        "variantLabel": "Silver",
+        "sku": "FDM134-SIL"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 362, Street 16",
+      "city": "Rawalpindi",
+      "postalCode": "46000",
+      "country": "Pakistan",
+      "phone": "03397608202"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 8900,
+    "couponCode": "WELCOME10",
+    "discountAmount": 890,
+    "shippingPrice": 0,
+    "totalPrice": 8010,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-06-13T18:33:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-14T05:33:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-16T02:33:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-17T03:33:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-16T10:33:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS620861771",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-06-16T10:33:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-06-16T10:33:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-06-13T18:33:00.000Z",
+    "updatedAt": "2026-06-16T10:33:00.000Z"
+  },
+  {
+    "_id": "1f014dcfdcb1bed9350d3496",
+    "user": "f857292fb83beacf436d34cb",
+    "orderItems": [
+      {
+        "name": "Ruby Filigree Passa (FSP173)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/ruby-filigree-passa-fsp173-0/800/1000",
+        "price": 2300,
+        "product": "2d240fdb843e79e84a6705af",
+        "variantId": "9a1b9b970c26353e3ce202d5",
+        "variantLabel": "Rose Gold",
+        "sku": "FSP173-ROS"
+      },
+      {
+        "name": "Crystal Vine Mathapatti Set (FSM122)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/crystal-vine-mathapatti-set-fsm122-0/800/1000",
+        "price": 3550,
+        "product": "c1768831c7f6d8bc7342ffb6",
+        "variantId": "a395f23438a1b1d471c219bd",
+        "variantLabel": "Two-Tone",
+        "sku": "FSM122-TWO"
+      },
+      {
+        "name": "Ruby Sunburst Mala Set (FDM129)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/ruby-sunburst-mala-set-fdm129-0/800/1000",
+        "price": 4800,
+        "product": "eb4d3bde9b3dcba699f286a5",
+        "variantId": "c33da5cab5358dc75121273d",
+        "variantLabel": "Silver",
+        "sku": "FDM129-SIL"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 92, Street 23",
+      "city": "Islamabad",
+      "postalCode": "44000",
+      "country": "Pakistan",
+      "phone": "03126471058"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 17750,
+    "couponCode": "WELCOME10",
+    "discountAmount": 1775,
+    "shippingPrice": 0,
+    "totalPrice": 15975,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-06-16T10:08:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-16T21:08:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-17T06:08:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-17T10:08:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-20T10:08:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS623405945",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-06-20T10:08:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-06-20T10:08:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-06-16T10:08:00.000Z",
+    "updatedAt": "2026-06-20T10:08:00.000Z"
+  },
+  {
+    "_id": "ad05bcf9fab4d84426075d91",
+    "user": "ba1f16070af57ff439936a2a",
+    "orderItems": [
+      {
+        "name": "Antique Gold Bird Ring (FSR124)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/antique-gold-bird-ring-fsr124-0/800/1000",
+        "price": 800,
+        "product": "a9ba522de72806f7e842c3c0",
+        "variantId": "74552d8e43f396623079752c",
+        "variantLabel": "Two-Tone / 17mm",
+        "sku": "FSR124-TWO-17mm"
+      },
+      {
+        "name": "Antique Gold Star Cocktail Ring (FSR119)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/antique-gold-star-cocktail-ring-fsr119-0/800/1000",
+        "price": 950,
+        "product": "a127ccf33001dc662e33272a",
+        "variantId": "68b4d7d3993c4c340bbeec29",
+        "variantLabel": "Antique Gold / 16mm",
+        "sku": "FSR119-ANT-16mm"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 342, Street 11",
+      "city": "Islamabad",
+      "postalCode": "44000",
+      "country": "Pakistan",
+      "phone": "03164550497"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 3500,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 3700,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-06-16T10:48:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-17T04:48:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-18T22:48:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-18T19:48:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-21T06:48:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS345950952",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-06-21T06:48:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-06-21T06:48:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-06-16T10:48:00.000Z",
+    "updatedAt": "2026-06-21T06:48:00.000Z"
+  },
+  {
+    "_id": "2df3a3f0bb6a4fbb5946da35",
+    "user": "3dd38c30c0863ad1cbac8612",
+    "orderItems": [
+      {
+        "name": "Ruby Sunburst Mala Set (FDM129)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/ruby-sunburst-mala-set-fdm129-0/800/1000",
+        "price": 4700,
+        "product": "eb4d3bde9b3dcba699f286a5",
+        "variantId": "b712e97a6e86838a5373a549",
+        "variantLabel": "Ivory",
+        "sku": "FDM129-IVO"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 366, Street 9",
+      "city": "Islamabad",
+      "postalCode": "44000",
+      "country": "Pakistan",
+      "phone": "03288787111"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 4700,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 4900,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-06-22T10:21:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-23T10:21:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-24T22:21:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-25T04:21:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-24T10:21:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS831009822",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-06-24T10:21:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-06-24T10:21:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-06-22T10:21:00.000Z",
+    "updatedAt": "2026-06-24T10:21:00.000Z"
+  },
+  {
+    "_id": "8c1e687715470d8b2fab9127",
+    "user": "66be203de9d30cd2de2e8d9e",
+    "orderItems": [
+      {
+        "name": "Two-Tone Teardrop Bindia & Earring Set (FBS116)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/two-tone-teardrop-bindia-earring-set-fbs116-0/800/1000",
+        "price": 1950,
+        "product": "dd1044f59359ffe3e779562d",
+        "variantId": "a5130b8259bb57085d33871e",
+        "variantLabel": "Ruby Red",
+        "sku": "FBS116-RUB"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 294, Street 2",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03454158439"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 3900,
+    "couponCode": "WELCOME10",
+    "discountAmount": 390,
+    "shippingPrice": 200,
+    "totalPrice": 3710,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-06-22T20:02:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-23T02:02:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-24T18:02:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-24T23:02:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-27T08:02:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS491596812",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-06-27T08:02:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-06-27T08:02:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-06-22T20:02:00.000Z",
+    "updatedAt": "2026-06-27T08:02:00.000Z"
+  },
+  {
+    "_id": "f7a7cb756a9d09bfced30366",
+    "user": "66be203de9d30cd2de2e8d9e",
+    "orderItems": [
+      {
+        "name": "Oxidised Silver Peacock Statement Earrings (FSE149)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/oxidised-silver-peacock-statement-earrings-fse149-0/800/1000",
+        "price": 2400,
+        "product": "b4d1e408ac73f1f09d2b83e4",
+        "variantId": "64f8f553092bf830d36ba1bd",
+        "variantLabel": "Ivory",
+        "sku": "FSE149-IVO"
+      },
+      {
+        "name": "Matte Gold Lotus Mala Set (FDM130)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/matte-gold-lotus-mala-set-fdm130-0/800/1000",
+        "price": 2800,
+        "product": "5084dc1ae1a86f08b9680d6b",
+        "variantId": "1db22c9f731d9c6c2debf752",
+        "variantLabel": "Rose Gold",
+        "sku": "FDM130-ROS"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 154, Street 4",
+      "city": "Karachi",
+      "postalCode": "74000",
+      "country": "Pakistan",
+      "phone": "03217119544"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 8000,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 8000,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-06-23T14:27:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-24T00:27:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-26T00:27:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-26T02:27:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-26T22:27:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS264248373",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-06-26T22:27:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-06-26T22:27:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-06-23T14:27:00.000Z",
+    "updatedAt": "2026-06-26T22:27:00.000Z"
+  },
+  {
+    "_id": "7e8684fb8de4112ba665d03e",
+    "user": "de0fde97a8a086d51a62f2aa",
+    "orderItems": [
+      {
+        "name": "Ruby Floral Mathapatti (FSM119)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/ruby-floral-mathapatti-fsm119-0/800/1000",
+        "price": 2350,
+        "product": "eb902a34a7ace309d2e1b77b",
+        "variantId": "048572323e09a16ea7539608",
+        "variantLabel": "Silver",
+        "sku": "FSM119-SIL"
+      },
+      {
+        "name": "Crystal Leaf Bangle Pair (FSB150)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/crystal-leaf-bangle-pair-fsb150-0/800/1000",
+        "price": 2900,
+        "product": "ecfe4d81cc8350ffdeb3438d",
+        "variantId": "dd86cbf2adf0ec965851be97",
+        "variantLabel": "Two-Tone / 2.8",
+        "sku": "FSB150-TWO-2.8"
+      },
+      {
+        "name": "Silver Tone Braided Bangle Stack (FSB141)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/silver-tone-braided-bangle-stack-fsb141-0/800/1000",
+        "price": 3150,
+        "product": "8904f86cc9884aa854d005da",
+        "variantId": "8014d1695e126ec16fa3905c",
+        "variantLabel": "Ruby Red / 2.8",
+        "sku": "FSB141-RUB-2.8"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 225, Street 25",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03107395424"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 14450,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 14450,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-06-25T13:32:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-26T03:32:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-27T13:32:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-26T07:32:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-29T05:32:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS894063167",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-06-29T05:32:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-06-29T05:32:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-06-25T13:32:00.000Z",
+    "updatedAt": "2026-06-29T05:32:00.000Z"
+  },
+  {
+    "_id": "73e1474a090d82070493792f",
+    "user": "dc26af2e4e2e423f3949eb40",
+    "orderItems": [
+      {
+        "name": "Matte Gold Braided Cuff Bracelet (FSBR131)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/matte-gold-braided-cuff-bracelet-fsbr131-0/800/1000",
+        "price": 2650,
+        "product": "32aaa0e56b3f8ea802bba9cc",
+        "variantId": "b13510e5b65fbc20664d65d4",
+        "variantLabel": "Two-Tone / 2.8",
+        "sku": "FSBR131-TWO-2.8"
+      },
+      {
+        "name": "Oxidised Silver Vine Studs (FSE143)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/oxidised-silver-vine-studs-fse143-0/800/1000",
+        "price": 1250,
+        "product": "2c7942d35146b7769c5ec3dd",
+        "variantId": "406ca8299f4b033956fcc73e",
+        "variantLabel": "Two-Tone",
+        "sku": "FSE143-TWO"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 206, Street 21",
+      "city": "Sialkot",
+      "postalCode": "51310",
+      "country": "Pakistan",
+      "phone": "03154833443"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 6550,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 6550,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-06-27T15:28:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-28T11:28:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-29T23:28:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-28T15:28:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-01T19:28:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS224605069",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-07-01T19:28:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-07-01T19:28:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-06-27T15:28:00.000Z",
+    "updatedAt": "2026-07-01T19:28:00.000Z"
+  },
+  {
+    "_id": "364edcec402a66dadd70e0aa",
+    "user": "3dd38c30c0863ad1cbac8612",
+    "orderItems": [
+      {
+        "name": "Kundan Star Jhumka Drops (FSE129)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/kundan-star-jhumka-drops-fse129-0/800/1000",
+        "price": 700,
+        "product": "183406e15bf4b0f25f8cd4ff",
+        "variantId": "3b694a3c6ecabe2fba816ccb",
+        "variantLabel": "Ruby Red",
+        "sku": "FSE129-RUB"
+      },
+      {
+        "name": "Turquoise Sunburst Bridal Necklace Set (FDB110)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/turquoise-sunburst-bridal-necklace-set-fdb110-0/800/1000",
+        "price": 14500,
+        "product": "0b47846ad2b967b1d16e440d",
+        "variantId": "2a8b4436b7ce2e178bc2204e",
+        "variantLabel": "Gold",
+        "sku": "FDB110-GOL"
+      },
+      {
+        "name": "Rose Gold Beaded Chandelier Earrings (FSE148)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/rose-gold-beaded-chandelier-earrings-fse148-0/800/1000",
+        "price": 3400,
+        "product": "88a9159af3997a8ca0a90e02",
+        "variantId": "f9922c0eee256d01880029e8",
+        "variantLabel": "Green",
+        "sku": "FSE148-GRE"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 3, Street 14",
+      "city": "Narowal",
+      "postalCode": "51600",
+      "country": "Pakistan",
+      "phone": "03242184723"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 36500,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 36500,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-06-28T10:11:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-28T20:11:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-29T00:11:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-30T16:11:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-30T10:11:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS784938522",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-06-30T10:11:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-06-30T10:11:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-06-28T10:11:00.000Z",
+    "updatedAt": "2026-06-30T10:11:00.000Z"
+  },
+  {
+    "_id": "f17b2aa3ef62ffc227aed185",
+    "user": "ba1f16070af57ff439936a2a",
+    "orderItems": [
+      {
+        "name": "Champagne Gold Paisley AD Bangles Set (FSAB109)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/champagne-gold-paisley-ad-bangles-set-fsab109-0/800/1000",
+        "price": 3050,
+        "product": "505465ff647ef5cc410e498e",
+        "variantId": "e674d88a43ba2cda25a8bdd0",
+        "variantLabel": "Rose Gold / 2.10",
+        "sku": "FSAB109-ROS-2.10"
+      },
+      {
+        "name": "Kundan Star Jhumka Drops (FSE129)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/kundan-star-jhumka-drops-fse129-0/800/1000",
+        "price": 700,
+        "product": "183406e15bf4b0f25f8cd4ff",
+        "variantId": "3b694a3c6ecabe2fba816ccb",
+        "variantLabel": "Ruby Red",
+        "sku": "FSE129-RUB"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 254, Street 28",
+      "city": "Multan",
+      "postalCode": "60000",
+      "country": "Pakistan",
+      "phone": "03231522565"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 4450,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 4650,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-06-28T20:17:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-29T19:17:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-29T20:17:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-01T20:17:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-06-30T00:17:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS934053568",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-06-30T00:17:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-06-30T00:17:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-06-28T20:17:00.000Z",
+    "updatedAt": "2026-06-30T00:17:00.000Z"
+  },
+  {
+    "_id": "4a9a1361362c07f10572b8c1",
+    "user": "5ddbbc9e4fa5db8137e98aa0",
+    "orderItems": [
+      {
+        "name": "Pearl Bird Kara Pair (FSKB120)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/pearl-bird-kara-pair-fskb120-0/800/1000",
+        "price": 550,
+        "product": "6f0927c3293d060a0b92639e",
+        "variantId": "e8325dce4bc2f6a8c4f250da",
+        "variantLabel": "Ruby Red / 2.8",
+        "sku": "FSKB120-RUB-2.8"
+      },
+      {
+        "name": "Polished Gold Beaded Kara Pair (FSKB124)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/polished-gold-beaded-kara-pair-fskb124-0/800/1000",
+        "price": 300,
+        "product": "e3c2023277f3426d42628731",
+        "variantId": "3db33c380821699a766c7fea",
+        "variantLabel": "Midnight Blue / 2.8",
+        "sku": "FSKB124-MID-2.8"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 370, Street 13",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03129412450"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 1700,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 1900,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-01T20:45:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-03T02:45:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-02T12:45:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-05T14:45:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-06T20:45:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS456136588",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-07-06T20:45:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-07-06T20:45:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-07-01T20:45:00.000Z",
+    "updatedAt": "2026-07-06T20:45:00.000Z"
+  },
+  {
+    "_id": "16c9279f2023a43714ef3a22",
+    "user": "f857292fb83beacf436d34cb",
+    "orderItems": [
+      {
+        "name": "Silver Tone Braided Studs (FSE145)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/silver-tone-braided-studs-fse145-0/800/1000",
+        "price": 1800,
+        "product": "b5e16872ac78e19103b58c17",
+        "variantId": "6236b76b39cf642201bdab47",
+        "variantLabel": "Ruby Red",
+        "sku": "FSE145-RUB"
+      },
+      {
+        "name": "Pearl Beaded Men's Chain (FMN182)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/pearl-beaded-mens-chain-fmn182-0/800/1000",
+        "price": 1800,
+        "product": "b8f8afe5e80900c8be1f280d",
+        "variantId": "f21fe160f712cf0933e062f1",
+        "variantLabel": "Midnight Blue / Adjustable",
+        "sku": "FMN182-MID-Adjustable"
+      },
+      {
+        "name": "Silver Tone Hexagon Stud Earrings (FSE141)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/silver-tone-hexagon-stud-earrings-fse141-0/800/1000",
+        "price": 1550,
+        "product": "f7d3fcafeb621e2c6b62f407",
+        "variantId": "b6c68760282e79a4a3a3cf4f",
+        "variantLabel": "Midnight Blue",
+        "sku": "FSE141-MID"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 289, Street 23",
+      "city": "Rawalpindi",
+      "postalCode": "46000",
+      "country": "Pakistan",
+      "phone": "03387299327"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 5150,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 5150,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-02T09:38:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-02T16:38:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-04T01:38:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-04T18:38:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-07T01:38:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS953133007",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-07-07T01:38:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-07-07T01:38:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-07-02T09:38:00.000Z",
+    "updatedAt": "2026-07-07T01:38:00.000Z"
+  },
+  {
+    "_id": "8b7f96f97c22d636542875cd",
+    "user": "66be203de9d30cd2de2e8d9e",
+    "orderItems": [
+      {
+        "name": "Rose Gold Filigree Ring (FSR118)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/rose-gold-filigree-ring-fsr118-0/800/1000",
+        "price": 300,
+        "product": "4ba8ba568217f13b9e8ddcf6",
+        "variantId": "9b33f49c2a1d778dd1d7d789",
+        "variantLabel": "Midnight Blue / 18mm",
+        "sku": "FSR118-MID-18mm"
+      },
+      {
+        "name": "Champagne Gold Filigree Long Mala Set (FDM128)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/champagne-gold-filigree-long-mala-set-fdm128-0/800/1000",
+        "price": 2900,
+        "product": "acc09701fcfa9317a83699a5",
+        "variantId": "9909e4faa8d8dc04a4e8950d",
+        "variantLabel": "Midnight Blue",
+        "sku": "FDM128-MID"
+      },
+      {
+        "name": "Antique Gold Hexagon Passa (FSP175)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/antique-gold-hexagon-passa-fsp175-0/800/1000",
+        "price": 3100,
+        "product": "d61710d0b27923a447e3f0cf",
+        "variantId": "1efe626664bc89e5702f9b6a",
+        "variantLabel": "Antique Gold",
+        "sku": "FSP175-ANT"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 352, Street 8",
+      "city": "Sialkot",
+      "postalCode": "51310",
+      "country": "Pakistan",
+      "phone": "03378709841"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 9400,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 9400,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-06T19:32:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-07T18:32:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-07T15:32:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-08T22:32:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-09T23:32:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS860923243",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-07-09T23:32:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-07-09T23:32:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-07-06T19:32:00.000Z",
+    "updatedAt": "2026-07-09T23:32:00.000Z"
+  },
+  {
+    "_id": "edd88dd6315a103af830a4ce",
+    "user": "9bafdb6bb803dbbbcadd391a",
+    "orderItems": [
+      {
+        "name": "Onyx Paisley Choker (FDN122)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/onyx-paisley-choker-fdn122-0/800/1000",
+        "price": 2050,
+        "product": "bced89c770ca178ff2670fb7",
+        "variantId": "355cefe14a5d81f39fe5d365",
+        "variantLabel": "Two-Tone",
+        "sku": "FDN122-TWO"
+      },
+      {
+        "name": "Oxidised Silver Floral Cuff Bracelet (FSBR128)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/oxidised-silver-floral-cuff-bracelet-fsbr128-0/800/1000",
+        "price": 2300,
+        "product": "f83bc8039ff8e1bb87284ae3",
+        "variantId": "e5a86e951a2b84af06b356e2",
+        "variantLabel": "Green / 2.4",
+        "sku": "FSBR128-GRE-2.4"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 219, Street 12",
+      "city": "Sialkot",
+      "postalCode": "51310",
+      "country": "Pakistan",
+      "phone": "03156182281"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 6400,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 6400,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-07T09:37:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-08T08:37:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-08T09:37:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-09T18:37:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-09T05:37:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS522987129",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-07-09T05:37:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-07-09T05:37:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-07-07T09:37:00.000Z",
+    "updatedAt": "2026-07-09T05:37:00.000Z"
+  },
+  {
+    "_id": "231a920ecac0026cd57e9ecb",
+    "user": "66be203de9d30cd2de2e8d9e",
+    "orderItems": [
+      {
+        "name": "Rose Gold Braided Jhumka Drops (FSE135)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/rose-gold-braided-jhumka-drops-fse135-0/800/1000",
+        "price": 750,
+        "product": "9bed1592e432bac2a701a4fa",
+        "variantId": "1005e0d7d4550b6cdea976bb",
+        "variantLabel": "Ivory",
+        "sku": "FSE135-IVO"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 54, Street 8",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03136595173"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 750,
+    "couponCode": "WELCOME10",
+    "discountAmount": 75,
+    "shippingPrice": 200,
+    "totalPrice": 875,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-13T10:59:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-13T21:59:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-15T14:59:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-14T19:59:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-18T10:59:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS865303253",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-07-18T10:59:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-07-18T10:59:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-07-13T10:59:00.000Z",
+    "updatedAt": "2026-07-18T10:59:00.000Z"
+  },
+  {
+    "_id": "22a8f9f3d979052c45fac0b0",
+    "user": "dc26af2e4e2e423f3949eb40",
+    "orderItems": [
+      {
+        "name": "Oxidised Silver Beaded Cocktail Ring (FSR122)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/oxidised-silver-beaded-cocktail-ring-fsr122-0/800/1000",
+        "price": 400,
+        "product": "26db104a32e746e523d335af",
+        "variantId": "6e07e58af1fef516a637bfea",
+        "variantLabel": "Rose Gold / Adjustable",
+        "sku": "FSR122-ROS-Adjustable"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 274, Street 24",
+      "city": "Rawalpindi",
+      "postalCode": "46000",
+      "country": "Pakistan",
+      "phone": "03183828283"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 800,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 1000,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-19T10:06:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-20T02:06:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-21T22:06:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-22T22:06:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-22T10:06:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS466245663",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-07-22T10:06:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-07-22T10:06:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-07-19T10:06:00.000Z",
+    "updatedAt": "2026-07-22T10:06:00.000Z"
+  },
+  {
+    "_id": "99a49281e9e83a44f66516ac",
+    "user": "66be203de9d30cd2de2e8d9e",
+    "orderItems": [
+      {
+        "name": "Polished Gold Beaded Kara Pair (FSKB124)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/polished-gold-beaded-kara-pair-fskb124-0/800/1000",
+        "price": 250,
+        "product": "e3c2023277f3426d42628731",
+        "variantId": "c9f2f9682520c20d76b1056f",
+        "variantLabel": "Two-Tone / 2.6",
+        "sku": "FSKB124-TWO-2.6"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 14, Street 3",
+      "city": "Islamabad",
+      "postalCode": "44000",
+      "country": "Pakistan",
+      "phone": "03251170642"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 250,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 450,
+    "status": "cancelled",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-19T14:49:00.000Z"
+      },
+      {
+        "status": "cancelled",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-19T21:49:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": "2026-07-19T21:49:00.000Z",
+    "cancelReason": "Changed my mind",
+    "isRefunded": false,
+    "createdAt": "2026-07-19T14:49:00.000Z",
+    "updatedAt": "2026-07-19T21:49:00.000Z"
+  },
+  {
+    "_id": "490d8a645c71feaa6c28f5c2",
+    "user": "dc26af2e4e2e423f3949eb40",
+    "orderItems": [
+      {
+        "name": "Silver Tone Textured Stud Earrings (FSE144)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/silver-tone-textured-stud-earrings-fse144-0/800/1000",
+        "price": 1700,
+        "product": "c43bdf0f116bf0a4a70e339b",
+        "variantId": "6399aa792ef217cfa0217901",
+        "variantLabel": "Green",
+        "sku": "FSE144-GRE"
+      },
+      {
+        "name": "Polished Gold Lotus AD Bangle Stack (FSAB107)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/polished-gold-lotus-ad-bangle-stack-fsab107-0/800/1000",
+        "price": 3800,
+        "product": "2b731ed1a02d3e6eecb577ae",
+        "variantId": "0dd55e70beb3252356606baf",
+        "variantLabel": "Midnight Blue / 2.4",
+        "sku": "FSAB107-MID-2.4"
+      },
+      {
+        "name": "Polished Gold Star Choker (FDN126)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/polished-gold-star-choker-fdn126-0/800/1000",
+        "price": 2700,
+        "product": "1cdfcd0039c3ed8563038cfa",
+        "variantId": "c10745bd464c26c3f4f15bd9",
+        "variantLabel": "Ivory",
+        "sku": "FDN126-IVO"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 228, Street 11",
+      "city": "Rawalpindi",
+      "postalCode": "46000",
+      "country": "Pakistan",
+      "phone": "03261927974"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 16400,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 16400,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-20T09:50:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-21T14:50:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-21T15:50:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-22T03:50:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-24T17:50:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS757867635",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-07-24T17:50:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-07-24T17:50:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-07-20T09:50:00.000Z",
+    "updatedAt": "2026-07-24T17:50:00.000Z"
+  },
+  {
+    "_id": "609fbaf0c64b9286342ff7d0",
+    "user": "4a3efdcedf14c9a397ff0ff1",
+    "orderItems": [
+      {
+        "name": "Ruby Lotus Necklace Set (FDN131)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/ruby-lotus-necklace-set-fdn131-0/800/1000",
+        "price": 5950,
+        "product": "55abde45cc08306ef3a3e9fa",
+        "variantId": "97026701e15f306ab17389eb",
+        "variantLabel": "Ivory",
+        "sku": "FDN131-IVO"
+      },
+      {
+        "name": "American Diamond Medallion Jhumka Drops (FSE130)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/american-diamond-medallion-jhumka-drops-fse130-0/800/1000",
+        "price": 1200,
+        "product": "4d7dcb57ccd4ef37dfd93c75",
+        "variantId": "aa3452ba1404554597829139",
+        "variantLabel": "Green",
+        "sku": "FSE130-GRE"
+      },
+      {
+        "name": "Antique Gold Teardrop Mathapatti Set (FSM121)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/antique-gold-teardrop-mathapatti-set-fsm121-0/800/1000",
+        "price": 1450,
+        "product": "72148daf4c786ae5a3442748",
+        "variantId": "7e07bf677828b88a9629700c",
+        "variantLabel": "Rose Gold",
+        "sku": "FSM121-ROS"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 66, Street 15",
+      "city": "Multan",
+      "postalCode": "60000",
+      "country": "Pakistan",
+      "phone": "03474371182"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 14550,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 14550,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-24T13:17:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-25T13:17:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-26T05:17:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-25T16:17:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-28T01:17:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS903673751",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-07-28T01:17:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-07-28T01:17:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-07-24T13:17:00.000Z",
+    "updatedAt": "2026-07-28T01:17:00.000Z"
+  },
+  {
+    "_id": "8b71b947c30b57f4b9ed23d4",
+    "user": "f857292fb83beacf436d34cb",
+    "orderItems": [
+      {
+        "name": "Antique Gold Textured AD Bangles Set (FSAB106)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/antique-gold-textured-ad-bangles-set-fsab106-0/800/1000",
+        "price": 5050,
+        "product": "0cc24d0135d7117fdaad0c11",
+        "variantId": "ab049dde5b7f23f7ea64fd18",
+        "variantLabel": "Silver / 2.6",
+        "sku": "FSAB106-SIL-2.6"
+      },
+      {
+        "name": "Zircon Geometric Collar Necklace (FDN121)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/zircon-geometric-collar-necklace-fdn121-0/800/1000",
+        "price": 1200,
+        "product": "d980c715f459ec661f235df8",
+        "variantId": "bdec8dad382245bc2d356048",
+        "variantLabel": "Ruby Red",
+        "sku": "FDN121-RUB"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 348, Street 2",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03217481702"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 6250,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 6250,
+    "status": "cancelled",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-24T13:41:00.000Z"
+      },
+      {
+        "status": "cancelled",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-24T21:41:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": "2026-07-24T21:41:00.000Z",
+    "cancelReason": "Changed my mind",
+    "isRefunded": false,
+    "createdAt": "2026-07-24T13:41:00.000Z",
+    "updatedAt": "2026-07-24T21:41:00.000Z"
+  },
+  {
+    "_id": "084b56cae44d4405d7df406c",
+    "user": "3dd38c30c0863ad1cbac8612",
+    "orderItems": [
+      {
+        "name": "Champagne Gold Star Charm Bracelet (FSBR129)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/champagne-gold-star-charm-bracelet-fsbr129-0/800/1000",
+        "price": 2450,
+        "product": "3a668e6dea876197fe00a794",
+        "variantId": "183388f2cab1d7a0b57b9322",
+        "variantLabel": "Ruby Red / 2.10",
+        "sku": "FSBR129-RUB-2.10"
+      },
+      {
+        "name": "Two-Tone Leaf Studs (FSE138)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/two-tone-leaf-studs-fse138-0/800/1000",
+        "price": 1350,
+        "product": "b12cd22a71b7d3d17ae6c7a3",
+        "variantId": "a46eff6b29579ea11cae6950",
+        "variantLabel": "Ivory",
+        "sku": "FSE138-IVO"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 191, Street 17",
+      "city": "Lahore",
+      "postalCode": "54000",
+      "country": "Pakistan",
+      "phone": "03339325489"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 6250,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 6250,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-24T17:28:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-25T13:28:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-25T15:28:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-27T05:28:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-28T01:28:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS236179653",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-07-28T01:28:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-07-28T01:28:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-07-24T17:28:00.000Z",
+    "updatedAt": "2026-07-28T01:28:00.000Z"
+  },
+  {
+    "_id": "4c6788adc35a4aa98a639d3e",
+    "user": "f857292fb83beacf436d34cb",
+    "orderItems": [
+      {
+        "name": "Antique Gold Hexagon Passa (FSP175)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/antique-gold-hexagon-passa-fsp175-0/800/1000",
+        "price": 3100,
+        "product": "d61710d0b27923a447e3f0cf",
+        "variantId": "1efe626664bc89e5702f9b6a",
+        "variantLabel": "Antique Gold",
+        "sku": "FSP175-ANT"
+      },
+      {
+        "name": "Oxidised Silver Floral Pendant with Chain (FDP135)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/oxidised-silver-floral-pendant-with-chain-fdp135-0/800/1000",
+        "price": 1350,
+        "product": "bf7a82b99857d505e29c4d0d",
+        "variantId": "d3a0bf07a97855a60e585c13",
+        "variantLabel": "Ivory",
+        "sku": "FDP135-IVO"
+      },
+      {
+        "name": "Moonstone Medallion Pendant with Chain (FDP137)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/moonstone-medallion-pendant-with-chain-fdp137-0/800/1000",
+        "price": 1600,
+        "product": "1428b30d3a1f0e74913d77e1",
+        "variantId": "d2463feb170bae4bbb935205",
+        "variantLabel": "Green",
+        "sku": "FDP137-GRE"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 359, Street 25",
+      "city": "Rawalpindi",
+      "postalCode": "46000",
+      "country": "Pakistan",
+      "phone": "03144937266"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 9150,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 9150,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-25T11:43:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-26T13:43:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-27T13:43:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-27T23:43:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-07-29T03:43:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS203623113",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-07-29T03:43:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-07-29T03:43:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-07-25T11:43:00.000Z",
+    "updatedAt": "2026-07-29T03:43:00.000Z"
+  },
+  {
+    "_id": "e63999bbf452f257b10900e7",
+    "user": "00a532ea623f13b61008ab01",
+    "orderItems": [
+      {
+        "name": "Two-Tone Bird Cocktail Ring (FSR116)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/two-tone-bird-cocktail-ring-fsr116-0/800/1000",
+        "price": 1050,
+        "product": "3c36549c6250c895f9499913",
+        "variantId": "b022593ab89d49c15a11e419",
+        "variantLabel": "Two-Tone / Adjustable",
+        "sku": "FSR116-TWO-Adjustable"
+      },
+      {
+        "name": "Zircon Geometric Collar Necklace (FDN121)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/zircon-geometric-collar-necklace-fdn121-0/800/1000",
+        "price": 1200,
+        "product": "d980c715f459ec661f235df8",
+        "variantId": "bdec8dad382245bc2d356048",
+        "variantLabel": "Ruby Red",
+        "sku": "FDN121-RUB"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 250, Street 20",
+      "city": "Lahore",
+      "postalCode": "54000",
+      "country": "Pakistan",
+      "phone": "03385163142"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 2250,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 2450,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-07-31T19:37:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-01T08:37:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-02T13:37:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-04T10:37:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-03T07:37:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS777802849",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-03T07:37:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-03T07:37:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-07-31T19:37:00.000Z",
+    "updatedAt": "2026-08-03T07:37:00.000Z"
+  },
+  {
+    "_id": "f3e08112a2c23061b3b84a5e",
+    "user": "00a532ea623f13b61008ab01",
+    "orderItems": [
+      {
+        "name": "Emerald Bird Kara Bangles (FSKB119)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/emerald-bird-kara-bangles-fskb119-0/800/1000",
+        "price": 2150,
+        "product": "7dbdf5fc3f8f5e67d19ffdd4",
+        "variantId": "c717fcf781b562b4ba61c713",
+        "variantLabel": "Silver / 2.8",
+        "sku": "FSKB119-SIL-2.8"
+      },
+      {
+        "name": "Champagne Stone Floral Statement Earrings (FSE150)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/champagne-stone-floral-statement-earrings-fse150-0/800/1000",
+        "price": 1750,
+        "product": "030c564ee40c19f72fa677f9",
+        "variantId": "c20fdef62d88dad73b6e4380",
+        "variantLabel": "Ruby Red",
+        "sku": "FSE150-RUB"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 354, Street 29",
+      "city": "Karachi",
+      "postalCode": "74000",
+      "country": "Pakistan",
+      "phone": "03116083272"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 5650,
+    "couponCode": "WELCOME10",
+    "discountAmount": 565,
+    "shippingPrice": 0,
+    "totalPrice": 5085,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-08-01T15:15:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-02T16:15:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-03T19:15:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-04T21:15:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-03T07:15:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS454367017",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-03T07:15:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-03T07:15:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-08-01T15:15:00.000Z",
+    "updatedAt": "2026-08-03T07:15:00.000Z"
+  },
+  {
+    "_id": "49ff975e6fc67e3c24c1d247",
+    "user": "dc26af2e4e2e423f3949eb40",
+    "orderItems": [
+      {
+        "name": "Onyx Floral Pendant with Chain (FDP136)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/onyx-floral-pendant-with-chain-fdp136-0/800/1000",
+        "price": 600,
+        "product": "6c2285db57cfa13783f6002c",
+        "variantId": "531289acd18ffaf102d0f642",
+        "variantLabel": "Midnight Blue",
+        "sku": "FDP136-MID"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 270, Street 23",
+      "city": "Narowal",
+      "postalCode": "51600",
+      "country": "Pakistan",
+      "phone": "03103544553"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 600,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 800,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-08-02T19:02:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-03T05:02:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-04T07:02:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-04T04:02:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-03T23:02:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS423189030",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-03T23:02:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-03T23:02:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-08-02T19:02:00.000Z",
+    "updatedAt": "2026-08-03T23:02:00.000Z"
+  },
+  {
+    "_id": "b0c1343ba0ddf71ecc32d60e",
+    "user": "5ddbbc9e4fa5db8137e98aa0",
+    "orderItems": [
+      {
+        "name": "Kundan Medallion Statement Earrings (FSE146)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/kundan-medallion-statement-earrings-fse146-0/800/1000",
+        "price": 1950,
+        "product": "046c622106ecdd1af501f769",
+        "variantId": "13c48e0a059215d07a1e3309",
+        "variantLabel": "Antique Gold",
+        "sku": "FSE146-ANT"
+      },
+      {
+        "name": "American Diamond Medallion Jhumka Drops (FSE130)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/american-diamond-medallion-jhumka-drops-fse130-0/800/1000",
+        "price": 1200,
+        "product": "4d7dcb57ccd4ef37dfd93c75",
+        "variantId": "aa3452ba1404554597829139",
+        "variantLabel": "Green",
+        "sku": "FSE130-GRE"
+      },
+      {
+        "name": "Crystal Star Set with Tikka (FDN130)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/crystal-star-set-with-tikka-fdn130-0/800/1000",
+        "price": 2700,
+        "product": "c0c829a7c16c4a9c96bd0f25",
+        "variantId": "6198610f0832e00ae7769d18",
+        "variantLabel": "Midnight Blue",
+        "sku": "FDN130-MID"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 65, Street 10",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03201687970"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 11700,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 11700,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-08-05T16:08:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-06T11:08:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-08T04:08:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-09T10:08:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-09T04:08:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS116146074",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-09T04:08:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-09T04:08:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-08-05T16:08:00.000Z",
+    "updatedAt": "2026-08-09T04:08:00.000Z"
+  },
+  {
+    "_id": "5acb3f52b085d0ae322b8311",
+    "user": "f857292fb83beacf436d34cb",
+    "orderItems": [
+      {
+        "name": "Polished Gold Star Choker (FDN126)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/polished-gold-star-choker-fdn126-0/800/1000",
+        "price": 2700,
+        "product": "1cdfcd0039c3ed8563038cfa",
+        "variantId": "e20462b0d41345e2dbd47d21",
+        "variantLabel": "Midnight Blue",
+        "sku": "FDN126-MID"
+      },
+      {
+        "name": "Antique Gold Paisley Cuff Bracelet (FSBR124)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/antique-gold-paisley-cuff-bracelet-fsbr124-0/800/1000",
+        "price": 1350,
+        "product": "1aa8904b3ae802919f529374",
+        "variantId": "2bfeeec02b6ef8416ec3dafc",
+        "variantLabel": "Rose Gold / 2.6",
+        "sku": "FSBR124-ROS-2.6"
+      },
+      {
+        "name": "Champagne Stone Beaded Set with Earrings (FDN132)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/champagne-stone-beaded-set-with-earrings-fdn132-0/800/1000",
+        "price": 4350,
+        "product": "2e5413e2ebbaea0a80513f7c",
+        "variantId": "90b93f7c05850cf1c81b0b0c",
+        "variantLabel": "Antique Gold",
+        "sku": "FDN132-ANT"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 126, Street 30",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03206969025"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 11100,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 11100,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-08-07T17:07:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-07T23:07:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-10T05:07:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-09T17:07:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-10T17:07:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS553270943",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-10T17:07:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-10T17:07:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-08-07T17:07:00.000Z",
+    "updatedAt": "2026-08-10T17:07:00.000Z"
+  },
+  {
+    "_id": "93e5326e68205c1204d78dec",
+    "user": "de0fde97a8a086d51a62f2aa",
+    "orderItems": [
+      {
+        "name": "Silver Tone Geometric AD Bridal Set (FDAB174)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/silver-tone-geometric-ad-bridal-set-fdab174-0/800/1000",
+        "price": 6700,
+        "product": "3b9581cfdcdb973b780712f5",
+        "variantId": "19498b3b12fd525ce8134fde",
+        "variantLabel": "Gold",
+        "sku": "FDAB174-GOL"
+      },
+      {
+        "name": "Two-Tone Teardrop Bindia & Earring Set (FBS116)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/two-tone-teardrop-bindia-earring-set-fbs116-0/800/1000",
+        "price": 1950,
+        "product": "dd1044f59359ffe3e779562d",
+        "variantId": "7c2bacbab40bdd3974060ca9",
+        "variantLabel": "Two-Tone",
+        "sku": "FBS116-TWO"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 330, Street 2",
+      "city": "Faisalabad",
+      "postalCode": "38000",
+      "country": "Pakistan",
+      "phone": "03383272255"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 17300,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 17300,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-08-08T09:15:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-09T02:15:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-08T21:15:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-10T06:15:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-13T01:15:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS815238096",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-13T01:15:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-13T01:15:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-08-08T09:15:00.000Z",
+    "updatedAt": "2026-08-13T01:15:00.000Z"
+  },
+  {
+    "_id": "24bab54e29b83ba5cd9a1a3b",
+    "user": "f857292fb83beacf436d34cb",
+    "orderItems": [
+      {
+        "name": "Polished Gold Floral Stud Earrings (FSE142)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/polished-gold-floral-stud-earrings-fse142-0/800/1000",
+        "price": 500,
+        "product": "ba052e96bfc9fc24518afb7a",
+        "variantId": "81dc22f3f94250af16f1ca6d",
+        "variantLabel": "Silver",
+        "sku": "FSE142-SIL"
+      },
+      {
+        "name": "Matte Gold Geometric Choker (FDN120)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/matte-gold-geometric-choker-fdn120-0/800/1000",
+        "price": 1300,
+        "product": "13508a0d774e3f6214e67e05",
+        "variantId": "3daf00a1ab0dbaaa2172862b",
+        "variantLabel": "Antique Gold",
+        "sku": "FDN120-ANT"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 314, Street 12",
+      "city": "Karachi",
+      "postalCode": "74000",
+      "country": "Pakistan",
+      "phone": "03284609621"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 2300,
+    "couponCode": "WELCOME10",
+    "discountAmount": 230,
+    "shippingPrice": 200,
+    "totalPrice": 2270,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-08-13T09:53:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-13T16:53:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-15T13:53:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-15T09:53:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-16T13:53:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS407798106",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-16T13:53:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-16T13:53:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-08-13T09:53:00.000Z",
+    "updatedAt": "2026-08-16T13:53:00.000Z"
+  },
+  {
+    "_id": "142df126ed2dea67c1b4d1d9",
+    "user": "ba1f16070af57ff439936a2a",
+    "orderItems": [
+      {
+        "name": "Oxidised Silver Vine Studs (FSE143)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/oxidised-silver-vine-studs-fse143-0/800/1000",
+        "price": 1250,
+        "product": "2c7942d35146b7769c5ec3dd",
+        "variantId": "406ca8299f4b033956fcc73e",
+        "variantLabel": "Two-Tone",
+        "sku": "FSE143-TWO"
+      },
+      {
+        "name": "Kundan Braided Bindia Set (FBS115)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/kundan-braided-bindia-set-fbs115-0/800/1000",
+        "price": 1750,
+        "product": "b81ecbb339e54cf7b1a54424",
+        "variantId": "79410f87bb0151a89df06e03",
+        "variantLabel": "Midnight Blue",
+        "sku": "FBS115-MID"
+      },
+      {
+        "name": "Moonstone Leaf Necklace Set (FDN128)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/moonstone-leaf-necklace-set-fdn128-0/800/1000",
+        "price": 2700,
+        "product": "eee34e5b8e8881832b9432d6",
+        "variantId": "ef954d504b5d8f96ecdc6c13",
+        "variantLabel": "Ivory",
+        "sku": "FDN128-IVO"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 117, Street 24",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03388157748"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 11400,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 11400,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-08-16T11:26:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-17T03:26:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-17T01:26:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-17T17:26:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-18T23:26:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS245228781",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-18T23:26:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-18T23:26:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-08-16T11:26:00.000Z",
+    "updatedAt": "2026-08-18T23:26:00.000Z"
+  },
+  {
+    "_id": "7c963b75d1e3c15c6f13abc6",
+    "user": "00a532ea623f13b61008ab01",
+    "orderItems": [
+      {
+        "name": "Moonstone Peacock Bindia & Earring Set (FBS114)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/moonstone-peacock-bindia-earring-set-fbs114-0/800/1000",
+        "price": 900,
+        "product": "7b095f0ac3632225c8ea392e",
+        "variantId": "07b06bc9a028dec675de96a7",
+        "variantLabel": "Antique Gold",
+        "sku": "FBS114-ANT"
+      },
+      {
+        "name": "Champagne Gold Medallion Rajwari Necklace Set (FRJ154)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/champagne-gold-medallion-rajwari-necklace-set-frj154-0/800/1000",
+        "price": 11300,
+        "product": "40b24b6709db6d5a3ec47b27",
+        "variantId": "534475346884bf2e4e0eff04",
+        "variantLabel": "Silver",
+        "sku": "FRJ154-SIL"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 113, Street 14",
+      "city": "Islamabad",
+      "postalCode": "44000",
+      "country": "Pakistan",
+      "phone": "03482706504"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 23500,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 23500,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-08-21T16:41:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-21T22:41:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-24T04:41:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-24T19:41:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-26T08:41:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS637210777",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-26T08:41:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-26T08:41:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-08-21T16:41:00.000Z",
+    "updatedAt": "2026-08-26T08:41:00.000Z"
+  },
+  {
+    "_id": "133c432e51686ca207705409",
+    "user": "9bafdb6bb803dbbbcadd391a",
+    "orderItems": [
+      {
+        "name": "Zircon Geometric Collar Necklace (FDN121)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/zircon-geometric-collar-necklace-fdn121-0/800/1000",
+        "price": 1200,
+        "product": "d980c715f459ec661f235df8",
+        "variantId": "9d0cc14447fb61c79f83efb7",
+        "variantLabel": "Gold",
+        "sku": "FDN121-GOL"
+      },
+      {
+        "name": "Emerald Geometric Rajwari Set (FRJ153)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/emerald-geometric-rajwari-set-frj153-0/800/1000",
+        "price": 7500,
+        "product": "6cf5a4eb8e0526db890ee06d",
+        "variantId": "f65341276f8c9eba011db86d",
+        "variantLabel": "Antique Gold",
+        "sku": "FRJ153-ANT"
+      },
+      {
+        "name": "Ruby Lotus Necklace Set (FDN131)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/ruby-lotus-necklace-set-fdn131-0/800/1000",
+        "price": 6100,
+        "product": "55abde45cc08306ef3a3e9fa",
+        "variantId": "182a5f89529fe30f8ee777af",
+        "variantLabel": "Silver",
+        "sku": "FDN131-SIL"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 365, Street 23",
+      "city": "Sialkot",
+      "postalCode": "51310",
+      "country": "Pakistan",
+      "phone": "03278700186"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 23500,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 23500,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-08-21T17:10:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-22T14:10:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-22T07:10:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-23T02:10:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-23T17:10:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS651428823",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-23T17:10:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-23T17:10:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-08-21T17:10:00.000Z",
+    "updatedAt": "2026-08-23T17:10:00.000Z"
+  },
+  {
+    "_id": "6860fb53edd8e998f916746b",
+    "user": "de0fde97a8a086d51a62f2aa",
+    "orderItems": [
+      {
+        "name": "Turquoise Sunburst Set with Tikka (FDN136)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/turquoise-sunburst-set-with-tikka-fdn136-0/800/1000",
+        "price": 5000,
+        "product": "9fa1036f3e7b16c156c8f07d",
+        "variantId": "25259b83aa9c4027a7e709c3",
+        "variantLabel": "Rose Gold",
+        "sku": "FDN136-ROS"
+      },
+      {
+        "name": "Crystal Floral Choker (FDN118)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/crystal-floral-choker-fdn118-0/800/1000",
+        "price": 4550,
+        "product": "b3bf85e3766c98f1ffce2cf3",
+        "variantId": "28165a2547f036a2417405dd",
+        "variantLabel": "Midnight Blue",
+        "sku": "FDN118-MID"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 94, Street 16",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03365805673"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 9550,
+    "couponCode": "WELCOME10",
+    "discountAmount": 955,
+    "shippingPrice": 0,
+    "totalPrice": 8595,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-08-24T13:15:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-25T18:15:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-25T07:15:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-27T19:15:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-27T17:15:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS796966960",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-27T17:15:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-27T17:15:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-08-24T13:15:00.000Z",
+    "updatedAt": "2026-08-27T17:15:00.000Z"
+  },
+  {
+    "_id": "58bfe4c2c53fb6d53aa38419",
+    "user": "4a3efdcedf14c9a397ff0ff1",
+    "orderItems": [
+      {
+        "name": "Kundan Crescent Bracelet (FSBR125)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/kundan-crescent-bracelet-fsbr125-0/800/1000",
+        "price": 1950,
+        "product": "f88f9a8fc8235b428acc51de",
+        "variantId": "b65613669e06e98e24337922",
+        "variantLabel": "Midnight Blue / 2.4",
+        "sku": "FSBR125-MID-2.4"
+      },
+      {
+        "name": "Crystal Leaf Bangle Pair (FSB150)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/crystal-leaf-bangle-pair-fsb150-0/800/1000",
+        "price": 2900,
+        "product": "ecfe4d81cc8350ffdeb3438d",
+        "variantId": "50a74ddfa24682d3a823ab6f",
+        "variantLabel": "Ivory / 2.4",
+        "sku": "FSB150-IVO-2.4"
+      },
+      {
+        "name": "Ruby Braided Statement Earrings (FSE147)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/ruby-braided-statement-earrings-fse147-0/800/1000",
+        "price": 2050,
+        "product": "ab61f40a4d1115f25bc89100",
+        "variantId": "cf3fd61e9e9fc88bbaea5b3c",
+        "variantLabel": "Ruby Red",
+        "sku": "FSE147-RUB"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 39, Street 25",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03421087463"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 9800,
+    "couponCode": "WELCOME10",
+    "discountAmount": 980,
+    "shippingPrice": 0,
+    "totalPrice": 8820,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-08-26T11:34:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-26T23:34:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-27T09:34:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-29T11:34:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-27T11:34:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS725245814",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-27T11:34:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-27T11:34:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-08-26T11:34:00.000Z",
+    "updatedAt": "2026-08-27T11:34:00.000Z"
+  },
+  {
+    "_id": "daca86951109e66d14c23841",
+    "user": "9bafdb6bb803dbbbcadd391a",
+    "orderItems": [
+      {
+        "name": "Rose Gold Braided AD Bangle Stack (FSAB105)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/rose-gold-braided-ad-bangle-stack-fsab105-0/800/1000",
+        "price": 3100,
+        "product": "edaaed90dd4479dd4d48ef07",
+        "variantId": "ee44e52f4fc6be7be09da1fc",
+        "variantLabel": "Two-Tone / 2.8",
+        "sku": "FSAB105-TWO-2.8"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 59, Street 3",
+      "city": "Lahore",
+      "postalCode": "54000",
+      "country": "Pakistan",
+      "phone": "03452816252"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 6200,
+    "couponCode": "WELCOME10",
+    "discountAmount": 620,
+    "shippingPrice": 0,
+    "totalPrice": 5580,
+    "status": "delivered",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-08-27T17:31:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-28T02:31:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-29T19:31:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-30T11:31:00.000Z"
+      },
+      {
+        "status": "delivered",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-08-28T21:31:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS987069518",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": true,
+    "paidAt": "2026-08-28T21:31:00.000Z",
+    "isDelivered": true,
+    "deliveredAt": "2026-08-28T21:31:00.000Z",
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-08-27T17:31:00.000Z",
+    "updatedAt": "2026-08-28T21:31:00.000Z"
+  },
+  {
+    "_id": "1e4bb456fe53c11b4b68c86b",
+    "user": "de0fde97a8a086d51a62f2aa",
+    "orderItems": [
+      {
+        "name": "Champagne Stone Beaded Set with Earrings (FDN132)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/champagne-stone-beaded-set-with-earrings-fdn132-0/800/1000",
+        "price": 4450,
+        "product": "2e5413e2ebbaea0a80513f7c",
+        "variantId": "ac3a3d6be55f7118b3392954",
+        "variantLabel": "Ruby Red",
+        "sku": "FDN132-RUB"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 219, Street 13",
+      "city": "Narowal",
+      "postalCode": "51600",
+      "country": "Pakistan",
+      "phone": "03454486070"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 8900,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 8900,
+    "status": "cancelled",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-02T15:34:00.000Z"
+      },
+      {
+        "status": "cancelled",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-03T13:34:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": "2026-09-03T13:34:00.000Z",
+    "cancelReason": "Changed my mind",
+    "isRefunded": false,
+    "createdAt": "2026-09-02T15:34:00.000Z",
+    "updatedAt": "2026-09-03T13:34:00.000Z"
+  },
+  {
+    "_id": "c08171cc3459fed3a7c0ac14",
+    "user": "66be203de9d30cd2de2e8d9e",
+    "orderItems": [
+      {
+        "name": "Onyx Teardrop Ring (FSR121)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/onyx-teardrop-ring-fsr121-0/800/1000",
+        "price": 1900,
+        "product": "7a4bac57d6723a0979cbb2f2",
+        "variantId": "6ce573e03257377cc15ec0f3",
+        "variantLabel": "Two-Tone / 16mm",
+        "sku": "FSR121-TWO-16mm"
+      },
+      {
+        "name": "Matte Gold Teardrop Necklace (FDN124)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/matte-gold-teardrop-necklace-fdn124-0/800/1000",
+        "price": 1750,
+        "product": "de9e0ea3fa5b2acc3d859050",
+        "variantId": "33368b2effa97ec29e8f7f4a",
+        "variantLabel": "Rose Gold",
+        "sku": "FDN124-ROS"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 186, Street 11",
+      "city": "Islamabad",
+      "postalCode": "44000",
+      "country": "Pakistan",
+      "phone": "03285945422"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 5550,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 5550,
+    "status": "shipped",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-02T17:59:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-03T04:59:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-03T15:59:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-04T08:59:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS398784639",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-02T17:59:00.000Z",
+    "updatedAt": "2026-09-04T08:59:00.000Z"
+  },
+  {
+    "_id": "65844900e4a8d8e11b3a21b2",
+    "user": "dc26af2e4e2e423f3949eb40",
+    "orderItems": [
+      {
+        "name": "Two-Tone Lotus AD Bridal Set (FDAB172)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/two-tone-lotus-ad-bridal-set-fdab172-0/800/1000",
+        "price": 18200,
+        "product": "f049c5276a93cf6f7c948034",
+        "variantId": "61746091f8f09682c29e27b8",
+        "variantLabel": "Midnight Blue",
+        "sku": "FDAB172-MID"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 123, Street 10",
+      "city": "Narowal",
+      "postalCode": "51600",
+      "country": "Pakistan",
+      "phone": "03412582778"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 36400,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 36400,
+    "status": "shipped",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-03T09:57:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-03T21:57:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-04T11:57:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-05T18:57:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS453434737",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-03T09:57:00.000Z",
+    "updatedAt": "2026-09-05T18:57:00.000Z"
+  },
+  {
+    "_id": "59e119e98179f6511a76b072",
+    "user": "66be203de9d30cd2de2e8d9e",
+    "orderItems": [
+      {
+        "name": "Oxidised Silver Peacock Bahubali Passa (FSP174)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/oxidised-silver-peacock-bahubali-passa-fsp174-0/800/1000",
+        "price": 2500,
+        "product": "92e65ccdbbd70796c2922ce8",
+        "variantId": "ccba48f6b9be6ccb4b40522b",
+        "variantLabel": "Two-Tone",
+        "sku": "FSP174-TWO"
+      },
+      {
+        "name": "Oxidised Silver Peacock Statement Earrings (FSE149)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/oxidised-silver-peacock-statement-earrings-fse149-0/800/1000",
+        "price": 2400,
+        "product": "b4d1e408ac73f1f09d2b83e4",
+        "variantId": "64f8f553092bf830d36ba1bd",
+        "variantLabel": "Ivory",
+        "sku": "FSE149-IVO"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 276, Street 19",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03102852529"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 9800,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 9800,
+    "status": "shipped",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-03T11:25:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-04T16:25:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-05T23:25:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-07T02:25:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS164720646",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-03T11:25:00.000Z",
+    "updatedAt": "2026-09-07T02:25:00.000Z"
+  },
+  {
+    "_id": "14b003642e9919a4d82ba9a3",
+    "user": "ba1f16070af57ff439936a2a",
+    "orderItems": [
+      {
+        "name": "Oxidised Silver Beaded Cocktail Ring (FSR122)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/oxidised-silver-beaded-cocktail-ring-fsr122-0/800/1000",
+        "price": 500,
+        "product": "26db104a32e746e523d335af",
+        "variantId": "fbabb6d7b501aabc891c3211",
+        "variantLabel": "Rose Gold / 19mm",
+        "sku": "FSR122-ROS-19mm"
+      },
+      {
+        "name": "Polished Gold Beaded Kara Pair (FSKB124)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/polished-gold-beaded-kara-pair-fskb124-0/800/1000",
+        "price": 350,
+        "product": "e3c2023277f3426d42628731",
+        "variantId": "6fef4e12834cf3dd7506fb2a",
+        "variantLabel": "Midnight Blue / 2.6",
+        "sku": "FSKB124-MID-2.6"
+      },
+      {
+        "name": "Polished Gold Teardrop Cocktail Ring (FSR114)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/polished-gold-teardrop-cocktail-ring-fsr114-0/800/1000",
+        "price": 1950,
+        "product": "47bfb314a2a8b129b45a3de7",
+        "variantId": "7ee4cc5b996762f25f0438a1",
+        "variantLabel": "Two-Tone / 18mm",
+        "sku": "FSR114-TWO-18mm"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 65, Street 27",
+      "city": "Karachi",
+      "postalCode": "74000",
+      "country": "Pakistan",
+      "phone": "03382891414"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 5250,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 5250,
+    "status": "processing",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-03T17:44:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-04T02:44:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-05T09:44:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-03T17:44:00.000Z",
+    "updatedAt": "2026-09-05T09:44:00.000Z"
+  },
+  {
+    "_id": "6df83d0ec82fe3a5685d4c96",
+    "user": "f857292fb83beacf436d34cb",
+    "orderItems": [
+      {
+        "name": "Rose Gold Star Jhumkas (FSE131)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/rose-gold-star-jhumkas-fse131-0/800/1000",
+        "price": 3000,
+        "product": "6c5c97e36b320e9386882274",
+        "variantId": "3d320c5cbe71bd1f5ddd4bc4",
+        "variantLabel": "Silver",
+        "sku": "FSE131-SIL"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 240, Street 14",
+      "city": "Rawalpindi",
+      "postalCode": "46000",
+      "country": "Pakistan",
+      "phone": "03183304029"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 6000,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 6000,
+    "status": "processing",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-03T19:01:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-04T13:01:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-05T11:01:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-03T19:01:00.000Z",
+    "updatedAt": "2026-09-05T11:01:00.000Z"
+  },
+  {
+    "_id": "d8d36631b9ee35ce96a364c5",
+    "user": "00a532ea623f13b61008ab01",
+    "orderItems": [
+      {
+        "name": "Silver Tone Braided Bangle Stack (FSB141)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/silver-tone-braided-bangle-stack-fsb141-0/800/1000",
+        "price": 3150,
+        "product": "8904f86cc9884aa854d005da",
+        "variantId": "8014d1695e126ec16fa3905c",
+        "variantLabel": "Ruby Red / 2.8",
+        "sku": "FSB141-RUB-2.8"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 390, Street 1",
+      "city": "Lahore",
+      "postalCode": "54000",
+      "country": "Pakistan",
+      "phone": "03474073309"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 6300,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 6300,
+    "status": "shipped",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-04T09:05:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-05T10:05:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-06T21:05:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-06T12:05:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS872474198",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-04T09:05:00.000Z",
+    "updatedAt": "2026-09-06T12:05:00.000Z"
+  },
+  {
+    "_id": "78e854ce5851197902156b00",
+    "user": "00a532ea623f13b61008ab01",
+    "orderItems": [
+      {
+        "name": "Polished Gold Braided Set with Tikka (FDN137)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/polished-gold-braided-set-with-tikka-fdn137-0/800/1000",
+        "price": 4950,
+        "product": "0a12d591f247f7d5c8e141bc",
+        "variantId": "2bb32bb8db64cf4847c5e878",
+        "variantLabel": "Ruby Red",
+        "sku": "FDN137-RUB"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 314, Street 10",
+      "city": "Multan",
+      "postalCode": "60000",
+      "country": "Pakistan",
+      "phone": "03286392006"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 4950,
+    "couponCode": "WELCOME10",
+    "discountAmount": 495,
+    "shippingPrice": 200,
+    "totalPrice": 4655,
+    "status": "processing",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-04T10:34:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-05T03:34:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-06T04:34:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-04T10:34:00.000Z",
+    "updatedAt": "2026-09-06T04:34:00.000Z"
+  },
+  {
+    "_id": "16a25abcf8f07e32954ecf92",
+    "user": "de0fde97a8a086d51a62f2aa",
+    "orderItems": [
+      {
+        "name": "Champagne Gold Crescent Men's Bracelet (FMN183)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/champagne-gold-crescent-mens-bracelet-fmn183-0/800/1000",
+        "price": 1600,
+        "product": "7e568a6c57a2c51c2896919a",
+        "variantId": "350e616f5800a29cf5f66186",
+        "variantLabel": "Antique Gold / 17mm",
+        "sku": "FMN183-ANT-17mm"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 169, Street 5",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03326025620"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 1600,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 1800,
+    "status": "processing",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-04T13:00:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-05T15:00:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-05T11:00:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-04T13:00:00.000Z",
+    "updatedAt": "2026-09-05T11:00:00.000Z"
+  },
+  {
+    "_id": "ccfc47fe17fc0f3267a0b696",
+    "user": "5ddbbc9e4fa5db8137e98aa0",
+    "orderItems": [
+      {
+        "name": "Rose Gold Braided AD Bangle Stack (FSAB105)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/rose-gold-braided-ad-bangle-stack-fsab105-0/800/1000",
+        "price": 3100,
+        "product": "edaaed90dd4479dd4d48ef07",
+        "variantId": "ee44e52f4fc6be7be09da1fc",
+        "variantLabel": "Two-Tone / 2.8",
+        "sku": "FSAB105-TWO-2.8"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 202, Street 29",
+      "city": "Islamabad",
+      "postalCode": "44000",
+      "country": "Pakistan",
+      "phone": "03237418052"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 3100,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 3300,
+    "status": "cancelled",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-04T14:27:00.000Z"
+      },
+      {
+        "status": "cancelled",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-05T15:27:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": "2026-09-05T15:27:00.000Z",
+    "cancelReason": "Changed my mind",
+    "isRefunded": false,
+    "createdAt": "2026-09-04T14:27:00.000Z",
+    "updatedAt": "2026-09-05T15:27:00.000Z"
+  },
+  {
+    "_id": "da501f8c8eb61c32826395ac",
+    "user": "00a532ea623f13b61008ab01",
+    "orderItems": [
+      {
+        "name": "Crystal Geometric Bangle Pair (FSB145)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/crystal-geometric-bangle-pair-fsb145-0/800/1000",
+        "price": 4250,
+        "product": "4adc318027f81b28f7dd4885",
+        "variantId": "6ae5f09f7bd7ed7d8670b61d",
+        "variantLabel": "Ruby Red / 2.8",
+        "sku": "FSB145-RUB-2.8"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 95, Street 3",
+      "city": "Faisalabad",
+      "postalCode": "38000",
+      "country": "Pakistan",
+      "phone": "03463136544"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 8500,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 8500,
+    "status": "cancelled",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-04T20:54:00.000Z"
+      },
+      {
+        "status": "cancelled",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-05T06:54:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": "2026-09-05T06:54:00.000Z",
+    "cancelReason": "Changed my mind",
+    "isRefunded": false,
+    "createdAt": "2026-09-04T20:54:00.000Z",
+    "updatedAt": "2026-09-05T06:54:00.000Z"
+  },
+  {
+    "_id": "30547990612afe62f25e07ac",
+    "user": "3dd38c30c0863ad1cbac8612",
+    "orderItems": [
+      {
+        "name": "Champagne Stone Geometric Kundan Bridal Set (FDB106)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/champagne-stone-geometric-kundan-bridal-set-fdb106-0/800/1000",
+        "price": 7300,
+        "product": "eea895359b4ae717d7d867d4",
+        "variantId": "b2786e8a6483d585b4015747",
+        "variantLabel": "Antique Gold",
+        "sku": "FDB106-ANT"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 74, Street 22",
+      "city": "Narowal",
+      "postalCode": "51600",
+      "country": "Pakistan",
+      "phone": "03107721783"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 14600,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 14600,
+    "status": "shipped",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-05T15:50:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-06T07:50:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-07T05:50:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-09T06:50:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS506398310",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-05T15:50:00.000Z",
+    "updatedAt": "2026-09-09T06:50:00.000Z"
+  },
+  {
+    "_id": "75610fbebc99ab6740cf4644",
+    "user": "de0fde97a8a086d51a62f2aa",
+    "orderItems": [
+      {
+        "name": "Champagne Gold Vine Jhoomar (FSJ137)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/champagne-gold-vine-jhoomar-fsj137-0/800/1000",
+        "price": 1150,
+        "product": "fdb149475a90d4910b4a88c4",
+        "variantId": "0f16a5d47181c5e617a906d7",
+        "variantLabel": "Two-Tone",
+        "sku": "FSJ137-TWO"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 382, Street 26",
+      "city": "Peshawar",
+      "postalCode": "25000",
+      "country": "Pakistan",
+      "phone": "03242117041"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 1150,
+    "couponCode": "WELCOME10",
+    "discountAmount": 115,
+    "shippingPrice": 200,
+    "totalPrice": 1235,
+    "status": "shipped",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-06T10:35:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-07T15:35:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-08T00:35:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-10T01:35:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS562095663",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-06T10:35:00.000Z",
+    "updatedAt": "2026-09-10T01:35:00.000Z"
+  },
+  {
+    "_id": "9975a30208105ad5ed4871c5",
+    "user": "de0fde97a8a086d51a62f2aa",
+    "orderItems": [
+      {
+        "name": "Oxidised Silver Star Anklets (FSA186)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/oxidised-silver-star-anklets-fsa186-0/800/1000",
+        "price": 950,
+        "product": "70a14a3ae192c054a8c1c410",
+        "variantId": "ba130e223a22dae3e5769d0c",
+        "variantLabel": "Ruby Red",
+        "sku": "FSA186-RUB"
+      },
+      {
+        "name": "Silver Tone Geometric AD Bridal Set (FDAB174)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/silver-tone-geometric-ad-bridal-set-fdab174-0/800/1000",
+        "price": 6700,
+        "product": "3b9581cfdcdb973b780712f5",
+        "variantId": "3964e8831226fefaaf458fc9",
+        "variantLabel": "Ivory",
+        "sku": "FDAB174-IVO"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 327, Street 4",
+      "city": "Narowal",
+      "postalCode": "51600",
+      "country": "Pakistan",
+      "phone": "03456117919"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 7650,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 7650,
+    "status": "shipped",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-06T15:41:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-07T10:41:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-07T11:41:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-07T09:41:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS898604191",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-06T15:41:00.000Z",
+    "updatedAt": "2026-09-07T09:41:00.000Z"
+  },
+  {
+    "_id": "487236fc7651c9a0938ae326",
+    "user": "de0fde97a8a086d51a62f2aa",
+    "orderItems": [
+      {
+        "name": "Crystal Lotus Bridal Necklace Set (FDB111)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/crystal-lotus-bridal-necklace-set-fdb111-0/800/1000",
+        "price": 9700,
+        "product": "47c94a633e0bd1125463e18d",
+        "variantId": "da09835e86dc2ce8389cf76f",
+        "variantLabel": "Green",
+        "sku": "FDB111-GRE"
+      },
+      {
+        "name": "Antique Gold Teardrop Mathapatti Set (FSM121)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/antique-gold-teardrop-mathapatti-set-fsm121-0/800/1000",
+        "price": 1450,
+        "product": "72148daf4c786ae5a3442748",
+        "variantId": "02c1fa9abb65e7a43b97505d",
+        "variantLabel": "Two-Tone",
+        "sku": "FSM121-TWO"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 117, Street 29",
+      "city": "Karachi",
+      "postalCode": "74000",
+      "country": "Pakistan",
+      "phone": "03332500963"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 20850,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 20850,
+    "status": "shipped",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-06T19:56:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-07T13:56:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-08T13:56:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-09T04:56:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS941021052",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-06T19:56:00.000Z",
+    "updatedAt": "2026-09-09T04:56:00.000Z"
+  },
+  {
+    "_id": "c30ceb1bcfed7a0b38e1a89a",
+    "user": "3dd38c30c0863ad1cbac8612",
+    "orderItems": [
+      {
+        "name": "American Diamond Floral Jhumka Drops (FSE133)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/american-diamond-floral-jhumka-drops-fse133-0/800/1000",
+        "price": 2650,
+        "product": "d791c94f7646a63979cc04c6",
+        "variantId": "633fad292b02f4a17c26d8c6",
+        "variantLabel": "Green",
+        "sku": "FSE133-GRE"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 128, Street 5",
+      "city": "Islamabad",
+      "postalCode": "44000",
+      "country": "Pakistan",
+      "phone": "03209801218"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 5300,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 5300,
+    "status": "shipped",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-06T20:54:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-07T13:54:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-09T00:54:00.000Z"
+      },
+      {
+        "status": "shipped",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-08T14:54:00.000Z"
+      }
+    ],
+    "stockAdjusted": true,
+    "trackingNumber": "TCS825757314",
+    "courier": "TCS",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-06T20:54:00.000Z",
+    "updatedAt": "2026-09-08T14:54:00.000Z"
+  },
+  {
+    "_id": "f6a3dfcd3c805b5d1e4f6981",
+    "user": "ba1f16070af57ff439936a2a",
+    "orderItems": [
+      {
+        "name": "Ruby Filigree Passa (FSP173)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/ruby-filigree-passa-fsp173-0/800/1000",
+        "price": 2350,
+        "product": "2d240fdb843e79e84a6705af",
+        "variantId": "36a5c50e3444fd86c6b68ee2",
+        "variantLabel": "Gold",
+        "sku": "FSP173-GOL"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 312, Street 3",
+      "city": "Karachi",
+      "postalCode": "74000",
+      "country": "Pakistan",
+      "phone": "03154708839"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 4700,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 4900,
+    "status": "confirmed",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-07T14:52:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-08T00:52:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-07T14:52:00.000Z",
+    "updatedAt": "2026-09-08T00:52:00.000Z"
+  },
+  {
+    "_id": "a71253ff82c7c9c7dae9875b",
+    "user": "3dd38c30c0863ad1cbac8612",
+    "orderItems": [
+      {
+        "name": "Turquoise Vine Ring (FSR120)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/turquoise-vine-ring-fsr120-0/800/1000",
+        "price": 1950,
+        "product": "522fd2199cc45be1cdef6991",
+        "variantId": "2d381186fc7c58b503560145",
+        "variantLabel": "Ruby Red / 19mm",
+        "sku": "FSR120-RUB-19mm"
+      },
+      {
+        "name": "Matte Gold Peacock Locket Set (FDL161)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/matte-gold-peacock-locket-set-fdl161-0/800/1000",
+        "price": 700,
+        "product": "070470eb2e8e0bf89b3d0113",
+        "variantId": "da626edaec2eb0dbef039238",
+        "variantLabel": "Ivory",
+        "sku": "FDL161-IVO"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 186, Street 7",
+      "city": "Lahore",
+      "postalCode": "54000",
+      "country": "Pakistan",
+      "phone": "03207242794"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 5300,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 5300,
+    "status": "confirmed",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-07T17:01:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-08T00:01:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-07T17:01:00.000Z",
+    "updatedAt": "2026-09-08T00:01:00.000Z"
+  },
+  {
+    "_id": "f31aeb54f6a8023ebc1a0510",
+    "user": "00a532ea623f13b61008ab01",
+    "orderItems": [
+      {
+        "name": "Silver Tone Braided Bangle Stack (FSB141)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/silver-tone-braided-bangle-stack-fsb141-0/800/1000",
+        "price": 3050,
+        "product": "8904f86cc9884aa854d005da",
+        "variantId": "57718eafddaf0e4a3641cdeb",
+        "variantLabel": "Rose Gold / 2.10",
+        "sku": "FSB141-ROS-2.10"
+      },
+      {
+        "name": "Onyx Bird Bridal Nath (FNR166)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/onyx-bird-bridal-nath-fnr166-0/800/1000",
+        "price": 2200,
+        "product": "9f9f967b7a7fb088959549c3",
+        "variantId": "321ff824940fe8cbaf72f315",
+        "variantLabel": "Antique Gold / Medium",
+        "sku": "FNR166-ANT-Medium"
+      },
+      {
+        "name": "Champagne Stone Peacock Locket & Chain Set (FDL162)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/champagne-stone-peacock-locket-chain-set-fdl162-0/800/1000",
+        "price": 400,
+        "product": "25eb6d206059bab6c3c95c7d",
+        "variantId": "1b6cc60e12a4bec2d17b683e",
+        "variantLabel": "Rose Gold",
+        "sku": "FDL162-ROS"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 67, Street 23",
+      "city": "Rawalpindi",
+      "postalCode": "46000",
+      "country": "Pakistan",
+      "phone": "03148777641"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 9100,
+    "couponCode": "WELCOME10",
+    "discountAmount": 910,
+    "shippingPrice": 0,
+    "totalPrice": 8190,
+    "status": "confirmed",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-07T21:14:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-08T09:14:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-07T21:14:00.000Z",
+    "updatedAt": "2026-09-08T09:14:00.000Z"
+  },
+  {
+    "_id": "dc11f7b33fc5e843beb13552",
+    "user": "66be203de9d30cd2de2e8d9e",
+    "orderItems": [
+      {
+        "name": "Crystal Floral Choker (FDN118)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/crystal-floral-choker-fdn118-0/800/1000",
+        "price": 4450,
+        "product": "b3bf85e3766c98f1ffce2cf3",
+        "variantId": "f73575ee663f81153626c87c",
+        "variantLabel": "Silver",
+        "sku": "FDN118-SIL"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 67, Street 19",
+      "city": "Multan",
+      "postalCode": "60000",
+      "country": "Pakistan",
+      "phone": "03312833560"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 8900,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 8900,
+    "status": "processing",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-08T11:15:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-08T21:15:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-10T17:15:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-08T11:15:00.000Z",
+    "updatedAt": "2026-09-10T17:15:00.000Z"
+  },
+  {
+    "_id": "bfc95864bb3834432e2a2ae0",
+    "user": "dc26af2e4e2e423f3949eb40",
+    "orderItems": [
+      {
+        "name": "Ruby Filigree Passa (FSP173)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/ruby-filigree-passa-fsp173-0/800/1000",
+        "price": 2350,
+        "product": "2d240fdb843e79e84a6705af",
+        "variantId": "36a5c50e3444fd86c6b68ee2",
+        "variantLabel": "Gold",
+        "sku": "FSP173-GOL"
+      },
+      {
+        "name": "Polished Gold Geometric Locket Set (FDL159)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/polished-gold-geometric-locket-set-fdl159-0/800/1000",
+        "price": 1050,
+        "product": "bcdda773f12083570b58e761",
+        "variantId": "4ec6266a86d4ad1cdb80c0ea",
+        "variantLabel": "Midnight Blue",
+        "sku": "FDL159-MID"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 313, Street 6",
+      "city": "Lahore",
+      "postalCode": "54000",
+      "country": "Pakistan",
+      "phone": "03116423884"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 3400,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 3600,
+    "status": "processing",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-08T16:06:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-09T04:06:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-10T22:06:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-08T16:06:00.000Z",
+    "updatedAt": "2026-09-10T22:06:00.000Z"
+  },
+  {
+    "_id": "0735a7d3146baf666c263252",
+    "user": "dc26af2e4e2e423f3949eb40",
+    "orderItems": [
+      {
+        "name": "Zircon Geometric Collar Necklace (FDN121)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/zircon-geometric-collar-necklace-fdn121-0/800/1000",
+        "price": 1200,
+        "product": "d980c715f459ec661f235df8",
+        "variantId": "bdec8dad382245bc2d356048",
+        "variantLabel": "Ruby Red",
+        "sku": "FDN121-RUB"
+      },
+      {
+        "name": "Matte Gold Teardrop Necklace (FDN124)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/matte-gold-teardrop-necklace-fdn124-0/800/1000",
+        "price": 1750,
+        "product": "de9e0ea3fa5b2acc3d859050",
+        "variantId": "33368b2effa97ec29e8f7f4a",
+        "variantLabel": "Rose Gold",
+        "sku": "FDN124-ROS"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 237, Street 29",
+      "city": "Narowal",
+      "postalCode": "51600",
+      "country": "Pakistan",
+      "phone": "03198531518"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 5900,
+    "couponCode": "WELCOME10",
+    "discountAmount": 590,
+    "shippingPrice": 0,
+    "totalPrice": 5310,
+    "status": "processing",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-08T17:12:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-09T05:12:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-10T13:12:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-08T17:12:00.000Z",
+    "updatedAt": "2026-09-10T13:12:00.000Z"
+  },
+  {
+    "_id": "bb8fcb41a118e0ddce412b18",
+    "user": "66be203de9d30cd2de2e8d9e",
+    "orderItems": [
+      {
+        "name": "Polished Gold Peacock Ring Set (FSR117)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/polished-gold-peacock-ring-set-fsr117-0/800/1000",
+        "price": 1300,
+        "product": "7d5bdd144cb1ad7a7ee50c69",
+        "variantId": "f74f221b28c2c7f6067a1073",
+        "variantLabel": "Antique Gold / 17mm",
+        "sku": "FSR117-ANT-17mm"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 23, Street 3",
+      "city": "Karachi",
+      "postalCode": "74000",
+      "country": "Pakistan",
+      "phone": "03211292541"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 2600,
+    "couponCode": "WELCOME10",
+    "discountAmount": 260,
+    "shippingPrice": 200,
+    "totalPrice": 2540,
+    "status": "processing",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-08T17:40:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-09T18:40:00.000Z"
+      },
+      {
+        "status": "processing",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-09T19:40:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-08T17:40:00.000Z",
+    "updatedAt": "2026-09-09T19:40:00.000Z"
+  },
+  {
+    "_id": "a4b6dcaf241bab9d7734f1d1",
+    "user": "5ddbbc9e4fa5db8137e98aa0",
+    "orderItems": [
+      {
+        "name": "Silver Tone Filigree Bridal Necklace Set (FDB109)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/silver-tone-filigree-bridal-necklace-set-fdb109-0/800/1000",
+        "price": 4550,
+        "product": "d53b9a47e3e8b8897aae5f63",
+        "variantId": "e349db86d79bbd22fb5efcd9",
+        "variantLabel": "Gold",
+        "sku": "FDB109-GOL"
+      },
+      {
+        "name": "Moonstone Peacock Bindia & Earring Set (FBS114)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/moonstone-peacock-bindia-earring-set-fbs114-0/800/1000",
+        "price": 900,
+        "product": "7b095f0ac3632225c8ea392e",
+        "variantId": "76b32154b40d58f457d8b925",
+        "variantLabel": "Midnight Blue",
+        "sku": "FBS114-MID"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 277, Street 20",
+      "city": "Karachi",
+      "postalCode": "74000",
+      "country": "Pakistan",
+      "phone": "03364402834"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 10000,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 10000,
+    "status": "confirmed",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-08T19:01:00.000Z"
+      },
+      {
+        "status": "confirmed",
+        "note": "",
+        "changedBy": null,
+        "at": "2026-09-09T06:01:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-08T19:01:00.000Z",
+    "updatedAt": "2026-09-09T06:01:00.000Z"
+  },
+  {
+    "_id": "0a798b468cfe2ab6bb4c946e",
+    "user": "00a532ea623f13b61008ab01",
+    "orderItems": [
+      {
+        "name": "Ruby Lotus Necklace Set (FDN131)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/ruby-lotus-necklace-set-fdn131-0/800/1000",
+        "price": 6100,
+        "product": "55abde45cc08306ef3a3e9fa",
+        "variantId": "ff8047fc1b99402aba4f041d",
+        "variantLabel": "Two-Tone",
+        "sku": "FDN131-TWO"
+      },
+      {
+        "name": "Polished Gold Floral Stud Earrings (FSE142)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/polished-gold-floral-stud-earrings-fse142-0/800/1000",
+        "price": 500,
+        "product": "ba052e96bfc9fc24518afb7a",
+        "variantId": "81dc22f3f94250af16f1ca6d",
+        "variantLabel": "Silver",
+        "sku": "FSE142-SIL"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 263, Street 20",
+      "city": "Karachi",
+      "postalCode": "74000",
+      "country": "Pakistan",
+      "phone": "03333520342"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 6600,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 6600,
+    "status": "pending",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-09T17:00:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-09T17:00:00.000Z",
+    "updatedAt": "2026-09-09T17:00:00.000Z"
+  },
+  {
+    "_id": "a20c994993c6bf7d071fb94e",
+    "user": "9bafdb6bb803dbbbcadd391a",
+    "orderItems": [
+      {
+        "name": "Silver Tone Star Bangles Set (FSB149)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/silver-tone-star-bangles-set-fsb149-0/800/1000",
+        "price": 1750,
+        "product": "d5e1e7edbcfd1a5ab590abc1",
+        "variantId": "9cd291387229935e350ca866",
+        "variantLabel": "Midnight Blue / 2.6",
+        "sku": "FSB149-MID-2.6"
+      },
+      {
+        "name": "Polished Gold Floral Stud Earrings (FSE142)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/polished-gold-floral-stud-earrings-fse142-0/800/1000",
+        "price": 500,
+        "product": "ba052e96bfc9fc24518afb7a",
+        "variantId": "81dc22f3f94250af16f1ca6d",
+        "variantLabel": "Silver",
+        "sku": "FSE142-SIL"
+      },
+      {
+        "name": "Ruby Teardrop Set with Earrings (FDN134)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/ruby-teardrop-set-with-earrings-fdn134-0/800/1000",
+        "price": 5700,
+        "product": "ac21f59d636aa468ede2e0d6",
+        "variantId": "e9c2281feda443cb70af619f",
+        "variantLabel": "Antique Gold",
+        "sku": "FDN134-ANT"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 338, Street 13",
+      "city": "Faisalabad",
+      "postalCode": "38000",
+      "country": "Pakistan",
+      "phone": "03252339659"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 10200,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 10200,
+    "status": "pending",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-09T17:07:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-09T17:07:00.000Z",
+    "updatedAt": "2026-09-09T17:07:00.000Z"
+  },
+  {
+    "_id": "68008904df3d5d50a320a0a1",
+    "user": "ba1f16070af57ff439936a2a",
+    "orderItems": [
+      {
+        "name": "American Diamond Floral Jhumka Drops (FSE133)",
+        "qty": 1,
+        "image": "https://picsum.photos/seed/american-diamond-floral-jhumka-drops-fse133-0/800/1000",
+        "price": 2600,
+        "product": "d791c94f7646a63979cc04c6",
+        "variantId": "eea30589b1165cc12a23ca6a",
+        "variantLabel": "Rose Gold",
+        "sku": "FSE133-ROS"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 65, Street 29",
+      "city": "Narowal",
+      "postalCode": "51600",
+      "country": "Pakistan",
+      "phone": "03442098840"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 2600,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 200,
+    "totalPrice": 2800,
+    "status": "pending",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-09T17:35:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-09T17:35:00.000Z",
+    "updatedAt": "2026-09-09T17:35:00.000Z"
+  },
+  {
+    "_id": "a0c8c3675326013441c6609c",
+    "user": "9bafdb6bb803dbbbcadd391a",
+    "orderItems": [
+      {
+        "name": "Kundan Braided Long Mala Set (FDM131)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/kundan-braided-long-mala-set-fdm131-0/800/1000",
+        "price": 4000,
+        "product": "e0fed8e84e980893b5733035",
+        "variantId": "b91350e893b90e0becaeb3e6",
+        "variantLabel": "Midnight Blue",
+        "sku": "FDM131-MID"
+      },
+      {
+        "name": "Silver Tone Paisley Collar Necklace (FDN116)",
+        "qty": 2,
+        "image": "https://picsum.photos/seed/silver-tone-paisley-collar-necklace-fdn116-0/800/1000",
+        "price": 3400,
+        "product": "d652c140ccd58c3c52351b4d",
+        "variantId": "5a6281a8fd49ac017047d925",
+        "variantLabel": "Antique Gold",
+        "sku": "FDN116-ANT"
+      }
+    ],
+    "shippingAddress": {
+      "address": "House 51, Street 29",
+      "city": "Islamabad",
+      "postalCode": "44000",
+      "country": "Pakistan",
+      "phone": "03392990729"
+    },
+    "paymentMethod": "Cash on Delivery",
+    "itemsPrice": 14800,
+    "couponCode": "",
+    "discountAmount": 0,
+    "shippingPrice": 0,
+    "totalPrice": 14800,
+    "status": "pending",
+    "statusHistory": [
+      {
+        "status": "pending",
+        "note": "Order placed",
+        "changedBy": null,
+        "at": "2026-09-09T21:33:00.000Z"
+      }
+    ],
+    "stockAdjusted": false,
+    "trackingNumber": "",
+    "courier": "",
+    "internalNotes": "",
+    "isPaid": false,
+    "paidAt": null,
+    "isDelivered": false,
+    "deliveredAt": null,
+    "cancelledAt": null,
+    "cancelReason": "",
+    "isRefunded": false,
+    "createdAt": "2026-09-09T21:33:00.000Z",
+    "updatedAt": "2026-09-09T21:33:00.000Z"
+  }
+]

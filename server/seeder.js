@@ -1,5 +1,6 @@
 import fs from 'fs';
 import path from 'path';
+import mongoose from 'mongoose';
 import dotenv from 'dotenv';
 import connectDB from './config/db.js';
 import Product from './models/productModel.js';
@@ -7,6 +8,7 @@ import Category from './models/categoryModel.js';
 import Collection from './models/collectionModel.js';
 import Review from './models/reviewModel.js';
 import Order from './models/orderModel.js';
+import User from './models/userModel.js';
 
 dotenv.config();
 await connectDB();
@@ -29,6 +31,8 @@ const importData = async () => {
     const rawCollections = readJson('collections.json');
     const rawProducts = readJson('products.json');
     const rawReviews = readJson('reviews.json');
+    const rawUsers = readJson('users.json');
+    const rawOrders = readJson('orders.json');
 
     await Promise.all([
       Order.deleteMany(),
@@ -51,7 +55,6 @@ const importData = async () => {
         return slug;
       }
 
-      // Try prefixing with the parent, e.g. bangles -> bangles-bangles
       const parent = byId.get(category.parent);
 
       if (parent) {
@@ -76,7 +79,6 @@ const importData = async () => {
       ...rawCategories.filter((c) => c.parent),
     ];
 
-    // Categories keep their original _ids so parent links stay intact
     const categories = ordered.map((c) => ({
       _id: c._id,
       name: c.name,
@@ -178,6 +180,28 @@ const importData = async () => {
 
     await Review.insertMany(reviews);
 
+    // Demo customers. Existing accounts, including your admin, are untouched.
+    // insertOne bypasses Mongoose so the already-hashed password isn't
+    // hashed a second time by the pre-save hook.
+    let newUsers = 0;
+
+    for (const u of rawUsers) {
+      const exists = await User.findOne({ email: u.email });
+      if (exists) continue;
+
+      await User.collection.insertOne({
+        ...u,
+        _id: new mongoose.Types.ObjectId(u._id),
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      });
+
+      newUsers += 1;
+    }
+
+    // timestamps: true would overwrite createdAt and flatten the chart
+    await Order.insertMany(rawOrders, { timestamps: false });
+
     console.log(`Categories:  ${categories.length}`);
     console.log(`Collections: ${collections.length}`);
     console.log(`Products:    ${products.length}`);
@@ -185,6 +209,9 @@ const importData = async () => {
       `Variants:    ${products.reduce((s, p) => s + p.variants.length, 0)}`
     );
     console.log(`Reviews:     ${reviews.length}`);
+    console.log(`Customers:   ${newUsers} added`);
+    console.log(`Orders:      ${rawOrders.length}`);
+    console.log('\nDemo login: ayesha@example.com / password123');
     console.log('Import complete');
 
     process.exit();
@@ -204,7 +231,7 @@ const destroyData = async () => {
       Category.deleteMany(),
     ]);
 
-    console.log('All data destroyed');
+    console.log('All data destroyed (users kept)');
     process.exit();
   } catch (error) {
     console.error(error.message);

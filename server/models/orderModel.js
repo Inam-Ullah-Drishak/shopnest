@@ -1,5 +1,25 @@
 import mongoose from 'mongoose';
 
+export const ORDER_STATUSES = [
+  'pending',
+  'confirmed',
+  'processing',
+  'shipped',
+  'delivered',
+  'cancelled',
+];
+
+// Which statuses an order can legally move to from where it is now.
+// Delivered and cancelled are terminal.
+export const NEXT_STATUSES = {
+  pending: ['confirmed', 'cancelled'],
+  confirmed: ['processing', 'cancelled'],
+  processing: ['shipped', 'cancelled'],
+  shipped: ['delivered', 'cancelled'],
+  delivered: [],
+  cancelled: [],
+};
+
 const orderSchema = new mongoose.Schema(
   {
     user: {
@@ -48,6 +68,44 @@ const orderSchema = new mongoose.Schema(
     shippingPrice: { type: Number, required: true, default: 0 },
     totalPrice: { type: Number, required: true, default: 0 },
 
+    status: {
+      type: String,
+      enum: ORDER_STATUSES,
+      default: 'pending',
+      index: true,
+    },
+
+    // Every change, so the customer can see a timeline
+    statusHistory: [
+      {
+        status: { type: String, enum: ORDER_STATUSES, required: true },
+        note: { type: String, default: '' },
+        changedBy: {
+          type: mongoose.Schema.Types.ObjectId,
+          ref: 'User',
+          default: null,
+        },
+        at: { type: Date, default: Date.now },
+        _id: false,
+      },
+    ],
+
+    trackingNumber: { type: String, default: '', trim: true },
+    courier: { type: String, default: '', trim: true },
+
+    // Visible to admins only
+    internalNotes: { type: String, default: '' },
+
+    cancelledAt: { type: Date },
+    cancelReason: { type: String, default: '' },
+
+    // Stock is only taken once; this stops a double decrement
+    stockAdjusted: { type: Boolean, default: false },
+
+    isRefunded: { type: Boolean, default: false },
+    refundedAt: { type: Date },
+    refundNote: { type: String, default: '' },
+
     isPaid: { type: Boolean, required: true, default: false },
     paidAt: { type: Date },
     isDelivered: { type: Boolean, required: true, default: false },
@@ -55,6 +113,17 @@ const orderSchema = new mongoose.Schema(
   },
   { timestamps: true }
 );
+
+orderSchema.virtual('isOpen').get(function () {
+  return !['delivered', 'cancelled'].includes(this.status);
+});
+
+orderSchema.virtual('canCancel').get(function () {
+  return ['pending', 'confirmed'].includes(this.status);
+});
+
+orderSchema.set('toJSON', { virtuals: true });
+orderSchema.set('toObject', { virtuals: true });
 
 const Order = mongoose.model('Order', orderSchema);
 

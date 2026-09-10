@@ -1,11 +1,46 @@
 import asyncHandler from '../utils/asyncHandler.js';
-import Order from '../models/orderModel.js';
+import Order, { NEXT_STATUSES } from '../models/orderModel.js';
 import Product from '../models/productModel.js';
 import Coupon from '../models/couponModel.js';
 
 const SHIPPING_PRICE = 200;
 const FREE_SHIPPING_OVER = 5000;
 const DEFAULT_PAGE_SIZE = 8;
+
+// Stock leaves when the order ships and comes back if it's cancelled.
+// direction is -1 to take, +1 to return.
+const adjustStock = async (order, direction) => {
+  for (const item of order.orderItems) {
+    const change = direction * item.qty;
+
+    if (item.variantId) {
+      // Positional operator: touch the matched variant only
+      await Product.updateOne(
+        { _id: item.product, 'variants._id': item.variantId },
+        { $inc: { 'variants.$.countInStock': change } }
+      );
+
+      await Product.updateOne(
+        { _id: item.product },
+        { $inc: { countInStock: change } }
+      );
+    } else {
+      await Product.updateOne(
+        { _id: item.product },
+        { $inc: { countInStock: change } }
+      );
+    }
+  }
+};
+
+const pushHistory = (order, status, note, userId) => {
+  order.statusHistory.push({
+    status,
+    note: note || '',
+    changedBy: userId || null,
+    at: new Date(),
+  });
+};
 
 // POST /api/orders  — protected
 export const createOrder = asyncHandler(async (req, res) => {
@@ -29,7 +64,6 @@ export const createOrder = asyncHandler(async (req, res) => {
       throw new Error('One of the products is no longer available');
     }
 
-    // Drafts aren't for sale, even if someone still has one in their cart
     if (dbProduct.status === 'draft') {
       res.status(400);
       throw new Error(`${dbProduct.name} is no longer available`);
@@ -131,7 +165,6 @@ export const createOrder = asyncHandler(async (req, res) => {
 
   const discountedSubtotal = itemsPrice - discountAmount;
 
-  // Shipping is judged on what they actually pay, not the pre-discount total
   const shippingPrice =
     discountedSubtotal > FREE_SHIPPING_OVER ? 0 : SHIPPING_PRICE;
 
@@ -147,6 +180,10 @@ export const createOrder = asyncHandler(async (req, res) => {
     discountAmount,
     shippingPrice,
     totalPrice,
+    status: 'pending',
+    statusHistory: [
+      { status: 'pending', note: 'Order placed', at: new Date() },
+    ],
   });
 
   // Record the redemption only after the order exists, so a failed order
@@ -175,12 +212,16 @@ export const createOrder = asyncHandler(async (req, res) => {
   res.status(201).json(order);
 });
 
-// GET /api/orders/mine?pageNumber=&pageSize=  — protected
+// GET /api/orders/mine  — protected
 export const getMyOrders = asyncHandler(async (req, res) => {
   const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
   const page = Number(req.query.pageNumber) || 1;
 
   const filter = { user: req.user._id };
+
+  if (req.query.status && req.query.status !== 'all') {
+    filter.status = req.query.status;
+  }
 
   const count = await Order.countDocuments(filter);
 
@@ -197,19 +238,31 @@ export const getMyOrders = asyncHandler(async (req, res) => {
   });
 });
 
-// GET /api/orders?pageNumber=&pageSize=&status=  — admin
+// GET /api/orders  — admin
 export const getAllOrders = asyncHandler(async (req, res) => {
   const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
   const page = Number(req.query.pageNumber) || 1;
 
   const filter = {};
 
-  if (req.query.status === 'pending') {
-    filter.isDelivered = false;
-  } else if (req.query.status === 'delivered') {
-    filter.isDelivered = true;
-  } else if (req.query.status === 'unpaid') {
-    filter.isPaid = false;
+  if (req.query.status && req.query.status !== 'all') {
+    if (req.query.status === 'open') {
+      filter.status = { $nin: ['delivered', 'cancelled'] };
+    } else if (req.query.status === 'unpaid') {
+      filter.isPaid = false;
+    } else {
+      filter.status = req.query.status;
+    }
+  }
+
+  if (req.query.from || req.query.to) {
+    filter.createdAt = {};
+    if (req.query.from) filter.createdAt.$gte = new Date(req.query.from);
+    if (req.query.to) {
+      const end = new Date(req.query.to);
+      end.setHours(23, 59, 59, 999);
+      filter.createdAt.$lte = end;
+    }
   }
 
   const count = await Order.countDocuments(filter);
@@ -230,29 +283,34 @@ export const getAllOrders = asyncHandler(async (req, res) => {
 
 // GET /api/orders/:id  — protected
 export const getOrderById = asyncHandler(async (req, res) => {
-  const order = await Order.findById(req.params.id).populate(
-    'user',
-    'name email'
-  );
+  const order = await Order.findById(req.params.id)
+    .populate('user', 'name email')
+    .populate('statusHistory.changedBy', 'name');
 
   if (!order) {
     res.status(404);
     throw new Error('Order not found');
   }
 
-  if (
-    order.user._id.toString() !== req.user._id.toString() &&
-    !req.user.isAdmin
-  ) {
+  const isOwner = order.user._id.toString() === req.user._id.toString();
+
+  if (!isOwner && !req.user.isAdmin) {
     res.status(401);
     throw new Error('Not authorized');
   }
 
-  res.json(order);
+  const json = order.toObject();
+
+  // Internal notes are for staff only
+  if (!req.user.isAdmin) delete json.internalNotes;
+
+  res.json(json);
 });
 
-// PUT /api/orders/:id/deliver  — admin
-export const updateOrderToDelivered = asyncHandler(async (req, res) => {
+// PUT /api/orders/:id/status  — admin
+export const updateOrderStatus = asyncHandler(async (req, res) => {
+  const { status, note } = req.body;
+
   const order = await Order.findById(req.params.id);
 
   if (!order) {
@@ -260,33 +318,134 @@ export const updateOrderToDelivered = asyncHandler(async (req, res) => {
     throw new Error('Order not found');
   }
 
-  if (order.isDelivered) {
+  const allowed = NEXT_STATUSES[order.status] || [];
+
+  if (!allowed.includes(status)) {
     res.status(400);
-    throw new Error('Order already delivered');
+    throw new Error(
+      allowed.length === 0
+        ? `This order is ${order.status} and cannot change further`
+        : `An order that is ${order.status} can only move to ${allowed.join(
+            ' or '
+          )}`
+    );
   }
 
-  order.isDelivered = true;
-  order.deliveredAt = Date.now();
-
-  if (order.paymentMethod === 'Cash on Delivery') {
-    order.isPaid = true;
-    order.paidAt = Date.now();
+  // Stock leaves the warehouse when the order ships
+  if (status === 'shipped' && !order.stockAdjusted) {
+    await adjustStock(order, -1);
+    order.stockAdjusted = true;
   }
 
-  for (const item of order.orderItems) {
-    if (item.variantId) {
-      // Positional operator: decrement the matched variant only
-      await Product.updateOne(
-        { _id: item.product, 'variants._id': item.variantId },
-        { $inc: { 'variants.$.countInStock': -item.qty } }
-      );
-    } else {
-      await Product.updateOne(
-        { _id: item.product },
-        { $inc: { countInStock: -item.qty } }
-      );
+  // Put it back if the order is cancelled after stock was already taken
+  if (status === 'cancelled' && order.stockAdjusted) {
+    await adjustStock(order, 1);
+    order.stockAdjusted = false;
+  }
+
+  if (status === 'delivered') {
+    order.isDelivered = true;
+    order.deliveredAt = new Date();
+
+    if (order.paymentMethod === 'Cash on Delivery') {
+      order.isPaid = true;
+      order.paidAt = new Date();
     }
   }
+
+  if (status === 'cancelled') {
+    order.cancelledAt = new Date();
+    order.cancelReason = note || 'Cancelled by store';
+  }
+
+  order.status = status;
+  pushHistory(order, status, note, req.user._id);
+
+  const updated = await order.save();
+  res.json(updated);
+});
+
+// PUT /api/orders/:id/cancel  — protected, customer's own order
+export const cancelOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    res.status(404);
+    throw new Error('Order not found');
+  }
+
+  if (order.user.toString() !== req.user._id.toString()) {
+    res.status(401);
+    throw new Error('Not authorized');
+  }
+
+  if (!['pending', 'confirmed'].includes(order.status)) {
+    res.status(400);
+    throw new Error(
+      `This order is already ${order.status} and can no longer be cancelled. Contact us and we'll help.`
+    );
+  }
+
+  if (order.stockAdjusted) {
+    await adjustStock(order, 1);
+    order.stockAdjusted = false;
+  }
+
+  order.status = 'cancelled';
+  order.cancelledAt = new Date();
+  order.cancelReason = req.body.reason?.trim() || 'Cancelled by customer';
+
+  pushHistory(order, 'cancelled', order.cancelReason, req.user._id);
+
+  const updated = await order.save();
+  res.json(updated);
+});
+
+// PUT /api/orders/:id/details  — admin
+export const updateOrderDetails = asyncHandler(async (req, res) => {
+  const { trackingNumber, courier, internalNotes } = req.body;
+
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    res.status(404);
+    throw new Error('Order not found');
+  }
+
+  if (trackingNumber !== undefined)
+    order.trackingNumber = String(trackingNumber).trim();
+
+  if (courier !== undefined) order.courier = String(courier).trim();
+
+  if (internalNotes !== undefined)
+    order.internalNotes = String(internalNotes).trim();
+
+  const updated = await order.save();
+  res.json(updated);
+});
+
+// PUT /api/orders/:id/refund  — admin
+export const refundOrder = asyncHandler(async (req, res) => {
+  const order = await Order.findById(req.params.id);
+
+  if (!order) {
+    res.status(404);
+    throw new Error('Order not found');
+  }
+
+  if (!order.isPaid) {
+    res.status(400);
+    throw new Error('This order has not been paid for');
+  }
+
+  if (order.isRefunded) {
+    res.status(400);
+    throw new Error('This order has already been refunded');
+  }
+
+  order.isRefunded = true;
+  order.refundedAt = new Date();
+  order.refundNote = req.body.note?.trim() || '';
 
   const updated = await order.save();
   res.json(updated);

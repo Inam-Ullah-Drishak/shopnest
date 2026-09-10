@@ -1,7 +1,15 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
-import { Eye, Loader2, AlertCircle, Inbox, X, ArrowRight } from 'lucide-react';
+import {
+  Eye,
+  Loader2,
+  AlertCircle,
+  Inbox,
+  X,
+  ArrowRight,
+  Download,
+} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import AdminNav from '../../components/AdminNav.jsx';
 import Dropdown from '../../components/Dropdown.jsx';
@@ -38,6 +46,13 @@ function OrderListPage() {
   const [updatingId, setUpdatingId] = useState(null);
 
   const filtersActive = status !== 'all' || from || to;
+
+  // The export should respect whatever filters are on screen
+  const exportQuery = new URLSearchParams(
+    Object.entries({ status, from, to }).filter(
+      ([, v]) => v && v !== 'all'
+    )
+  ).toString();
 
   useEffect(() => {
     if (!userInfo || !userInfo.isAdmin) navigate('/login');
@@ -163,6 +178,14 @@ function OrderListPage() {
             className="w-40"
             align="right"
           />
+
+          <a
+            href={`/api/orders/export${exportQuery ? `?${exportQuery}` : ''}`}
+            className="inline-flex items-center gap-1.5 border rounded-lg px-3 py-2.5 text-sm hover:bg-gray-50"
+          >
+            <Download size={15} />
+            Export
+          </a>
 
           {filtersActive && (
             <button

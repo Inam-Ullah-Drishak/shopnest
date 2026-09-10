@@ -3,6 +3,7 @@ import {
   createOrder,
   getMyOrders,
   getAllOrders,
+  exportOrders,
   getOrderById,
   updateOrderStatus,
   cancelOrder,
@@ -17,6 +18,7 @@ router.post('/', protect, createOrder);
 router.get('/', protect, admin, getAllOrders);
 
 router.get('/mine', protect, getMyOrders);
+router.get('/export', protect, admin, exportOrders);
 
 router.get('/:id', protect, getOrderById);
 

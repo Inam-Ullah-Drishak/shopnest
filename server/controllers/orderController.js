@@ -19,17 +19,12 @@ const adjustStock = async (order, direction) => {
         { _id: item.product, 'variants._id': item.variantId },
         { $inc: { 'variants.$.countInStock': change } }
       );
-
-      await Product.updateOne(
-        { _id: item.product },
-        { $inc: { countInStock: change } }
-      );
-    } else {
-      await Product.updateOne(
-        { _id: item.product },
-        { $inc: { countInStock: change } }
-      );
     }
+
+    await Product.updateOne(
+      { _id: item.product },
+      { $inc: { countInStock: change } }
+    );
   }
 };
 
@@ -40,6 +35,33 @@ const pushHistory = (order, status, note, userId) => {
     changedBy: userId || null,
     at: new Date(),
   });
+};
+
+// Shared by the list and the CSV export
+const buildOrderFilter = (query) => {
+  const filter = {};
+
+  if (query.status && query.status !== 'all') {
+    if (query.status === 'open') {
+      filter.status = { $nin: ['delivered', 'cancelled'] };
+    } else if (query.status === 'unpaid') {
+      filter.isPaid = false;
+    } else {
+      filter.status = query.status;
+    }
+  }
+
+  if (query.from || query.to) {
+    filter.createdAt = {};
+    if (query.from) filter.createdAt.$gte = new Date(query.from);
+    if (query.to) {
+      const end = new Date(query.to);
+      end.setHours(23, 59, 59, 999);
+      filter.createdAt.$lte = end;
+    }
+  }
+
+  return filter;
 };
 
 // POST /api/orders  — protected
@@ -181,9 +203,7 @@ export const createOrder = asyncHandler(async (req, res) => {
     shippingPrice,
     totalPrice,
     status: 'pending',
-    statusHistory: [
-      { status: 'pending', note: 'Order placed', at: new Date() },
-    ],
+    statusHistory: [{ status: 'pending', note: 'Order placed', at: new Date() }],
   });
 
   // Record the redemption only after the order exists, so a failed order
@@ -243,27 +263,7 @@ export const getAllOrders = asyncHandler(async (req, res) => {
   const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
   const page = Number(req.query.pageNumber) || 1;
 
-  const filter = {};
-
-  if (req.query.status && req.query.status !== 'all') {
-    if (req.query.status === 'open') {
-      filter.status = { $nin: ['delivered', 'cancelled'] };
-    } else if (req.query.status === 'unpaid') {
-      filter.isPaid = false;
-    } else {
-      filter.status = req.query.status;
-    }
-  }
-
-  if (req.query.from || req.query.to) {
-    filter.createdAt = {};
-    if (req.query.from) filter.createdAt.$gte = new Date(req.query.from);
-    if (req.query.to) {
-      const end = new Date(req.query.to);
-      end.setHours(23, 59, 59, 999);
-      filter.createdAt.$lte = end;
-    }
-  }
+  const filter = buildOrderFilter(req.query);
 
   const count = await Order.countDocuments(filter);
 
@@ -279,6 +279,89 @@ export const getAllOrders = asyncHandler(async (req, res) => {
     pages: Math.ceil(count / pageSize),
     count,
   });
+});
+
+// GET /api/orders/export  — admin
+export const exportOrders = asyncHandler(async (req, res) => {
+  const filter = buildOrderFilter(req.query);
+
+  const orders = await Order.find(filter)
+    .populate('user', 'name email')
+    .sort({ createdAt: -1 })
+    .limit(5000);
+
+  // Wrap every field in quotes and double any inner quotes, so a comma in
+  // an address doesn't split the column
+  const cell = (value) => {
+    const text = String(value ?? '');
+    return `"${text.replace(/"/g, '""')}"`;
+  };
+
+  const headers = [
+    'Order ID',
+    'Date',
+    'Customer',
+    'Email',
+    'Phone',
+    'Address',
+    'City',
+    'Postal code',
+    'Items',
+    'Products',
+    'Items price',
+    'Coupon',
+    'Discount',
+    'Shipping',
+    'Total',
+    'Status',
+    'Paid',
+    'Courier',
+    'Tracking',
+  ];
+
+  const rows = orders.map((o) =>
+    [
+      o._id,
+      new Date(o.createdAt).toISOString().slice(0, 10),
+      o.user?.name || 'Deleted user',
+      o.user?.email || '',
+      o.shippingAddress?.phone,
+      o.shippingAddress?.address,
+      o.shippingAddress?.city,
+      o.shippingAddress?.postalCode,
+      o.orderItems.reduce((s, i) => s + i.qty, 0),
+      o.orderItems
+        .map(
+          (i) =>
+            `${i.qty}x ${i.name}${i.variantLabel ? ` (${i.variantLabel})` : ''}`
+        )
+        .join('; '),
+      o.itemsPrice,
+      o.couponCode,
+      o.discountAmount,
+      o.shippingPrice,
+      o.totalPrice,
+      o.status,
+      o.isPaid ? 'Yes' : 'No',
+      o.courier,
+      o.trackingNumber,
+    ]
+      .map(cell)
+      .join(',')
+  );
+
+  // BOM so Excel reads UTF-8 correctly
+  const csv = `\uFEFF${headers.map(cell).join(',')}\n${rows.join('\n')}`;
+
+  const stamp = new Date().toISOString().slice(0, 10);
+
+  res.setHeader('Content-Type', 'text/csv; charset=utf-8');
+  res.setHeader(
+    'Content-Disposition',
+    `attachment; filename="shopnest-orders-${stamp}.csv"`
+  );
+
+  res.send(csv);
 });
 
 // GET /api/orders/:id  — protected

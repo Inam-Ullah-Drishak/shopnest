@@ -17,7 +17,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import AdminNav from '../../components/AdminNav.jsx';
-import OrderStatus, { STATUS_META } from '../../components/OrderStatus.jsx';
+import OrderStatus from '../../components/OrderStatus.jsx';
 import { formatPrice, formatDate } from '../../utils/format.js';
 
 function Stat({ icon: Icon, label, value }) {

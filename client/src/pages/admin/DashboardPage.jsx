@@ -196,7 +196,7 @@ function DashboardPage() {
         />
       </div>
 
-      {hasSales && (
+      {hasSales ? (
         <div className="border rounded-lg p-5 mb-8">
           <div className="flex flex-wrap justify-between items-baseline gap-2 mb-5">
             <h2 className="font-bold">Revenue</h2>
@@ -236,9 +236,7 @@ function DashboardPage() {
             </LineChart>
           </ResponsiveContainer>
         </div>
-      )}
-
-      {!hasSales && (
+      ) : (
         <div className="border rounded-lg py-16 text-center mb-8">
           <TrendingUp size={36} className="mx-auto text-gray-300" />
           <p className="mt-3 font-medium">No sales yet</p>
@@ -327,9 +325,7 @@ function DashboardPage() {
           </div>
 
           {lowStock.length === 0 ? (
-            <p className="text-sm text-gray-500">
-              Everything is well stocked.
-            </p>
+            <p className="text-sm text-gray-500">Everything is well stocked.</p>
           ) : (
             <div className="space-y-2">
               {lowStock.map((product) => (
@@ -343,6 +339,7 @@ function DashboardPage() {
                       <img
                         src={product.images[0]}
                         alt=""
+                        loading="lazy"
                         className="w-full h-full object-cover"
                       />
                     ) : (
@@ -357,17 +354,42 @@ function DashboardPage() {
                     </p>
                   </div>
 
-                  <span
-                    className={`text-xs px-2 py-1 rounded shrink-0 ${
-                      product.countInStock === 0
-                        ? 'bg-red-100 text-red-700'
-                        : 'bg-amber-100 text-amber-700'
-                    }`}
-                  >
-                    {product.countInStock === 0
-                      ? 'Out'
-                      : `${product.countInStock} left`}
-                  </span>
+                  <div className="shrink-0 text-right">
+                    {product.lowVariants?.length > 0 ? (
+                      <div className="space-y-0.5">
+                        {product.lowVariants.slice(0, 2).map((v) => (
+                          <p
+                            key={v.label}
+                            className={`text-xs px-2 py-0.5 rounded ${
+                              v.countInStock === 0
+                                ? 'bg-red-100 text-red-700'
+                                : 'bg-amber-100 text-amber-700'
+                            }`}
+                          >
+                            {v.label}: {v.countInStock}
+                          </p>
+                        ))}
+
+                        {product.lowVariants.length > 2 && (
+                          <p className="text-xs text-gray-400">
+                            +{product.lowVariants.length - 2} more
+                          </p>
+                        )}
+                      </div>
+                    ) : (
+                      <span
+                        className={`text-xs px-2 py-1 rounded ${
+                          product.countInStock === 0
+                            ? 'bg-red-100 text-red-700'
+                            : 'bg-amber-100 text-amber-700'
+                        }`}
+                      >
+                        {product.countInStock === 0
+                          ? 'Out'
+                          : `${product.countInStock} left`}
+                      </span>
+                    )}
+                  </div>
                 </Link>
               ))}
             </div>
@@ -400,9 +422,8 @@ function DashboardPage() {
                       {order.user?.name || 'Deleted user'}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {formatDate(order.createdAt)} ·{' '}
-                      {order.orderItems.length} item
-                      {order.orderItems.length > 1 ? 's' : ''}
+                      {formatDate(order.createdAt)} · {order.orderItems.length}{' '}
+                      item{order.orderItems.length > 1 ? 's' : ''}
                     </p>
                   </div>
 

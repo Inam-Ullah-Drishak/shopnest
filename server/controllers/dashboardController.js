@@ -4,8 +4,18 @@ import Product from '../models/productModel.js';
 import User from '../models/userModel.js';
 import Review from '../models/reviewModel.js';
 
-// Only delivered orders count as real revenue
+// Only paid orders count as real revenue
 const PAID = { isPaid: true };
+
+// A simple product is low on its own count; a variant product is low if any
+// single variant is low, even when the total across variants looks healthy
+const LOW_STOCK = {
+  status: 'active',
+  $or: [
+    { variants: { $size: 0 }, countInStock: { $lt: 5 } },
+    { 'variants.countInStock': { $lt: 5 } },
+  ],
+};
 
 const rangeFilter = (from, to) => {
   const filter = {};
@@ -41,7 +51,7 @@ export const getSummary = asyncHandler(async (req, res) => {
       Order.countDocuments({ isDelivered: false, ...range }),
       User.countDocuments({ isAdmin: false }),
       Product.countDocuments({ status: 'active' }),
-      Product.countDocuments({ status: 'active', countInStock: { $lt: 5 } }),
+      Product.countDocuments(LOW_STOCK),
       Review.countDocuments(),
     ]);
 
@@ -74,9 +84,7 @@ export const getRevenueSeries = asyncHandler(async (req, res) => {
     { $match: { ...PAID, createdAt: { $gte: start } } },
     {
       $group: {
-        _id: {
-          $dateToString: { format: '%Y-%m-%d', date: '$createdAt' },
-        },
+        _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
         revenue: { $sum: '$totalPrice' },
         orders: { $sum: 1 },
       },
@@ -163,15 +171,29 @@ export const getRevenueByCategory = asyncHandler(async (req, res) => {
 export const getLowStock = asyncHandler(async (req, res) => {
   const limit = Math.min(Number(req.query.limit) || 10, 50);
 
-  const products = await Product.find({
-    status: 'active',
-    countInStock: { $lt: 5 },
-  })
+  const products = await Product.find(LOW_STOCK)
     .sort({ countInStock: 1 })
     .limit(limit)
-    .select('name images countInStock price categoryName');
+    .select('name images countInStock price categoryName variants');
 
-  res.json(products);
+  res.json(
+    products.map((p) => {
+      const low = p.variants.filter((v) => v.countInStock < 5);
+
+      return {
+        _id: p._id,
+        name: p.name,
+        images: p.images,
+        price: p.price,
+        categoryName: p.categoryName,
+        countInStock: p.countInStock,
+        lowVariants: low.map((v) => ({
+          label: v.options.map((o) => o.value).join(' / '),
+          countInStock: v.countInStock,
+        })),
+      };
+    })
+  );
 });
 
 // GET /api/dashboard/recent-orders?limit=5  — admin

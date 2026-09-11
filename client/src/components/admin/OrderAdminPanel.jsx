@@ -11,8 +11,12 @@ import {
 } from 'lucide-react';
 import OrderStatus, { STATUS_META } from '../OrderStatus.jsx';
 import { formatDate } from '../../utils/format.js';
+import { useToast } from "../../context/ToastContext.jsx";
+import { useConfirm } from "../../context/ConfirmContext.jsx";
 
 function OrderAdminPanel({ order, onChange }) {
+  const toast = useToast();
+  const confirm = useConfirm();
   const [tracking, setTracking] = useState(order.trackingNumber || '');
   const [courier, setCourier] = useState(order.courier || '');
   const [notes, setNotes] = useState(order.internalNotes || '');
@@ -44,7 +48,16 @@ function OrderAdminPanel({ order, onChange }) {
   };
 
   const refundHandler = async () => {
-    const note = window.prompt('Refund note (optional)', '');
+    const note = await confirm({
+      title: "Mark this order as refunded?",
+      message: "This records the refund. It does not move any money.",
+      confirmLabel: "Mark refunded",
+      danger: true,
+      input: {
+        label: "Note (optional)",
+        placeholder: "Returned, item damaged",
+      },
+    });
     if (note === null) return;
 
     setRefunding(true);

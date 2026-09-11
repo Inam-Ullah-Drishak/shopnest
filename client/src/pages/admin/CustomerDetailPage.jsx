@@ -20,8 +20,12 @@ import AdminNav from "../../components/AdminNav.jsx";
 import OrderStatus from "../../components/OrderStatus.jsx";
 import { formatPrice, formatDate } from "../../utils/format.js";
 import { usePageTitle } from "../../hooks/usePageTitle.js";
+import { useToast } from "../../context/ToastContext.jsx";
+import { useConfirm } from "../../context/ConfirmContext.jsx";
 
 function Stat({ icon: Icon, label, value }) {
+  const toast = useToast();
+  const confirm = useConfirm();
   return (
     <div className="border rounded-lg p-4">
       <div className="flex items-start justify-between">
@@ -69,11 +73,16 @@ function CustomerDetailPage() {
     const making = !data.user.isAdmin;
 
     if (
-      !window.confirm(
-        making
-          ? `Give ${data.user.name} full admin access?`
+      !(await confirm({
+        title: making
+          ? `Give ${data.user.name} admin access?`
           : `Remove admin access from ${data.user.name}?`,
-      )
+        message: making
+          ? "They will be able to manage products, orders and other customers."
+          : "They will lose access to the admin area.",
+        confirmLabel: making ? "Make admin" : "Remove access",
+        danger: !making,
+      }))
     )
       return;
 
@@ -97,11 +106,16 @@ function CustomerDetailPage() {
     const blocking = !data.user.isBlocked;
 
     if (
-      !window.confirm(
-        blocking
-          ? `Suspend ${data.user.name}? They will not be able to sign in.`
+      !(await confirm({
+        title: blocking
+          ? `Suspend ${data.user.name}?`
           : `Restore access for ${data.user.name}?`,
-      )
+        message: blocking
+          ? "They will not be able to sign in. Their orders are kept."
+          : "They will be able to sign in again.",
+        confirmLabel: blocking ? "Suspend" : "Restore",
+        danger: blocking,
+      }))
     )
       return;
 

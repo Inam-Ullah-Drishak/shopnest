@@ -26,8 +26,12 @@ import ProductImportModal from '../../components/admin/ProductImportModal.jsx';
 import { formatPrice } from '../../utils/format.js';
 import { PAGE_SIZE } from '../../utils/constants.js';
 import { usePageTitle } from "../../hooks/usePageTitle.js";
+import { useToast } from "../../context/ToastContext.jsx";
+import { useConfirm } from "../../context/ConfirmContext.jsx";
 
 function ProductListPage() {
+  const toast = useToast();
+  const confirm = useConfirm();
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -154,7 +158,20 @@ function ProductListPage() {
       activate: `Make ${ids.length} product${ids.length === 1 ? '' : 's'} visible in the store?`,
     };
 
-    if (!window.confirm(wording[action])) return;
+    const ok = await confirm({
+      title: wording[action],
+      message:
+        action === "delete" ? "This cannot be undone." : undefined,
+      confirmLabel:
+        action === "delete"
+          ? "Delete"
+          : action === "draft"
+          ? "Hide them"
+          : "Make active",
+      danger: action === "delete",
+    });
+
+    if (!ok) return;
 
     setBulkBusy(true);
     setError('');
@@ -190,7 +207,14 @@ function ProductListPage() {
       )}`;
 
   const deleteHandler = async (id, name) => {
-    if (!window.confirm(`Delete "${name}"? This cannot be undone.`)) return;
+    const ok = await confirm({
+      title: `Delete "${name}"?`,
+      message: "This cannot be undone.",
+      confirmLabel: "Delete",
+      danger: true,
+    });
+
+    if (!ok) return;
 
     setDeletingId(id);
     setError('');

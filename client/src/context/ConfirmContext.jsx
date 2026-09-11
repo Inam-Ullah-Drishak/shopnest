@@ -10,7 +10,9 @@ export function ConfirmProvider({ children }) {
   // Holds the resolve function of the promise the caller is awaiting
   const resolver = useRef(null);
 
-  // Drop-in replacement for window.confirm, but returns a promise
+  // Drop-in replacement for window.confirm, but returns a promise.
+  // Pass an `input` option and it resolves with the typed string instead
+  // of true, replacing window.prompt as well.
   const confirm = useCallback(
     (options) =>
       new Promise((resolve) => {
@@ -41,12 +43,13 @@ export function ConfirmProvider({ children }) {
         confirmLabel={dialog?.confirmLabel}
         cancelLabel={dialog?.cancelLabel}
         danger={dialog?.danger}
+        input={dialog?.input}
         busy={busy}
-        onConfirm={() => {
+        onConfirm={(answer) => {
           setBusy(true);
-          settle(true);
+          settle(answer);
         }}
-        onCancel={() => settle(false)}
+        onCancel={() => settle(dialog?.input ? null : false)}
       />
     </ConfirmContext.Provider>
   );

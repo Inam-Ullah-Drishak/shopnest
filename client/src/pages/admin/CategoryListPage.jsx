@@ -19,8 +19,12 @@ import Dropdown from '../../components/Dropdown.jsx';
 import Pagination from '../../components/Pagination.jsx';
 import { PAGE_SIZE } from '../../utils/constants.js';
 import { usePageTitle } from "../../hooks/usePageTitle.js";
+import { useToast } from "../../context/ToastContext.jsx";
+import { useConfirm } from "../../context/ConfirmContext.jsx";
 
 function CategoryListPage() {
+  const toast = useToast();
+  const confirm = useConfirm();
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -121,7 +125,14 @@ function CategoryListPage() {
   };
 
   const deleteHandler = async (category) => {
-    if (!window.confirm(`Delete "${category.name}"?`)) return;
+    const ok = await confirm({
+      title: `Delete "${category.name}"?`,
+      message: "This cannot be undone.",
+      confirmLabel: "Delete",
+      danger: true,
+    });
+
+    if (!ok) return;
 
     setDeletingId(category._id);
     setError('');

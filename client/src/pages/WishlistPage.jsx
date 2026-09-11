@@ -8,8 +8,12 @@ import ProductCard from "../components/ProductCard.jsx";
 import Pagination from "../components/Pagination.jsx";
 import { PAGE_SIZE } from "../utils/constants.js";
 import { usePageTitle } from "../hooks/usePageTitle.js";
+import { useToast } from "../context/ToastContext.jsx";
+import { useConfirm } from "../context/ConfirmContext.jsx";
 
 function WishlistPage() {
+  const toast = useToast();
+  const confirm = useConfirm();
   const { userInfo } = useAuth();
   const { ids, clear } = useWishlist();
   const navigate = useNavigate();
@@ -61,9 +65,17 @@ function WishlistPage() {
   };
 
   const clearHandler = async () => {
-    if (!window.confirm("Remove everything from your wishlist?")) return;
+    const ok = await confirm({
+      title: "Remove everything from your wishlist?",
+      message: "You can always save things again later.",
+      confirmLabel: "Remove all",
+      danger: true,
+    });
+
+    if (!ok) return;
 
     await clear();
+    toast.success("Wishlist cleared");
     setFetched([]);
     setCount(0);
     setPages(1);

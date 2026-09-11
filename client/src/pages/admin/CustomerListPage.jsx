@@ -18,8 +18,12 @@ import Pagination from "../../components/Pagination.jsx";
 import { formatPrice, formatDate } from "../../utils/format.js";
 import { PAGE_SIZE } from "../../utils/constants.js";
 import { usePageTitle } from "../../hooks/usePageTitle.js";
+import { useToast } from "../../context/ToastContext.jsx";
+import { useConfirm } from "../../context/ConfirmContext.jsx";
 
 function CustomerListPage() {
+  const toast = useToast();
+  const confirm = useConfirm();
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -97,11 +101,16 @@ function CustomerListPage() {
     const making = !customer.isAdmin;
 
     if (
-      !window.confirm(
-        making
-          ? `Give ${customer.name} full admin access?`
+      !(await confirm({
+        title: making
+          ? `Give ${customer.name} admin access?`
           : `Remove admin access from ${customer.name}?`,
-      )
+        message: making
+          ? "They will be able to manage products, orders and other customers."
+          : "They will lose access to the admin area.",
+        confirmLabel: making ? "Make admin" : "Remove access",
+        danger: !making,
+      }))
     )
       return;
 
@@ -125,11 +134,16 @@ function CustomerListPage() {
     const blocking = !customer.isBlocked;
 
     if (
-      !window.confirm(
-        blocking
-          ? `Suspend ${customer.name}? They will not be able to sign in.`
+      !(await confirm({
+        title: blocking
+          ? `Suspend ${customer.name}?`
           : `Restore access for ${customer.name}?`,
-      )
+        message: blocking
+          ? "They will not be able to sign in. Their orders are kept."
+          : "They will be able to sign in again.",
+        confirmLabel: blocking ? "Suspend" : "Restore",
+        danger: blocking,
+      }))
     )
       return;
 

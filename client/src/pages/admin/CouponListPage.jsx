@@ -18,6 +18,8 @@ import Pagination from "../../components/Pagination.jsx";
 import { formatPrice, formatDate } from "../../utils/format.js";
 import { PAGE_SIZE } from "../../utils/constants.js";
 import { usePageTitle } from "../../hooks/usePageTitle.js";
+import { useToast } from "../../context/ToastContext.jsx";
+import { useConfirm } from "../../context/ConfirmContext.jsx";
 
 // A coupon can be inactive for several reasons; say which
 const statusOf = (coupon) => {
@@ -45,6 +47,8 @@ const tones = {
 };
 
 function CouponListPage() {
+  const toast = useToast();
+  const confirm = useConfirm();
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -107,7 +111,14 @@ function CouponListPage() {
   };
 
   const deleteHandler = async (coupon) => {
-    if (!window.confirm(`Delete "${coupon.code}"?`)) return;
+    const ok = await confirm({
+      title: `Delete "${coupon.code}"?`,
+      message: "Orders that already used it keep their discount.",
+      confirmLabel: "Delete",
+      danger: true,
+    });
+
+    if (!ok) return;
 
     setDeletingId(coupon._id);
     setError("");

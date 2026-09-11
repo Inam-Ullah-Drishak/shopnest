@@ -1,4 +1,5 @@
-import { useEffect } from 'react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect } from 'react';
 import { AlertTriangle, Loader2 } from 'lucide-react';
 
 function ConfirmDialog({
@@ -9,9 +10,18 @@ function ConfirmDialog({
   cancelLabel = 'Cancel',
   danger = false,
   busy = false,
+  // Set to show a text field. The value comes back instead of `true`.
+  input = null,
   onConfirm,
   onCancel,
 }) {
+  const [value, setValue] = useState('');
+
+  // Reset the field each time the dialog opens
+  useEffect(() => {
+    if (open) setValue(input?.defaultValue || '');
+  }, [open, input]);
+
   useEffect(() => {
     if (!open) return;
 
@@ -31,6 +41,8 @@ function ConfirmDialog({
   }, [open, busy, onCancel]);
 
   if (!open) return null;
+
+  const submit = () => onConfirm(input ? value : true);
 
   return (
     <div className="fixed inset-0 z-55 flex items-center justify-center p-4">
@@ -53,10 +65,38 @@ function ConfirmDialog({
             </span>
           )}
 
-          <div className="min-w-0">
+          <div className="min-w-0 flex-1">
             <h2 className="font-bold">{title}</h2>
+
             {message && (
               <p className="text-sm text-gray-600 mt-1">{message}</p>
+            )}
+
+            {input && (
+              <div className="mt-4">
+                {input.label && (
+                  <label
+                    htmlFor="confirm-input"
+                    className="block text-sm font-medium mb-1"
+                  >
+                    {input.label}
+                  </label>
+                )}
+
+                <input
+                  id="confirm-input"
+                  type="text"
+                  value={value}
+                  onChange={(e) => setValue(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' && !busy) submit();
+                  }}
+                  placeholder={input.placeholder}
+                  disabled={busy}
+                  autoFocus
+                  className="w-full border rounded-lg p-2.5 text-sm"
+                />
+              </div>
             )}
           </div>
         </div>
@@ -73,9 +113,9 @@ function ConfirmDialog({
 
           <button
             type="button"
-            onClick={onConfirm}
+            onClick={submit}
             disabled={busy}
-            autoFocus
+            autoFocus={!input}
             className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm text-white disabled:opacity-50 cursor-pointer ${
               danger
                 ? 'bg-red-600 hover:bg-red-500'

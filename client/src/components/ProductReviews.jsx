@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 /* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect, useCallback } from "react";
 import { Link } from "react-router-dom";
@@ -8,8 +9,12 @@ import StarRating from "./StarRating.jsx";
 import Dropdown from "./Dropdown.jsx";
 import Pagination from "./Pagination.jsx";
 import { formatDate } from "../utils/format.js";
+import { useToast } from "../context/ToastContext.jsx";
+import { useConfirm } from "../context/ConfirmContext.jsx";
 
 function ReviewForm({ productId, onDone }) {
+  const toast = useToast();
+  const confirm = useConfirm();
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
   const [title, setTitle] = useState("");
@@ -174,7 +179,14 @@ function ProductReviews({ productId, rating, numReviews }) {
   }, [productId, userInfo]);
 
   const deleteHandler = async (id) => {
-    if (!window.confirm("Delete this review?")) return;
+    const ok = await confirm({
+      title: "Delete this review?",
+      message: "It will be removed from the product page.",
+      confirmLabel: "Delete",
+      danger: true,
+    });
+
+    if (!ok) return;
 
     try {
       await axios.delete(`/api/reviews/${id}`);

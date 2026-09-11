@@ -18,6 +18,8 @@ import OrderStatus, { STATUS_META } from "../../components/OrderStatus.jsx";
 import { formatPrice, formatDate } from "../../utils/format.js";
 import { PAGE_SIZE } from "../../utils/constants.js";
 import { usePageTitle } from "../../hooks/usePageTitle.js";
+import { useToast } from "../../context/ToastContext.jsx";
+import { useConfirm } from "../../context/ConfirmContext.jsx";
 
 // Mirrors NEXT_STATUSES on the server, so we only offer legal moves
 const NEXT = {
@@ -30,6 +32,8 @@ const NEXT = {
 };
 
 function OrderListPage() {
+  const toast = useToast();
+  const confirm = useConfirm();
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
@@ -110,7 +114,14 @@ function OrderListPage() {
           ? " Stock will be returned."
           : "";
 
-    if (!window.confirm(`Mark this order as ${label}?${warning}`)) return;
+    const ok = await confirm({
+      title: `Mark this order as ${label}?`,
+      message: warning.trim() || undefined,
+      confirmLabel: STATUS_META[nextStatus].label,
+      danger: nextStatus === "cancelled",
+    });
+
+    if (!ok) return;
 
     setUpdatingId(order._id);
     setError("");

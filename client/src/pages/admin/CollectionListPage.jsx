@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
@@ -15,8 +16,12 @@ import {
 import { useAuth } from "../../context/AuthContext.jsx";
 import AdminNav from "../../components/AdminNav.jsx";
 import { usePageTitle } from "../../hooks/usePageTitle.js";
+import { useToast } from "../../context/ToastContext.jsx";
+import { useConfirm } from "../../context/ConfirmContext.jsx";
 
 function CollectionListPage() {
+  const toast = useToast();
+  const confirm = useConfirm();
   const { userInfo } = useAuth();
   const navigate = useNavigate();
 
@@ -46,7 +51,14 @@ function CollectionListPage() {
   }, [userInfo, navigate]);
 
   const deleteHandler = async (collection) => {
-    if (!window.confirm(`Delete "${collection.title}"?`)) return;
+    const ok = await confirm({
+      title: `Delete "${collection.title}"?`,
+      message: "The products in it are not deleted.",
+      confirmLabel: "Delete",
+      danger: true,
+    });
+
+    if (!ok) return;
 
     setDeletingId(collection._id);
     setError("");

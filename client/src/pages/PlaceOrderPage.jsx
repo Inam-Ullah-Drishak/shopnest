@@ -6,11 +6,14 @@ import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import CouponInput from '../components/CouponInput.jsx';
 import { formatPrice } from '../utils/format.js';
+import { usePageTitle } from "../hooks/usePageTitle.js";
 
 const SHIPPING_PRICE = 200;
 const FREE_SHIPPING_OVER = 5000;
 
 function PlaceOrderPage() {
+  usePageTitle('Review your order');
+
   const { cartItems, shippingAddress, totalPrice, clearCart } = useCart();
   const { userInfo } = useAuth();
   const navigate = useNavigate();
@@ -28,7 +31,7 @@ function PlaceOrderPage() {
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
-
+  usePageTitle('Review your order')
   useEffect(() => {
     if (!userInfo) {
       navigate('/login');

@@ -5,6 +5,7 @@ import { Loader2, PackageOpen, ArrowLeft } from 'lucide-react';
 import ProductCard from '../components/ProductCard.jsx';
 import Dropdown from '../components/Dropdown.jsx';
 import Pagination from '../components/Pagination.jsx';
+import { usePageTitle } from "../hooks/usePageTitle.js";
 
 function CollectionPage() {
   const { slug } = useParams();
@@ -19,7 +20,7 @@ function CollectionPage() {
   const [count, setCount] = useState(0);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
-
+  usePageTitle(collection?.title)
   useEffect(() => {
     const fetchCollection = async () => {
       setLoading(true);

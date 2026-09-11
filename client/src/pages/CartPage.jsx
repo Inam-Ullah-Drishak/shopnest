@@ -4,12 +4,13 @@ import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
 import QuantityInput from '../components/QuantityInput.jsx';
 import { formatPrice } from '../utils/format.js';
+import { usePageTitle } from "../hooks/usePageTitle.js";
 
 function CartPage() {
   const { cartItems, updateQty, removeFromCart, totalPrice } = useCart();
   const { userInfo } = useAuth();
   const navigate = useNavigate();
-
+  usePageTitle('Your cart')
   const checkoutHandler = () => {
     navigate(userInfo ? '/shipping' : '/login');
   };

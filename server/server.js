@@ -1,7 +1,11 @@
+// Must be first: ES modules evaluate imports before this file's body runs,
+// so cloudinary.js would read undefined env vars if dotenv loaded later
+import 'dotenv/config';
+
 import path from 'path';
 import express from 'express';
-import dotenv from 'dotenv';
 import cors from 'cors';
+import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
 import productRoutes from './routes/productRoutes.js';
@@ -13,14 +17,26 @@ import collectionRoutes from './routes/collectionRoutes.js';
 import reviewRoutes from './routes/reviewRoutes.js';
 import dashboardRoutes from './routes/dashboardRoutes.js';
 import couponRoutes from './routes/couponRoutes.js';
-import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 import wishlistRoutes from './routes/wishlistRoutes.js';
 import customerRoutes from './routes/customerRoutes.js';
+import { sanitize, apiLimiter } from './middleware/securityMiddleware.js';
+import { notFound, errorHandler } from './middleware/errorMiddleware.js';
 
-dotenv.config();
 connectDB();
 
 const app = express();
+
+// Render and Vercel sit behind a proxy, so rate limiting needs the real
+// client IP rather than the proxy's
+app.set('trust proxy', 1);
+
+// Security headers. crossOriginResourcePolicy is relaxed because images
+// are served from Cloudinary, a different origin.
+app.use(
+  helmet({
+    crossOriginResourcePolicy: { policy: 'cross-origin' },
+  })
+);
 
 app.use(
   cors({
@@ -29,8 +45,14 @@ app.use(
   })
 );
 
-app.use(express.json());
+// 10mb so a large product CSV fits. The default 100kb rejects them.
+app.use(express.json({ limit: '10mb' }));
 app.use(cookieParser());
+
+// Strip Mongo operators from anything the client sends
+app.use(sanitize);
+
+app.use('/api', apiLimiter);
 
 app.use('/api/products', productRoutes);
 app.use('/api/users', userRoutes);
@@ -44,6 +66,8 @@ app.use('/api/coupons', couponRoutes);
 app.use('/api/wishlist', wishlistRoutes);
 app.use('/api/customers', customerRoutes);
 
+// Legacy: images uploaded before Cloudinary still live on disk.
+// Safe to remove once no product references a /uploads path.
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
 
 app.get('/', (req, res) => {

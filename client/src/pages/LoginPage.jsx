@@ -1,32 +1,33 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext.jsx';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext.jsx";
+import { usePageTitle } from "../hooks/usePageTitle.js";
 
 function LoginPage() {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  usePageTitle("Sign in");
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setLoading(true);
 
     try {
-      const { data } = await axios.post('/api/users/login', {
+      const { data } = await axios.post("/api/users/login", {
         email,
         password,
       });
 
       login(data);
-      navigate('/');
+      navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong');
+      setError(err.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -68,12 +69,12 @@ function LoginPage() {
           disabled={loading}
           className="w-full bg-gray-900 text-white p-2 rounded hover:bg-gray-700 disabled:opacity-50"
         >
-          {loading ? 'Signing in...' : 'Sign In'}
+          {loading ? "Signing in..." : "Sign In"}
         </button>
       </form>
 
       <p className="mt-4 text-sm">
-        New customer?{' '}
+        New customer?{" "}
         <Link to="/register" className="text-blue-600 underline">
           Register
         </Link>

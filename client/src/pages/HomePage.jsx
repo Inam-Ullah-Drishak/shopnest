@@ -4,6 +4,7 @@ import axios from "axios";
 import ProductCard from "../components/ProductCard.jsx";
 import Carousel from "../components/Carousel.jsx";
 import { formatPrice } from "../utils/format.js";
+import { usePageTitle } from '../hooks/usePageTitle.js';
 import {
   Loader2,
   Truck,
@@ -13,12 +14,14 @@ import {
   ImageOff,
 } from "lucide-react";
 function HomePage() {
+  usePageTitle('')
   const [featured, setFeatured] = useState([]);
   const [arrivals, setArrivals] = useState([]);
   const [onSale, setOnSale] = useState([]);
   const [categories, setCategories] = useState([]);
   const [collections, setCollections] = useState([]);
   const [loading, setLoading] = useState(true);
+  
 
   useEffect(() => {
     const load = async () => {

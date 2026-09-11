@@ -1,7 +1,9 @@
 import { Link } from 'react-router-dom';
 import { Compass, Search, Home } from 'lucide-react';
+import { usePageTitle } from "../hooks/usePageTitle.js";
 
 function NotFoundPage() {
+  usePageTitle('Page not found')
   return (
     <div className="p-8 py-24 text-center">
       <Compass size={44} className="mx-auto text-gray-300" />

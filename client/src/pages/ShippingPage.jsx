@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext.jsx';
 import { useAuth } from '../context/AuthContext.jsx';
+import { usePageTitle } from "../hooks/usePageTitle.js";
 
 function ShippingPage() {
   const { shippingAddress, saveShippingAddress, cartItems } = useCart();
@@ -13,7 +14,7 @@ function ShippingPage() {
   const [postalCode, setPostalCode] = useState(shippingAddress?.postalCode || '');
   const [country, setCountry] = useState(shippingAddress?.country || 'Pakistan');
   const [phone, setPhone] = useState(shippingAddress?.phone || '');
-
+  usePageTitle('Shipping');
   useEffect(() => {
     if (!userInfo) {
       navigate('/login');

@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react';
+/* eslint-disable react-hooks/set-state-in-effect */
+import { useState, useEffect, useCallback } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -12,11 +13,16 @@ import {
   Search,
   X,
   EyeOff,
+  Eye,
+  Upload,
+  Download,
+  FileText,
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import AdminNav from '../../components/AdminNav.jsx';
 import Dropdown from '../../components/Dropdown.jsx';
 import Pagination from '../../components/Pagination.jsx';
+import ProductImportModal from '../../components/admin/ProductImportModal.jsx';
 import { formatPrice } from '../../utils/format.js';
 import { PAGE_SIZE } from '../../utils/constants.js';
 
@@ -47,6 +53,11 @@ function ProductListPage() {
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
 
+  // Selection is a Set of ids, so the lookup on every row is O(1)
+  const [selected, setSelected] = useState(() => new Set());
+  const [bulkBusy, setBulkBusy] = useState(false);
+  const [importOpen, setImportOpen] = useState(false);
+
   const filtersActive =
     keyword || category !== 'All' || stock !== 'all' || sort !== 'newest';
 
@@ -63,35 +74,35 @@ function ProductListPage() {
       .catch(() => {});
   }, []);
 
-  useEffect(() => {
-    const fetchProducts = async () => {
-      setLoading(true);
+  const fetchProducts = useCallback(async () => {
+    setLoading(true);
 
-      try {
-        const { data } = await axios.get('/api/products', {
-          params: {
-            keyword,
-            category,
-            stock,
-            sort,
-            includeDrafts: 'true',
-            pageNumber: page,
-            pageSize: PAGE_SIZE,
-          },
-        });
+    try {
+      const { data } = await axios.get('/api/products', {
+        params: {
+          keyword,
+          category,
+          stock,
+          sort,
+          includeDrafts: 'true',
+          pageNumber: page,
+          pageSize: PAGE_SIZE,
+        },
+      });
 
-        setProducts(data.products);
-        setPages(data.pages);
-        setCount(data.count);
-      } catch (err) {
-        setError(err.response?.data?.message || 'Could not load products');
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchProducts();
+      setProducts(data.products);
+      setPages(data.pages);
+      setCount(data.count);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Could not load products');
+    } finally {
+      setLoading(false);
+    }
   }, [keyword, category, stock, sort, page]);
+
+  useEffect(() => {
+    fetchProducts();
+  }, [fetchProducts]);
 
   // Merge one change into the URL, resetting to page 1
   const setParam = (changes) => {
@@ -110,6 +121,72 @@ function ProductListPage() {
   };
 
   const clearFilters = () => setSearchParams({});
+
+  const toggleOne = (id) =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+
+  const pageIds = products.map((p) => p._id);
+  const allOnPageSelected =
+    pageIds.length > 0 && pageIds.every((id) => selected.has(id));
+
+  const toggleAllOnPage = () =>
+    setSelected((prev) => {
+      const next = new Set(prev);
+      if (allOnPageSelected) pageIds.forEach((id) => next.delete(id));
+      else pageIds.forEach((id) => next.add(id));
+      return next;
+    });
+
+  const clearSelection = () => setSelected(new Set());
+
+  const runBulk = async (action) => {
+    const ids = [...selected];
+
+    const wording = {
+      delete: `Delete ${ids.length} product${ids.length === 1 ? '' : 's'}? This cannot be undone.`,
+      draft: `Hide ${ids.length} product${ids.length === 1 ? '' : 's'} from the store?`,
+      activate: `Make ${ids.length} product${ids.length === 1 ? '' : 's'} visible in the store?`,
+    };
+
+    if (!window.confirm(wording[action])) return;
+
+    setBulkBusy(true);
+    setError('');
+
+    try {
+      await axios.post('/api/products/bulk', { ids, action });
+
+      if (action === 'delete') {
+        setProducts((prev) => prev.filter((p) => !selected.has(p._id)));
+        setCount((c) => c - ids.length);
+      } else {
+        const status = action === 'draft' ? 'draft' : 'active';
+        setProducts((prev) =>
+          prev.map((p) => (selected.has(p._id) ? { ...p, status } : p))
+        );
+      }
+
+      clearSelection();
+    } catch (err) {
+      setError(err.response?.data?.message || 'Could not complete that action');
+    } finally {
+      setBulkBusy(false);
+    }
+  };
+
+  // Export respects the selection, or falls back to the active filters
+  const exportUrl = selected.size
+    ? `/api/products/export?ids=${[...selected].join(',')}`
+    : `/api/products/export?${new URLSearchParams(
+        Object.entries({ keyword, category, stock }).filter(
+          ([, v]) => v && v !== 'All' && v !== 'all'
+        )
+      )}`;
 
   const deleteHandler = async (id, name) => {
     if (!window.confirm(`Delete "${name}"? This cannot be undone.`)) return;
@@ -141,13 +218,32 @@ function ProductListPage() {
           </p>
         </div>
 
-        <Link
-          to="/admin/product/new"
-          className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700"
-        >
-          <Plus size={18} />
-          New product
-        </Link>
+        <div className="flex flex-wrap gap-2">
+          <a
+            href="/api/products/template"
+            className="inline-flex items-center gap-2 border px-4 py-2.5 rounded-lg hover:bg-gray-50"
+          >
+            <FileText size={18} />
+            Template
+          </a>
+
+          <button
+            type="button"
+            onClick={() => setImportOpen(true)}
+            className="inline-flex items-center gap-2 border px-4 py-2.5 rounded-lg hover:bg-gray-50 cursor-pointer"
+          >
+            <Upload size={18} />
+            Import
+          </button>
+
+          <Link
+            to="/admin/product/new"
+            className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700"
+          >
+            <Plus size={18} />
+            New product
+          </Link>
+        </div>
       </div>
 
       <div className="flex flex-wrap gap-2 mb-6">
@@ -199,8 +295,8 @@ function ProductListPage() {
           options={[
             { value: 'newest', label: 'Newest first' },
             { value: 'oldest', label: 'Oldest first' },
-            { value: 'name-asc', label: 'Name A–Z' },
-            { value: 'name-desc', label: 'Name Z–A' },
+            { value: 'name-asc', label: 'Name A-Z' },
+            { value: 'name-desc', label: 'Name Z-A' },
             { value: 'price-asc', label: 'Price low to high' },
             { value: 'price-desc', label: 'Price high to low' },
             { value: 'stock-asc', label: 'Stock low to high' },
@@ -208,6 +304,15 @@ function ProductListPage() {
           ]}
           className="w-48"
         />
+
+        <a
+          href={exportUrl}
+          className="inline-flex items-center gap-1.5 border rounded-lg px-3 py-2.5 text-sm hover:bg-gray-50"
+        >
+          <Download size={15} />
+          Export
+          {selected.size > 0 && ` (${selected.size})`}
+        </a>
 
         {filtersActive && (
           <button
@@ -220,6 +325,67 @@ function ProductListPage() {
           </button>
         )}
       </div>
+
+      {selected.size > 0 && (
+        <div className="flex flex-wrap items-center gap-3 bg-gray-900 text-white rounded-lg px-4 py-3 mb-4">
+          <p className="text-sm font-medium">
+            {selected.size} selected
+          </p>
+
+          <div className="flex flex-wrap gap-2 ml-auto">
+            <a
+              href={`/api/products/export?ids=${[...selected].join(',')}`}
+              className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded text-sm"
+            >
+              <Download size={14} />
+              Export
+            </a>
+
+            <button
+              type="button"
+              onClick={() => runBulk('activate')}
+              disabled={bulkBusy}
+              className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded text-sm disabled:opacity-50 cursor-pointer"
+            >
+              <Eye size={14} />
+              Make active
+            </button>
+
+            <button
+              type="button"
+              onClick={() => runBulk('draft')}
+              disabled={bulkBusy}
+              className="inline-flex items-center gap-1.5 bg-white/10 hover:bg-white/20 px-3 py-1.5 rounded text-sm disabled:opacity-50 cursor-pointer"
+            >
+              <EyeOff size={14} />
+              Make draft
+            </button>
+
+            <button
+              type="button"
+              onClick={() => runBulk('delete')}
+              disabled={bulkBusy}
+              className="inline-flex items-center gap-1.5 bg-red-600 hover:bg-red-500 px-3 py-1.5 rounded text-sm disabled:opacity-50 cursor-pointer"
+            >
+              {bulkBusy ? (
+                <Loader2 size={14} className="animate-spin" />
+              ) : (
+                <Trash2 size={14} />
+              )}
+              Delete
+            </button>
+
+            <button
+              type="button"
+              onClick={clearSelection}
+              className="inline-flex items-center gap-1.5 hover:bg-white/10 px-3 py-1.5 rounded text-sm cursor-pointer"
+            >
+              <X size={14} />
+              Clear
+            </button>
+          </div>
+        </div>
+      )}
 
       {error && (
         <div className="flex gap-2 bg-red-50 border border-red-200 text-red-700 p-3 rounded mb-6">
@@ -256,15 +422,26 @@ function ProductListPage() {
               <PackageOpen size={36} className="mx-auto text-gray-300" />
               <p className="mt-3 font-medium">No products yet</p>
               <p className="text-sm text-gray-500 mt-1">
-                Add your first product to start selling.
+                Add your first product, or import a spreadsheet.
               </p>
-              <Link
-                to="/admin/product/new"
-                className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700 mt-5"
-              >
-                <Plus size={18} />
-                New product
-              </Link>
+              <div className="flex gap-2 justify-center mt-5">
+                <button
+                  type="button"
+                  onClick={() => setImportOpen(true)}
+                  className="inline-flex items-center gap-2 border px-4 py-2.5 rounded-lg hover:bg-gray-50 cursor-pointer"
+                >
+                  <Upload size={18} />
+                  Import
+                </button>
+
+                <Link
+                  to="/admin/product/new"
+                  className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700"
+                >
+                  <Plus size={18} />
+                  New product
+                </Link>
+              </div>
             </>
           )}
         </div>
@@ -274,6 +451,15 @@ function ProductListPage() {
             <table className="w-full text-sm">
               <thead className="bg-gray-50 text-left text-gray-600">
                 <tr>
+                  <th className="p-3 w-10">
+                    <input
+                      type="checkbox"
+                      checked={allOnPageSelected}
+                      onChange={toggleAllOnPage}
+                      aria-label="Select all on this page"
+                      className="w-4 h-4 cursor-pointer"
+                    />
+                  </th>
                   <th className="p-3 font-medium">Product</th>
                   <th className="p-3 font-medium">Category</th>
                   <th className="p-3 font-medium">Price</th>
@@ -283,107 +469,126 @@ function ProductListPage() {
               </thead>
 
               <tbody>
-                {products.map((product) => (
-                  <tr key={product._id} className="border-t hover:bg-gray-50">
-                    <td className="p-3">
-                      <div className="flex items-center gap-3">
-                        <div className="w-11 h-11 shrink-0 rounded border bg-gray-50 overflow-hidden flex items-center justify-center">
-                          {product.image ? (
-                            <img
-                              src={product.image}
-                              alt=""
-                              loading="lazy"
-                              className="w-full h-full object-cover"
-                            />
-                          ) : (
-                            <ImageOff size={16} className="text-gray-300" />
-                          )}
-                        </div>
+                {products.map((product) => {
+                  const isSelected = selected.has(product._id);
 
-                        <div className="min-w-0">
-                          <div className="flex items-center gap-2">
-                            <p className="font-medium truncate">
-                              {product.name}
-                            </p>
+                  return (
+                    <tr
+                      key={product._id}
+                      className={`border-t ${
+                        isSelected ? 'bg-gray-50' : 'hover:bg-gray-50'
+                      }`}
+                    >
+                      <td className="p-3">
+                        <input
+                          type="checkbox"
+                          checked={isSelected}
+                          onChange={() => toggleOne(product._id)}
+                          aria-label={`Select ${product.name}`}
+                          className="w-4 h-4 cursor-pointer"
+                        />
+                      </td>
 
-                            {product.status === 'draft' && (
-                              <span className="inline-flex items-center gap-1 bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded shrink-0">
-                                <EyeOff size={11} />
-                                Draft
-                              </span>
+                      <td className="p-3">
+                        <div className="flex items-center gap-3">
+                          <div className="w-11 h-11 shrink-0 rounded border bg-gray-50 overflow-hidden flex items-center justify-center">
+                            {product.image ? (
+                              <img
+                                src={product.image}
+                                alt=""
+                                loading="lazy"
+                                className="w-full h-full object-cover"
+                              />
+                            ) : (
+                              <ImageOff size={16} className="text-gray-300" />
                             )}
                           </div>
 
-                          <p className="text-xs text-gray-500">
-                            {product.hasVariants &&
-                              `${product.variants.length} variants`}
-                            {product.hasVariants &&
-                              product.images?.length > 1 &&
-                              ' · '}
-                            {product.images?.length > 1 &&
-                              `${product.images.length} photos`}
-                          </p>
+                          <div className="min-w-0">
+                            <div className="flex items-center gap-2">
+                              <p className="font-medium truncate">
+                                {product.name}
+                              </p>
+
+                              {product.status === 'draft' && (
+                                <span className="inline-flex items-center gap-1 bg-gray-100 text-gray-600 text-xs px-2 py-0.5 rounded shrink-0">
+                                  <EyeOff size={11} />
+                                  Draft
+                                </span>
+                              )}
+                            </div>
+
+                            <p className="text-xs text-gray-500">
+                              {product.hasVariants &&
+                                `${product.variants.length} variants`}
+                              {product.hasVariants &&
+                                product.images?.length > 1 &&
+                                ' · '}
+                              {product.images?.length > 1 &&
+                                `${product.images.length} photos`}
+                            </p>
+                          </div>
                         </div>
-                      </div>
-                    </td>
+                      </td>
 
-                    <td className="p-3 text-gray-600">
-                      {product.categoryName}
-                    </td>
+                      <td className="p-3 text-gray-600">
+                        {product.categoryName}
+                      </td>
 
-                    <td className="p-3 whitespace-nowrap">
-                      {product.hasVariants &&
-                      product.minPrice !== product.maxPrice
-                        ? `${formatPrice(product.minPrice)} – ${formatPrice(
-                            product.maxPrice
-                          )}`
-                        : formatPrice(product.price)}
-                    </td>
+                      <td className="p-3 whitespace-nowrap">
+                        {product.hasVariants &&
+                        product.minPrice !== product.maxPrice
+                          ? `${formatPrice(product.minPrice)} - ${formatPrice(
+                              product.maxPrice
+                            )}`
+                          : formatPrice(product.price)}
+                      </td>
 
-                    <td className="p-3">
-                      <span
-                        className={`px-2 py-1 rounded text-xs whitespace-nowrap ${
-                          product.countInStock === 0
-                            ? 'bg-red-100 text-red-700'
-                            : product.countInStock < 5
-                            ? 'bg-amber-100 text-amber-700'
-                            : 'bg-green-100 text-green-700'
-                        }`}
-                      >
-                        {product.countInStock === 0
-                          ? 'Out of stock'
-                          : `${product.countInStock} left`}
-                      </span>
-                    </td>
-
-                    <td className="p-3">
-                      <div className="flex gap-1 justify-end">
-                        <Link
-                          to={`/admin/product/${product._id}/edit`}
-                          title="Edit"
-                          className="p-2 rounded hover:bg-gray-200 text-gray-600"
+                      <td className="p-3">
+                        <span
+                          className={`px-2 py-1 rounded text-xs whitespace-nowrap ${
+                            product.countInStock === 0
+                              ? 'bg-red-100 text-red-700'
+                              : product.countInStock < 5
+                              ? 'bg-amber-100 text-amber-700'
+                              : 'bg-green-100 text-green-700'
+                          }`}
                         >
-                          <Pencil size={16} />
-                        </Link>
+                          {product.countInStock === 0
+                            ? 'Out of stock'
+                            : `${product.countInStock} left`}
+                        </span>
+                      </td>
 
-                        <button
-                          onClick={() =>
-                            deleteHandler(product._id, product.name)
-                          }
-                          disabled={deletingId === product._id}
-                          title="Delete"
-                          className="p-2 rounded hover:bg-red-100 text-red-600 disabled:opacity-50 cursor-pointer"
-                        >
-                          {deletingId === product._id ? (
-                            <Loader2 size={16} className="animate-spin" />
-                          ) : (
-                            <Trash2 size={16} />
-                          )}
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
+                      <td className="p-3">
+                        <div className="flex gap-1 justify-end">
+                          <Link
+                            to={`/admin/product/${product._id}/edit`}
+                            title="Edit"
+                            className="p-2 rounded hover:bg-gray-200 text-gray-600"
+                          >
+                            <Pencil size={16} />
+                          </Link>
+
+                          <button
+                            onClick={() =>
+                              deleteHandler(product._id, product.name)
+                            }
+                            disabled={deletingId === product._id}
+                            title="Delete"
+                            className="p-2 rounded hover:bg-red-100 text-red-600 disabled:opacity-50 cursor-pointer"
+                          >
+                            {deletingId === product._id ? (
+                              <Loader2 size={16} className="animate-spin" />
+                            ) : (
+                              <Trash2 size={16} />
+                            )}
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  );
+                })}
               </tbody>
             </table>
           </div>
@@ -391,6 +596,12 @@ function ProductListPage() {
           <Pagination page={page} pages={pages} onChange={pageHandler} />
         </>
       )}
+
+      <ProductImportModal
+        open={importOpen}
+        onClose={() => setImportOpen(false)}
+        onImported={fetchProducts}
+      />
     </div>
   );
 }

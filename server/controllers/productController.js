@@ -13,6 +13,33 @@ const titleCase = (str) =>
     .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
     .join(' ');
 
+const slugify = (str) =>
+  String(str)
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+
+// Handles must be unique, so append -2, -3 and so on if one is taken
+const uniqueHandle = async (name, excludeId = null) => {
+  const base = slugify(name) || 'product';
+  let handle = base;
+  let n = 2;
+
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    const filter = { handle };
+    if (excludeId) filter._id = { $ne: excludeId };
+
+    const clash = await Product.findOne(filter);
+    if (!clash) return handle;
+
+    handle = `${base}-${n}`;
+    n += 1;
+  }
+};
+
 // Clean and validate the variant payload from the admin form
 const sanitizeVariants = (variants, optionTypes) => {
   if (!Array.isArray(variants) || variants.length === 0) {
@@ -247,6 +274,7 @@ export const createProduct = asyncHandler(async (req, res) => {
 
   const product = await Product.create({
     name: name.trim(),
+    handle: await uniqueHandle(name.trim()),
     description: description.trim(),
     price: basePrice,
     compareAtPrice:
@@ -290,6 +318,12 @@ export const updateProduct = asyncHandler(async (req, res) => {
 
   product.name = name ?? product.name;
   product.description = description ?? product.description;
+
+  // Give older products a handle, but never change an existing one:
+  // it is the key the CSV import matches on
+  if (!product.handle) {
+    product.handle = await uniqueHandle(product.name, product._id);
+  }
 
   if (category?.trim()) {
     const resolved = await resolveCategory(category);
@@ -367,4 +401,42 @@ export const deleteProduct = asyncHandler(async (req, res) => {
 
   await product.deleteOne();
   res.json({ message: 'Product removed' });
+});
+// POST /api/products/bulk  — admin
+// Body: { ids: [], action: 'delete' | 'activate' | 'draft' }
+export const bulkAction = asyncHandler(async (req, res) => {
+  const { ids, action } = req.body;
+
+  if (!Array.isArray(ids) || ids.length === 0) {
+    res.status(400);
+    throw new Error('No products selected');
+  }
+
+  if (action === 'delete') {
+    const result = await Product.deleteMany({ _id: { $in: ids } });
+
+    return res.json({
+      message: `${result.deletedCount} product${
+        result.deletedCount === 1 ? '' : 's'
+      } deleted`,
+      count: result.deletedCount,
+    });
+  }
+
+  if (action === 'activate' || action === 'draft') {
+    const result = await Product.updateMany(
+      { _id: { $in: ids } },
+      { $set: { status: action === 'draft' ? 'draft' : 'active' } }
+    );
+
+    return res.json({
+      message: `${result.modifiedCount} product${
+        result.modifiedCount === 1 ? '' : 's'
+      } updated`,
+      count: result.modifiedCount,
+    });
+  }
+
+  res.status(400);
+  throw new Error('Unknown action');
 });

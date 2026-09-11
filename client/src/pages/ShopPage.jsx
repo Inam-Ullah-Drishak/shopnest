@@ -1,21 +1,22 @@
-import { useState, useEffect } from 'react';
-import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
-import { Search, X, Loader2, PackageOpen, Tag } from 'lucide-react';
-import ProductCard from '../components/ProductCard.jsx';
-import Dropdown from '../components/Dropdown.jsx';
-import Pagination from '../components/Pagination.jsx';
-import { PAGE_SIZE } from '../utils/constants.js';
-
+import { useState, useEffect } from "react";
+import { useSearchParams } from "react-router-dom";
+import axios from "axios";
+import { Search, X, Loader2, PackageOpen, Tag } from "lucide-react";
+import ProductCard from "../components/ProductCard.jsx";
+import Dropdown from "../components/Dropdown.jsx";
+import Pagination from "../components/Pagination.jsx";
+import { PAGE_SIZE } from "../utils/constants.js";
+import { usePageTitle } from "../hooks/usePageTitle.js";
 function ShopPage() {
+  usePageTitle("Shop");
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const keyword = searchParams.get('keyword') || '';
-  const category = searchParams.get('category') || 'All';
-  const stock = searchParams.get('stock') || 'all';
-  const sort = searchParams.get('sort') || 'newest';
-  const onSale = searchParams.get('onSale') === 'true';
-  const page = Number(searchParams.get('page')) || 1;
+  const keyword = searchParams.get("keyword") || "";
+  const category = searchParams.get("category") || "All";
+  const stock = searchParams.get("stock") || "all";
+  const sort = searchParams.get("sort") || "newest";
+  const onSale = searchParams.get("onSale") === "true";
+  const page = Number(searchParams.get("page")) || 1;
 
   const [searchInput, setSearchInput] = useState(keyword);
   const [lastKeyword, setLastKeyword] = useState(keyword);
@@ -31,19 +32,19 @@ function ShopPage() {
   const [categories, setCategories] = useState([]);
   const [pages, setPages] = useState(1);
   const [count, setCount] = useState(0);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
   const filtersActive =
     keyword ||
-    category !== 'All' ||
-    stock !== 'all' ||
-    sort !== 'newest' ||
+    category !== "All" ||
+    stock !== "all" ||
+    sort !== "newest" ||
     onSale;
 
   useEffect(() => {
     axios
-      .get('/api/products/categories')
+      .get("/api/products/categories")
       .then(({ data }) => setCategories(data))
       .catch(() => {});
   }, []);
@@ -53,13 +54,13 @@ function ShopPage() {
       setLoading(true);
 
       try {
-        const { data } = await axios.get('/api/products', {
+        const { data } = await axios.get("/api/products", {
           params: {
             keyword,
             category,
             stock,
             sort,
-            onSale: onSale ? 'true' : undefined,
+            onSale: onSale ? "true" : undefined,
             pageNumber: page,
             pageSize: PAGE_SIZE,
           },
@@ -69,7 +70,7 @@ function ShopPage() {
         setPages(data.pages);
         setCount(data.count);
       } catch (err) {
-        setError(err.response?.data?.message || 'Could not load products');
+        setError(err.response?.data?.message || "Could not load products");
       } finally {
         setLoading(false);
       }
@@ -85,13 +86,13 @@ function ShopPage() {
       category,
       stock,
       sort,
-      onSale: onSale ? 'true' : '',
+      onSale: onSale ? "true" : "",
       page: 1,
       ...changes,
     };
 
     Object.keys(next).forEach((k) => {
-      if (!next[k] || next[k] === 'All' || next[k] === 'all') delete next[k];
+      if (!next[k] || next[k] === "All" || next[k] === "all") delete next[k];
     });
 
     setSearchParams(next);
@@ -99,7 +100,7 @@ function ShopPage() {
 
   const pageHandler = (n) => {
     setParam({ page: n });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const clearFilters = () => setSearchParams({});
@@ -107,7 +108,7 @@ function ShopPage() {
   return (
     <div className="p-8">
       <h1 className="text-3xl font-bold mb-5">
-        {onSale ? 'On sale' : 'Shop all'}
+        {onSale ? "On sale" : "Shop all"}
       </h1>
 
       <div className="flex flex-wrap gap-2 mb-4">
@@ -133,11 +134,11 @@ function ShopPage() {
 
         <button
           type="button"
-          onClick={() => setParam({ onSale: onSale ? '' : 'true' })}
+          onClick={() => setParam({ onSale: onSale ? "" : "true" })}
           className={`inline-flex items-center gap-1.5 border rounded-lg px-4 py-2.5 text-sm cursor-pointer ${
             onSale
-              ? 'bg-gray-900 text-white border-gray-900'
-              : 'hover:bg-gray-50'
+              ? "bg-gray-900 text-white border-gray-900"
+              : "hover:bg-gray-50"
           }`}
         >
           <Tag size={15} />
@@ -148,7 +149,7 @@ function ShopPage() {
           value={category}
           onChange={(v) => setParam({ category: v })}
           options={[
-            { value: 'All', label: 'All categories' },
+            { value: "All", label: "All categories" },
             ...categories.map((cat) => ({ value: cat, label: cat })),
           ]}
           className="w-44"
@@ -158,8 +159,8 @@ function ShopPage() {
           value={stock}
           onChange={(v) => setParam({ stock: v })}
           options={[
-            { value: 'all', label: 'Show everything' },
-            { value: 'available', label: 'In stock only' },
+            { value: "all", label: "Show everything" },
+            { value: "available", label: "In stock only" },
           ]}
           className="w-44"
         />
@@ -168,12 +169,12 @@ function ShopPage() {
           value={sort}
           onChange={(v) => setParam({ sort: v })}
           options={[
-            { value: 'newest', label: 'Newest first' },
-            { value: 'rating-desc', label: 'Best rated' },
-            { value: 'name-asc', label: 'Name A–Z' },
-            { value: 'name-desc', label: 'Name Z–A' },
-            { value: 'price-asc', label: 'Price low to high' },
-            { value: 'price-desc', label: 'Price high to low' },
+            { value: "newest", label: "Newest first" },
+            { value: "rating-desc", label: "Best rated" },
+            { value: "name-asc", label: "Name A–Z" },
+            { value: "name-desc", label: "Name Z–A" },
+            { value: "price-asc", label: "Price low to high" },
+            { value: "price-desc", label: "Price high to low" },
           ]}
           className="w-48"
           align="right"
@@ -182,7 +183,7 @@ function ShopPage() {
 
       <div className="flex flex-wrap items-center gap-3 mb-6">
         <p className="text-sm text-gray-500">
-          {loading ? 'Loading' : `${count} product${count === 1 ? '' : 's'}`}
+          {loading ? "Loading" : `${count} product${count === 1 ? "" : "s"}`}
         </p>
 
         {filtersActive && (

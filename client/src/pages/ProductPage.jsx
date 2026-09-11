@@ -1,15 +1,16 @@
-import { useState, useEffect, useMemo } from 'react';
-import { useParams, Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
-import { ArrowLeft, ShoppingCart, Loader2 } from 'lucide-react';
-import { useCart } from '../context/CartContext.jsx';
-import ImageGallery from '../components/ImageGallery.jsx';
-import VariantSelector from '../components/VariantSelector.jsx';
-import QuantityInput from '../components/QuantityInput.jsx';
-import StarRating from '../components/StarRating.jsx';
-import WishlistButton from '../components/WishlistButton.jsx';
-import ProductReviews from '../components/ProductReviews.jsx';
-import { formatPrice } from '../utils/format.js';
+import { useState, useEffect, useMemo } from "react";
+import { useParams, Link, useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ArrowLeft, ShoppingCart, Loader2 } from "lucide-react";
+import { useCart } from "../context/CartContext.jsx";
+import ImageGallery from "../components/ImageGallery.jsx";
+import VariantSelector from "../components/VariantSelector.jsx";
+import QuantityInput from "../components/QuantityInput.jsx";
+import StarRating from "../components/StarRating.jsx";
+import WishlistButton from "../components/WishlistButton.jsx";
+import ProductReviews from "../components/ProductReviews.jsx";
+import { formatPrice } from "../utils/format.js";
+import { usePageTitle } from "../hooks/usePageTitle.js";
 
 function ProductPage() {
   const { id } = useParams();
@@ -18,14 +19,14 @@ function ProductPage() {
 
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [qty, setQty] = useState(1);
   const [selected, setSelected] = useState({});
-
+  usePageTitle(product?.name);
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
-      setError('');
+      setError("");
       window.scrollTo({ top: 0 });
 
       try {
@@ -47,7 +48,7 @@ function ProductPage() {
           setSelected({});
         }
       } catch (err) {
-        setError(err.response?.data?.message || 'Could not load this product');
+        setError(err.response?.data?.message || "Could not load this product");
       } finally {
         setLoading(false);
       }
@@ -63,7 +64,7 @@ function ProductPage() {
 
     return (
       product.variants.find((variant) =>
-        variant.options.every((o) => selected[o.name] === o.value)
+        variant.options.every((o) => selected[o.name] === o.value),
       ) || null
     );
   }, [product, selected, hasVariants]);
@@ -85,15 +86,15 @@ function ProductPage() {
     : 0;
 
   const stock = hasVariants
-    ? activeVariant?.countInStock ?? 0
-    : product?.countInStock ?? 0;
+    ? (activeVariant?.countInStock ?? 0)
+    : (product?.countInStock ?? 0);
 
   const inStock = stock > 0;
   const canBuy = hasVariants ? Boolean(activeVariant) && inStock : inStock;
 
   const addToCartHandler = () => {
     addToCart(product, Number(qty) || 1, activeVariant);
-    navigate('/cart');
+    navigate("/cart");
   };
 
   if (loading) {
@@ -108,7 +109,7 @@ function ProductPage() {
   if (error) return <p className="p-8 text-red-600">{error}</p>;
   if (!product) return null;
 
-  const categoryName = product.categoryName || product.category?.name || '';
+  const categoryName = product.categoryName || product.category?.name || "";
 
   const galleryImages =
     activeVariant?.image && !product.images.includes(activeVariant.image)
@@ -157,7 +158,7 @@ function ProductPage() {
 
           <div className="flex items-baseline gap-3 mt-4 flex-wrap">
             <p className="text-2xl font-semibold">
-              {price != null ? formatPrice(price) : 'Select an option'}
+              {price != null ? formatPrice(price) : "Select an option"}
             </p>
 
             {onSale && (
@@ -174,7 +175,7 @@ function ProductPage() {
 
           {hasVariants && product.minPrice !== product.maxPrice && (
             <p className="text-sm text-gray-500 mt-1">
-              {formatPrice(product.minPrice)} – {formatPrice(product.maxPrice)}{' '}
+              {formatPrice(product.minPrice)} – {formatPrice(product.maxPrice)}{" "}
               depending on {product.optionTypes[0]?.name.toLowerCase()}
             </p>
           )}
@@ -231,7 +232,7 @@ function ProductPage() {
               className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-900 text-white p-3 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               <ShoppingCart size={18} />
-              {canBuy ? 'Add to cart' : 'Out of stock'}
+              {canBuy ? "Add to cart" : "Out of stock"}
             </button>
 
             <WishlistButton

@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
 import { Loader2, LayoutGrid, ImageOff } from 'lucide-react';
+import { usePageTitle } from "../hooks/usePageTitle.js";
 
 function CollectionsPage() {
   const [collections, setCollections] = useState([]);
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
+  usePageTitle('Collections')
 
   useEffect(() => {
     const fetchCollections = async () => {

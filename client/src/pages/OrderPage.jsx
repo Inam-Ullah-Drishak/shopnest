@@ -1,21 +1,12 @@
 import { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios from 'axios';
-import {
-  ImageOff,
-  Loader2,
-  MapPin,
-  Wallet,
-  Truck,
-  Copy,
-  Check,
-  AlertCircle,
-  XCircle,
-} from 'lucide-react';
+import {ImageOff,Loader2,MapPin,Wallet,Truck,Copy,Check,AlertCircle,XCircle,} from 'lucide-react';
 import { useAuth } from '../context/AuthContext.jsx';
 import OrderStatus, { STATUS_META, FLOW } from '../components/OrderStatus.jsx';
 import OrderAdminPanel from '../components/admin/OrderAdminPanel.jsx';
 import { formatPrice, formatDate } from '../utils/format.js';
+import { usePageTitle } from "../hooks/usePageTitle.js";
 
 function Timeline({ order }) {
   if (order.status === 'cancelled') {
@@ -109,7 +100,7 @@ function OrderPage() {
   const [loading, setLoading] = useState(true);
   const [cancelling, setCancelling] = useState(false);
   const [copied, setCopied] = useState(false);
-
+  usePageTitle('Your order');
   useEffect(() => {
     const fetchOrder = async () => {
       try {

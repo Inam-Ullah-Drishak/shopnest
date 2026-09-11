@@ -1,12 +1,13 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
-import { Heart, Loader2, Trash2 } from 'lucide-react';
-import { useAuth } from '../context/AuthContext.jsx';
-import { useWishlist } from '../context/WishlistContext.jsx';
-import ProductCard from '../components/ProductCard.jsx';
-import Pagination from '../components/Pagination.jsx';
-import { PAGE_SIZE } from '../utils/constants.js';
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
+import { Heart, Loader2, Trash2 } from "lucide-react";
+import { useAuth } from "../context/AuthContext.jsx";
+import { useWishlist } from "../context/WishlistContext.jsx";
+import ProductCard from "../components/ProductCard.jsx";
+import Pagination from "../components/Pagination.jsx";
+import { PAGE_SIZE } from "../utils/constants.js";
+import { usePageTitle } from "../hooks/usePageTitle.js";
 
 function WishlistPage() {
   const { userInfo } = useAuth();
@@ -14,16 +15,16 @@ function WishlistPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const page = Number(searchParams.get('page')) || 1;
+  const page = Number(searchParams.get("page")) || 1;
 
   const [fetched, setFetched] = useState([]);
   const [pages, setPages] = useState(1);
   const [, setCount] = useState(0);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
-
+  usePageTitle("Saved items");
   useEffect(() => {
-    if (!userInfo) navigate('/login');
+    if (!userInfo) navigate("/login");
   }, [userInfo, navigate]);
 
   useEffect(() => {
@@ -33,7 +34,7 @@ function WishlistPage() {
       setLoading(true);
 
       try {
-        const { data } = await axios.get('/api/wishlist', {
+        const { data } = await axios.get("/api/wishlist", {
           params: { pageNumber: page, pageSize: PAGE_SIZE },
         });
 
@@ -41,7 +42,7 @@ function WishlistPage() {
         setPages(data.pages);
         setCount(data.count);
       } catch (err) {
-        setError(err.response?.data?.message || 'Could not load your wishlist');
+        setError(err.response?.data?.message || "Could not load your wishlist");
       } finally {
         setLoading(false);
       }
@@ -56,11 +57,11 @@ function WishlistPage() {
 
   const pageHandler = (n) => {
     setSearchParams({ page: n });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const clearHandler = async () => {
-    if (!window.confirm('Remove everything from your wishlist?')) return;
+    if (!window.confirm("Remove everything from your wishlist?")) return;
 
     await clear();
     setFetched([]);
@@ -85,7 +86,7 @@ function WishlistPage() {
         <div>
           <h1 className="text-2xl font-bold">Saved items</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            {ids.size} item{ids.size === 1 ? '' : 's'}
+            {ids.size} item{ids.size === 1 ? "" : "s"}
           </p>
         </div>
 

@@ -1,32 +1,33 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
-import { Package, ChevronRight, Loader2, ImageOff, X } from 'lucide-react';
-import { useAuth } from '../context/AuthContext.jsx';
-import OrderStatus from '../components/OrderStatus.jsx';
-import Dropdown from '../components/Dropdown.jsx';
-import Pagination from '../components/Pagination.jsx';
-import { formatPrice, formatDate } from '../utils/format.js';
-import { PAGE_SIZE } from '../utils/constants.js';
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
+import { Package, ChevronRight, Loader2, ImageOff, X } from "lucide-react";
+import { useAuth } from "../context/AuthContext.jsx";
+import OrderStatus from "../components/OrderStatus.jsx";
+import Dropdown from "../components/Dropdown.jsx";
+import Pagination from "../components/Pagination.jsx";
+import { formatPrice, formatDate } from "../utils/format.js";
+import { PAGE_SIZE } from "../utils/constants.js";
+import { usePageTitle } from "../hooks/usePageTitle.js";
 
 function MyOrdersPage() {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const status = searchParams.get('status') || 'all';
-  const page = Number(searchParams.get('page')) || 1;
+  const status = searchParams.get("status") || "all";
+  const page = Number(searchParams.get("page")) || 1;
 
   const [orders, setOrders] = useState([]);
   const [pages, setPages] = useState(1);
   const [count, setCount] = useState(0);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
 
-  const filtersActive = status !== 'all';
-
+  const filtersActive = status !== "all";
+  usePageTitle("Your orders");
   useEffect(() => {
-    if (!userInfo) navigate('/login');
+    if (!userInfo) navigate("/login");
   }, [userInfo, navigate]);
 
   useEffect(() => {
@@ -36,7 +37,7 @@ function MyOrdersPage() {
       setLoading(true);
 
       try {
-        const { data } = await axios.get('/api/orders/mine', {
+        const { data } = await axios.get("/api/orders/mine", {
           params: { status, pageNumber: page, pageSize: PAGE_SIZE },
         });
 
@@ -44,7 +45,7 @@ function MyOrdersPage() {
         setPages(data.pages);
         setCount(data.count);
       } catch (err) {
-        setError(err.response?.data?.message || 'Could not load your orders');
+        setError(err.response?.data?.message || "Could not load your orders");
       } finally {
         setLoading(false);
       }
@@ -57,7 +58,7 @@ function MyOrdersPage() {
     const next = { status, page: 1, ...changes };
 
     Object.keys(next).forEach((k) => {
-      if (!next[k] || next[k] === 'all') delete next[k];
+      if (!next[k] || next[k] === "all") delete next[k];
     });
 
     setSearchParams(next);
@@ -65,7 +66,7 @@ function MyOrdersPage() {
 
   const pageHandler = (n) => {
     setParam({ page: n });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   if (loading) {
@@ -85,8 +86,8 @@ function MyOrdersPage() {
         <div>
           <h1 className="text-2xl font-bold">Your orders</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            {count} order{count === 1 ? '' : 's'}
-            {filtersActive && ' matching your filter'}
+            {count} order{count === 1 ? "" : "s"}
+            {filtersActive && " matching your filter"}
           </p>
         </div>
 
@@ -96,13 +97,13 @@ function MyOrdersPage() {
               value={status}
               onChange={(v) => setParam({ status: v })}
               options={[
-                { value: 'all', label: 'All orders' },
-                { value: 'pending', label: 'Order received' },
-                { value: 'confirmed', label: 'Confirmed' },
-                { value: 'processing', label: 'Being packed' },
-                { value: 'shipped', label: 'On the way' },
-                { value: 'delivered', label: 'Delivered' },
-                { value: 'cancelled', label: 'Cancelled' },
+                { value: "all", label: "All orders" },
+                { value: "pending", label: "Order received" },
+                { value: "confirmed", label: "Confirmed" },
+                { value: "processing", label: "Being packed" },
+                { value: "shipped", label: "On the way" },
+                { value: "delivered", label: "Delivered" },
+                { value: "cancelled", label: "Cancelled" },
               ]}
               className="w-44"
               align="right"
@@ -126,12 +127,12 @@ function MyOrdersPage() {
         <div className="border rounded-lg py-16 text-center">
           <Package size={36} className="mx-auto text-gray-300" />
           <p className="mt-3 font-medium">
-            {filtersActive ? 'No orders match' : 'No orders yet'}
+            {filtersActive ? "No orders match" : "No orders yet"}
           </p>
           <p className="text-sm text-gray-500 mt-1">
             {filtersActive
-              ? 'Try a different filter.'
-              : 'Anything you buy will show up here.'}
+              ? "Try a different filter."
+              : "Anything you buy will show up here."}
           </p>
 
           {filtersActive ? (
@@ -184,8 +185,8 @@ function MyOrdersPage() {
                 <div className="flex-1 min-w-0">
                   <p className="font-medium">{formatPrice(order.totalPrice)}</p>
                   <p className="text-sm text-gray-500">
-                    {formatDate(order.createdAt)} · {order.orderItems.length}{' '}
-                    item{order.orderItems.length > 1 ? 's' : ''}
+                    {formatDate(order.createdAt)} · {order.orderItems.length}{" "}
+                    item{order.orderItems.length > 1 ? "s" : ""}
                   </p>
                 </div>
 

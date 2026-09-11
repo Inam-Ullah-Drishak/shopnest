@@ -1,36 +1,37 @@
-import { Routes, Route, useLocation } from 'react-router-dom';
-import Header from './components/Header.jsx';
-import Footer from './components/Footer.jsx';
-import HomePage from './pages/HomePage.jsx';
-import ShopPage from './pages/ShopPage.jsx';
-import ProductPage from './pages/ProductPage.jsx';
-import LoginPage from './pages/LoginPage.jsx';
-import RegisterPage from './pages/RegisterPage.jsx';
-import ProfilePage from './pages/ProfilePage.jsx';
-import CartPage from './pages/CartPage.jsx';
-import ShippingPage from './pages/ShippingPage.jsx';
-import PlaceOrderPage from './pages/PlaceOrderPage.jsx';
-import OrderPage from './pages/OrderPage.jsx';
-import MyOrdersPage from './pages/MyOrdersPage.jsx';
-import WishlistPage from './pages/WishlistPage.jsx';
-import CollectionsPage from './pages/CollectionsPage.jsx';
-import CollectionPage from './pages/CollectionPage.jsx';
-import NotFoundPage from './pages/NotFoundPage.jsx';
-import DashboardPage from './pages/admin/DashboardPage.jsx';
-import ProductListPage from './pages/admin/ProductListPage.jsx';
-import ProductFormPage from './pages/admin/ProductFormPage.jsx';
-import OrderListPage from './pages/admin/OrderListPage.jsx';
-import CategoryListPage from './pages/admin/CategoryListPage.jsx';
-import CollectionListPage from './pages/admin/CollectionListPage.jsx';
-import CollectionFormPage from './pages/admin/CollectionFormPage.jsx';
-import CouponListPage from './pages/admin/CouponListPage.jsx';
-import CouponFormPage from './pages/admin/CouponFormPage.jsx';
-import CustomerListPage from './pages/admin/CustomerListPage.jsx';
-import CustomerDetailPage from './pages/admin/CustomerDetailPage.jsx';
+import { Routes, Route, useLocation } from "react-router-dom";
+import Header from "./components/Header.jsx";
+import Footer from "./components/Footer.jsx";
+import HomePage from "./pages/HomePage.jsx";
+import ShopPage from "./pages/ShopPage.jsx";
+import ProductPage from "./pages/ProductPage.jsx";
+import LoginPage from "./pages/LoginPage.jsx";
+import RegisterPage from "./pages/RegisterPage.jsx";
+import ProfilePage from "./pages/ProfilePage.jsx";
+import CartPage from "./pages/CartPage.jsx";
+import ShippingPage from "./pages/ShippingPage.jsx";
+import PlaceOrderPage from "./pages/PlaceOrderPage.jsx";
+import OrderPage from "./pages/OrderPage.jsx";
+import MyOrdersPage from "./pages/MyOrdersPage.jsx";
+import WishlistPage from "./pages/WishlistPage.jsx";
+import CollectionsPage from "./pages/CollectionsPage.jsx";
+import CollectionPage from "./pages/CollectionPage.jsx";
+import NotFoundPage from "./pages/NotFoundPage.jsx";
+import DashboardPage from "./pages/admin/DashboardPage.jsx";
+import ProductListPage from "./pages/admin/ProductListPage.jsx";
+import ProductFormPage from "./pages/admin/ProductFormPage.jsx";
+import OrderListPage from "./pages/admin/OrderListPage.jsx";
+import CategoryListPage from "./pages/admin/CategoryListPage.jsx";
+import CollectionListPage from "./pages/admin/CollectionListPage.jsx";
+import CollectionFormPage from "./pages/admin/CollectionFormPage.jsx";
+import CouponListPage from "./pages/admin/CouponListPage.jsx";
+import CouponFormPage from "./pages/admin/CouponFormPage.jsx";
+import CustomerListPage from "./pages/admin/CustomerListPage.jsx";
+import CustomerDetailPage from "./pages/admin/CustomerDetailPage.jsx";
+import ProductImportPage from "./pages/admin/ProductImportPage.jsx";
 
 function App() {
   const { pathname } = useLocation();
-  const isAdmin = pathname.startsWith('/admin');
+  const isAdmin = pathname.startsWith("/admin");
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -38,7 +39,7 @@ function App() {
 
       <main
         className={`flex-1 w-full ${
-          isAdmin ? 'max-w-screen-2xl mx-auto' : 'max-w-6xl mx-auto'
+          isAdmin ? "max-w-screen-2xl mx-auto" : "max-w-6xl mx-auto"
         }`}
       >
         <Routes>
@@ -77,6 +78,10 @@ function App() {
           <Route path="/admin/orders" element={<OrderListPage />} />
           <Route path="/admin/customers" element={<CustomerListPage />} />
           <Route path="/admin/customer/:id" element={<CustomerDetailPage />} />
+          <Route
+            path="/admin/products/import"
+            element={<ProductImportPage />}
+          />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

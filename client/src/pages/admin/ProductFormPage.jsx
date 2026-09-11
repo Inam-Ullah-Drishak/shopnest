@@ -14,6 +14,7 @@ import {
 import { useAuth } from '../../context/AuthContext.jsx';
 import VariantEditor from '../../components/admin/VariantEditor.jsx';
 import Dropdown from '../../components/Dropdown.jsx';
+import { uploadImages, thumb } from '../../utils/upload.js';
 
 function ProductFormPage() {
   const { id } = useParams();
@@ -75,7 +76,6 @@ function ProductFormPage() {
           description: data.description,
           price: data.price,
           compareAtPrice: data.compareAtPrice ?? '',
-          // category is populated now, so fall back through both shapes
           category: data.categoryName || data.category?.name || '',
           countInStock: data.countInStock,
           status: data.status || 'active',
@@ -119,16 +119,9 @@ function ProductFormPage() {
     setUploading(true);
 
     try {
-      for (const file of files) {
-        const formData = new FormData();
-        formData.append('image', file);
-
-        const { data } = await axios.post('/api/upload', formData, {
-          headers: { 'Content-Type': 'multipart/form-data' },
-        });
-
-        setImages((prev) => [...prev, data.image]);
-      }
+      // One request for all of them; the server uploads in parallel
+      const urls = await uploadImages(files, 'products');
+      setImages((prev) => [...prev, ...urls]);
     } catch (err) {
       setError(
         err.response?.data?.message || 'Upload failed. Try another file.'
@@ -195,7 +188,8 @@ function ProductFormPage() {
       name: form.name,
       description: form.description,
       price: basePrice,
-      compareAtPrice: form.compareAtPrice === '' ? null : Number(form.compareAtPrice),
+      compareAtPrice:
+        form.compareAtPrice === '' ? null : Number(form.compareAtPrice),
       category: form.category,
       countInStock: hasVariants
         ? variants.reduce((sum, v) => sum + v.countInStock, 0)
@@ -281,7 +275,12 @@ function ProductFormPage() {
                   key={`${src}-${index}`}
                   className="relative aspect-square border rounded-lg overflow-hidden bg-gray-50 group"
                 >
-                  <img src={src} alt="" className="w-full h-full object-cover" />
+                  <img
+                    src={thumb(src, 300)}
+                    alt=""
+                    loading="lazy"
+                    className="w-full h-full object-cover"
+                  />
 
                   {index === 0 && (
                     <span className="absolute bottom-0 inset-x-0 bg-gray-900/75 text-white text-[11px] text-center py-0.5">
@@ -372,6 +371,11 @@ function ProductFormPage() {
               Add
             </button>
           </div>
+
+          <p className="text-xs text-gray-500 mt-2">
+            The first image is shown on cards and in the cart. Up to 8 at a
+            time, 5 MB each.
+          </p>
         </div>
 
         <div>

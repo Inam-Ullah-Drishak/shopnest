@@ -89,3 +89,73 @@ export const getUserProfile = (req, res) => {
     createdAt: req.user.createdAt,
   });
 };
+
+// PUT /api/users/profile  — protected
+export const updateUserProfile = asyncHandler(async (req, res) => {
+  const { name, email, currentPassword, newPassword } = req.body;
+
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('Account not found');
+  }
+
+  if (name?.trim()) {
+    user.name = name.trim();
+  }
+
+  const cleanEmail = email?.toLowerCase().trim();
+
+  if (cleanEmail && cleanEmail !== user.email) {
+    const taken = await User.findOne({
+      _id: { $ne: user._id },
+      email: cleanEmail,
+    });
+
+    if (taken) {
+      res.status(400);
+      throw new Error('That email is already in use');
+    }
+
+    user.email = cleanEmail;
+  }
+
+  // Changing a password requires proving you know the current one, so a
+  // stolen session alone can't lock the real owner out
+  if (newPassword) {
+    if (!currentPassword) {
+      res.status(400);
+      throw new Error('Enter your current password to set a new one');
+    }
+
+    if (!(await user.matchPassword(currentPassword))) {
+      res.status(401);
+      throw new Error('Your current password is not correct');
+    }
+
+    if (newPassword.length < 6) {
+      res.status(400);
+      throw new Error('Use a password of at least 6 characters');
+    }
+
+    if (await user.matchPassword(newPassword)) {
+      res.status(400);
+      throw new Error('That is the same as your current password');
+    }
+
+    // Assign the plain value: the pre('save') hook hashes it.
+    // Hashing here would double-hash and lock the user out.
+    user.password = newPassword;
+  }
+
+  const updated = await user.save();
+
+  res.json({
+    _id: updated._id,
+    name: updated.name,
+    email: updated.email,
+    isAdmin: updated.isAdmin,
+    createdAt: updated.createdAt,
+  });
+});

@@ -1,41 +1,42 @@
-import { useState } from 'react';
-import { useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
-import { useAuth } from '../context/AuthContext.jsx';
+import { useState } from "react";
+import { useNavigate, Link } from "react-router-dom";
+import axios from "axios";
+import { useAuth } from "../context/AuthContext.jsx";
+import { usePageTitle } from "../hooks/usePageTitle.js";
 
 function RegisterPage() {
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [error, setError] = useState('');
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-
+  usePageTitle("Register");
   const { login } = useAuth();
   const navigate = useNavigate();
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (password !== confirmPassword) {
-      setError('Passwords do not match');
+      setError("Passwords do not match");
       return;
     }
 
     setLoading(true);
 
     try {
-      const { data } = await axios.post('/api/users', {
+      const { data } = await axios.post("/api/users", {
         name,
         email,
         password,
       });
 
       login(data);
-      navigate('/');
+      navigate("/");
     } catch (err) {
-      setError(err.response?.data?.message || 'Something went wrong');
+      setError(err.response?.data?.message || "Something went wrong");
     } finally {
       setLoading(false);
     }
@@ -99,12 +100,12 @@ function RegisterPage() {
           disabled={loading}
           className="w-full bg-gray-900 text-white p-2 rounded hover:bg-gray-700 disabled:opacity-50"
         >
-          {loading ? 'Creating account...' : 'Register'}
+          {loading ? "Creating account..." : "Register"}
         </button>
       </form>
 
       <p className="mt-4 text-sm">
-        Have an account?{' '}
+        Have an account?{" "}
         <Link to="/login" className="text-blue-600 underline">
           Sign In
         </Link>

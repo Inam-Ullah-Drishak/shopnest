@@ -13,6 +13,9 @@ import {
   ShieldCheck,
   ImageOff,
 } from "lucide-react";
+
+
+
 function HomePage() {
   usePageTitle('')
   const [featured, setFeatured] = useState([]);

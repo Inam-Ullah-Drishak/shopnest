@@ -27,7 +27,6 @@ import CouponListPage from "./pages/admin/CouponListPage.jsx";
 import CouponFormPage from "./pages/admin/CouponFormPage.jsx";
 import CustomerListPage from "./pages/admin/CustomerListPage.jsx";
 import CustomerDetailPage from "./pages/admin/CustomerDetailPage.jsx";
-import ProductImportPage from "./pages/admin/ProductImportPage.jsx";
 
 function App() {
   const { pathname } = useLocation();
@@ -78,10 +77,6 @@ function App() {
           <Route path="/admin/orders" element={<OrderListPage />} />
           <Route path="/admin/customers" element={<CustomerListPage />} />
           <Route path="/admin/customer/:id" element={<CustomerDetailPage />} />
-          <Route
-            path="/admin/products/import"
-            element={<ProductImportPage />}
-          />
 
           <Route path="*" element={<NotFoundPage />} />
         </Routes>

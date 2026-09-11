@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 import { useState, useEffect } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
@@ -17,6 +18,7 @@ import AdminNav from '../../components/AdminNav.jsx';
 import Dropdown from '../../components/Dropdown.jsx';
 import Pagination from '../../components/Pagination.jsx';
 import { PAGE_SIZE } from '../../utils/constants.js';
+import { usePageTitle } from "../../hooks/usePageTitle.js";
 
 function CategoryListPage() {
   const { userInfo } = useAuth();
@@ -37,6 +39,7 @@ function CategoryListPage() {
   const [editName, setEditName] = useState('');
   const [savingId, setSavingId] = useState(null);
   const [deletingId, setDeletingId] = useState(null);
+  usePageTitle('Categories');
 
   useEffect(() => {
     if (!userInfo || !userInfo.isAdmin) navigate('/login');

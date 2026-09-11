@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
 import {
   Eye,
   Loader2,
@@ -9,21 +9,22 @@ import {
   X,
   ArrowRight,
   Download,
-} from 'lucide-react';
-import { useAuth } from '../../context/AuthContext.jsx';
-import AdminNav from '../../components/AdminNav.jsx';
-import Dropdown from '../../components/Dropdown.jsx';
-import Pagination from '../../components/Pagination.jsx';
-import OrderStatus, { STATUS_META } from '../../components/OrderStatus.jsx';
-import { formatPrice, formatDate } from '../../utils/format.js';
-import { PAGE_SIZE } from '../../utils/constants.js';
+} from "lucide-react";
+import { useAuth } from "../../context/AuthContext.jsx";
+import AdminNav from "../../components/AdminNav.jsx";
+import Dropdown from "../../components/Dropdown.jsx";
+import Pagination from "../../components/Pagination.jsx";
+import OrderStatus, { STATUS_META } from "../../components/OrderStatus.jsx";
+import { formatPrice, formatDate } from "../../utils/format.js";
+import { PAGE_SIZE } from "../../utils/constants.js";
+import { usePageTitle } from "../../hooks/usePageTitle.js";
 
 // Mirrors NEXT_STATUSES on the server, so we only offer legal moves
 const NEXT = {
-  pending: ['confirmed', 'cancelled'],
-  confirmed: ['processing', 'cancelled'],
-  processing: ['shipped', 'cancelled'],
-  shipped: ['delivered', 'cancelled'],
+  pending: ["confirmed", "cancelled"],
+  confirmed: ["processing", "cancelled"],
+  processing: ["shipped", "cancelled"],
+  shipped: ["delivered", "cancelled"],
   delivered: [],
   cancelled: [],
 };
@@ -33,29 +34,27 @@ function OrderListPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const status = searchParams.get('status') || 'all';
-  const from = searchParams.get('from') || '';
-  const to = searchParams.get('to') || '';
-  const page = Number(searchParams.get('page')) || 1;
+  const status = searchParams.get("status") || "all";
+  const from = searchParams.get("from") || "";
+  const to = searchParams.get("to") || "";
+  const page = Number(searchParams.get("page")) || 1;
 
   const [orders, setOrders] = useState([]);
   const [pages, setPages] = useState(1);
   const [count, setCount] = useState(0);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [updatingId, setUpdatingId] = useState(null);
 
-  const filtersActive = status !== 'all' || from || to;
-
+  const filtersActive = status !== "all" || from || to;
+  usePageTitle("Orders");
   // The export should respect whatever filters are on screen
   const exportQuery = new URLSearchParams(
-    Object.entries({ status, from, to }).filter(
-      ([, v]) => v && v !== 'all'
-    )
+    Object.entries({ status, from, to }).filter(([, v]) => v && v !== "all"),
   ).toString();
 
   useEffect(() => {
-    if (!userInfo || !userInfo.isAdmin) navigate('/login');
+    if (!userInfo || !userInfo.isAdmin) navigate("/login");
   }, [userInfo, navigate]);
 
   useEffect(() => {
@@ -63,7 +62,7 @@ function OrderListPage() {
       setLoading(true);
 
       try {
-        const { data } = await axios.get('/api/orders', {
+        const { data } = await axios.get("/api/orders", {
           params: {
             status,
             from: from || undefined,
@@ -77,7 +76,7 @@ function OrderListPage() {
         setPages(data.pages);
         setCount(data.count);
       } catch (err) {
-        setError(err.response?.data?.message || 'Could not load orders');
+        setError(err.response?.data?.message || "Could not load orders");
       } finally {
         setLoading(false);
       }
@@ -90,7 +89,7 @@ function OrderListPage() {
     const next = { status, from, to, page: 1, ...changes };
 
     Object.keys(next).forEach((k) => {
-      if (!next[k] || next[k] === 'all') delete next[k];
+      if (!next[k] || next[k] === "all") delete next[k];
     });
 
     setSearchParams(next);
@@ -98,23 +97,23 @@ function OrderListPage() {
 
   const pageHandler = (n) => {
     setParam({ page: n });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: "smooth" });
   };
 
   const advance = async (order, nextStatus) => {
     const label = STATUS_META[nextStatus].label.toLowerCase();
 
     const warning =
-      nextStatus === 'shipped'
-        ? ' Stock will be reduced.'
-        : nextStatus === 'cancelled' && order.stockAdjusted
-        ? ' Stock will be returned.'
-        : '';
+      nextStatus === "shipped"
+        ? " Stock will be reduced."
+        : nextStatus === "cancelled" && order.stockAdjusted
+          ? " Stock will be returned."
+          : "";
 
     if (!window.confirm(`Mark this order as ${label}?${warning}`)) return;
 
     setUpdatingId(order._id);
-    setError('');
+    setError("");
 
     try {
       const { data } = await axios.put(`/api/orders/${order._id}/status`, {
@@ -123,7 +122,7 @@ function OrderListPage() {
 
       setOrders((prev) => prev.map((o) => (o._id === order._id ? data : o)));
     } catch (err) {
-      setError(err.response?.data?.message || 'Could not update this order');
+      setError(err.response?.data?.message || "Could not update this order");
     } finally {
       setUpdatingId(null);
     }
@@ -137,8 +136,8 @@ function OrderListPage() {
         <div>
           <h1 className="text-2xl font-bold">Orders</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            {loading ? 'Loading' : `${count} order${count === 1 ? '' : 's'}`}
-            {filtersActive && !loading && ' matching your filters'}
+            {loading ? "Loading" : `${count} order${count === 1 ? "" : "s"}`}
+            {filtersActive && !loading && " matching your filters"}
           </p>
         </div>
 
@@ -165,22 +164,22 @@ function OrderListPage() {
             value={status}
             onChange={(v) => setParam({ status: v })}
             options={[
-              { value: 'all', label: 'All orders' },
-              { value: 'open', label: 'Open orders' },
-              { value: 'pending', label: 'Pending' },
-              { value: 'confirmed', label: 'Confirmed' },
-              { value: 'processing', label: 'Processing' },
-              { value: 'shipped', label: 'Shipped' },
-              { value: 'delivered', label: 'Delivered' },
-              { value: 'cancelled', label: 'Cancelled' },
-              { value: 'unpaid', label: 'Unpaid' },
+              { value: "all", label: "All orders" },
+              { value: "open", label: "Open orders" },
+              { value: "pending", label: "Pending" },
+              { value: "confirmed", label: "Confirmed" },
+              { value: "processing", label: "Processing" },
+              { value: "shipped", label: "Shipped" },
+              { value: "delivered", label: "Delivered" },
+              { value: "cancelled", label: "Cancelled" },
+              { value: "unpaid", label: "Unpaid" },
             ]}
             className="w-40"
             align="right"
           />
 
           <a
-            href={`/api/orders/export${exportQuery ? `?${exportQuery}` : ''}`}
+            href={`/api/orders/export${exportQuery ? `?${exportQuery}` : ""}`}
             className="inline-flex items-center gap-1.5 border rounded-lg px-3 py-2.5 text-sm hover:bg-gray-50"
           >
             <Download size={15} />
@@ -216,12 +215,12 @@ function OrderListPage() {
         <div className="border rounded-lg py-16 text-center">
           <Inbox size={36} className="mx-auto text-gray-300" />
           <p className="mt-3 font-medium">
-            {filtersActive ? 'No orders match' : 'No orders yet'}
+            {filtersActive ? "No orders match" : "No orders yet"}
           </p>
           <p className="text-sm text-gray-500 mt-1">
             {filtersActive
-              ? 'Try a different filter or date range.'
-              : 'Orders will appear here as customers buy.'}
+              ? "Try a different filter or date range."
+              : "Orders will appear here as customers buy."}
           </p>
           {filtersActive && (
             <button
@@ -253,14 +252,14 @@ function OrderListPage() {
               <tbody>
                 {orders.map((order) => {
                   const options = NEXT[order.status] || [];
-                  const forward = options.find((s) => s !== 'cancelled');
+                  const forward = options.find((s) => s !== "cancelled");
                   const busy = updatingId === order._id;
 
                   return (
                     <tr key={order._id} className="border-t hover:bg-gray-50">
                       <td className="p-3">
                         <p className="font-medium">
-                          {order.user?.name || 'Deleted user'}
+                          {order.user?.name || "Deleted user"}
                         </p>
                         <p className="text-xs text-gray-500">
                           {order.shippingAddress?.city}
@@ -289,7 +288,7 @@ function OrderListPage() {
 
                       <td className="p-3">
                         <OrderStatus status={order.status} />
-                        {!order.isPaid && order.status !== 'cancelled' && (
+                        {!order.isPaid && order.status !== "cancelled" && (
                           <p className="text-xs text-gray-500 mt-1">Unpaid</p>
                         )}
                       </td>
@@ -315,7 +314,7 @@ function OrderListPage() {
                             )}
 
                             <button
-                              onClick={() => advance(order, 'cancelled')}
+                              onClick={() => advance(order, "cancelled")}
                               disabled={busy}
                               title="Cancel order"
                               className="p-1.5 rounded text-red-600 hover:bg-red-100 disabled:opacity-50 cursor-pointer"

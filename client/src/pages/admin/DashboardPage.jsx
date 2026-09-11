@@ -1,32 +1,13 @@
 import { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import {
-  LineChart,
-  Line,
-  BarChart,
-  Bar,
-  XAxis,
-  YAxis,
-  CartesianGrid,
-  Tooltip,
-  ResponsiveContainer,
-} from 'recharts';
-import {
-  Loader2,
-  AlertCircle,
-  TrendingUp,
-  ShoppingBag,
-  Users,
-  Package,
-  AlertTriangle,
-  ImageOff,
-  ChevronRight,
-} from 'lucide-react';
+import {LineChart,Line,BarChart,Bar,XAxis,YAxis,CartesianGrid,Tooltip,ResponsiveContainer,} from 'recharts';
+import {Loader2,AlertCircle,TrendingUp,ShoppingBag,Users,Package,AlertTriangle,ImageOff,ChevronRight,} from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import AdminNav from '../../components/AdminNav.jsx';
 import Dropdown from '../../components/Dropdown.jsx';
 import { formatPrice, formatDate } from '../../utils/format.js';
+import { usePageTitle } from "../../hooks/usePageTitle.js";
 
 function StatCard({ icon: Icon, label, value, sub, tone = 'default' }) {
   const tones = {
@@ -51,7 +32,6 @@ function StatCard({ icon: Icon, label, value, sub, tone = 'default' }) {
 function DashboardPage() {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
-
   const [days, setDays] = useState(30);
   const [summary, setSummary] = useState(null);
   const [revenue, setRevenue] = useState([]);
@@ -59,9 +39,9 @@ function DashboardPage() {
   const [byCategory, setByCategory] = useState([]);
   const [lowStock, setLowStock] = useState([]);
   const [recentOrders, setRecentOrders] = useState([]);
-
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
+  usePageTitle('Dashboard');
 
   useEffect(() => {
     if (!userInfo || !userInfo.isAdmin) navigate('/login');

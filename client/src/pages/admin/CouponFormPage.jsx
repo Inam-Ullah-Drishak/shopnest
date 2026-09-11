@@ -5,6 +5,7 @@ import { ArrowLeft, Loader2, AlertCircle, Shuffle } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext.jsx';
 import Dropdown from '../../components/Dropdown.jsx';
 import { formatPrice } from '../../utils/format.js';
+import { usePageTitle } from "../../hooks/usePageTitle.js";
 
 // Date inputs need yyyy-mm-dd, not an ISO timestamp
 const toDateInput = (value) =>
@@ -48,7 +49,7 @@ function CouponFormPage() {
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
-
+  usePageTitle(isEdit ? 'Edit coupon' : 'New coupon');
   const setField = (field, value) =>
     setForm((prev) => ({ ...prev, [field]: value }));
 

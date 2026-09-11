@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
 import {
   Loader2,
   AlertCircle,
@@ -10,23 +10,24 @@ import {
   Shield,
   Ban,
   ChevronRight,
-} from 'lucide-react';
-import { useAuth } from '../../context/AuthContext.jsx';
-import AdminNav from '../../components/AdminNav.jsx';
-import Dropdown from '../../components/Dropdown.jsx';
-import Pagination from '../../components/Pagination.jsx';
-import { formatPrice, formatDate } from '../../utils/format.js';
-import { PAGE_SIZE } from '../../utils/constants.js';
+} from "lucide-react";
+import { useAuth } from "../../context/AuthContext.jsx";
+import AdminNav from "../../components/AdminNav.jsx";
+import Dropdown from "../../components/Dropdown.jsx";
+import Pagination from "../../components/Pagination.jsx";
+import { formatPrice, formatDate } from "../../utils/format.js";
+import { PAGE_SIZE } from "../../utils/constants.js";
+import { usePageTitle } from "../../hooks/usePageTitle.js";
 
 function CustomerListPage() {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const keyword = searchParams.get('keyword') || '';
-  const role = searchParams.get('role') || 'all';
-  const sort = searchParams.get('sort') || 'newest';
-  const page = Number(searchParams.get('page')) || 1;
+  const keyword = searchParams.get("keyword") || "";
+  const role = searchParams.get("role") || "all";
+  const sort = searchParams.get("sort") || "newest";
+  const page = Number(searchParams.get("page")) || 1;
 
   const [searchInput, setSearchInput] = useState(keyword);
   const [lastKeyword, setLastKeyword] = useState(keyword);
@@ -39,14 +40,14 @@ function CustomerListPage() {
   const [customers, setCustomers] = useState([]);
   const [pages, setPages] = useState(1);
   const [count, setCount] = useState(0);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [busyId, setBusyId] = useState(null);
-
-  const filtersActive = keyword || role !== 'all' || sort !== 'newest';
+  usePageTitle("Customers");
+  const filtersActive = keyword || role !== "all" || sort !== "newest";
 
   useEffect(() => {
-    if (!userInfo || !userInfo.isAdmin) navigate('/login');
+    if (!userInfo || !userInfo.isAdmin) navigate("/login");
   }, [userInfo, navigate]);
 
   useEffect(() => {
@@ -54,7 +55,7 @@ function CustomerListPage() {
       setLoading(true);
 
       try {
-        const { data } = await axios.get('/api/customers', {
+        const { data } = await axios.get("/api/customers", {
           params: {
             keyword,
             role,
@@ -68,7 +69,7 @@ function CustomerListPage() {
         setPages(data.pages);
         setCount(data.count);
       } catch (err) {
-        setError(err.response?.data?.message || 'Could not load customers');
+        setError(err.response?.data?.message || "Could not load customers");
       } finally {
         setLoading(false);
       }
@@ -81,7 +82,7 @@ function CustomerListPage() {
     const next = { keyword, role, sort, page: 1, ...changes };
 
     Object.keys(next).forEach((k) => {
-      if (!next[k] || next[k] === 'all') delete next[k];
+      if (!next[k] || next[k] === "all") delete next[k];
     });
 
     setSearchParams(next);
@@ -89,7 +90,7 @@ function CustomerListPage() {
 
   const patch = (updated) =>
     setCustomers((prev) =>
-      prev.map((c) => (c._id === updated._id ? { ...c, ...updated } : c))
+      prev.map((c) => (c._id === updated._id ? { ...c, ...updated } : c)),
     );
 
   const roleHandler = async (customer) => {
@@ -99,13 +100,13 @@ function CustomerListPage() {
       !window.confirm(
         making
           ? `Give ${customer.name} full admin access?`
-          : `Remove admin access from ${customer.name}?`
+          : `Remove admin access from ${customer.name}?`,
       )
     )
       return;
 
     setBusyId(customer._id);
-    setError('');
+    setError("");
 
     try {
       const { data } = await axios.put(`/api/customers/${customer._id}/role`, {
@@ -114,7 +115,7 @@ function CustomerListPage() {
 
       patch(data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Could not change the role');
+      setError(err.response?.data?.message || "Could not change the role");
     } finally {
       setBusyId(null);
     }
@@ -127,13 +128,13 @@ function CustomerListPage() {
       !window.confirm(
         blocking
           ? `Suspend ${customer.name}? They will not be able to sign in.`
-          : `Restore access for ${customer.name}?`
+          : `Restore access for ${customer.name}?`,
       )
     )
       return;
 
     setBusyId(customer._id);
-    setError('');
+    setError("");
 
     try {
       const { data } = await axios.put(`/api/customers/${customer._id}/block`, {
@@ -142,7 +143,7 @@ function CustomerListPage() {
 
       patch(data);
     } catch (err) {
-      setError(err.response?.data?.message || 'Could not update this account');
+      setError(err.response?.data?.message || "Could not update this account");
     } finally {
       setBusyId(null);
     }
@@ -156,8 +157,8 @@ function CustomerListPage() {
         <div>
           <h1 className="text-2xl font-bold">Customers</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            {loading ? 'Loading' : `${count} account${count === 1 ? '' : 's'}`}
-            {filtersActive && !loading && ' matching your filters'}
+            {loading ? "Loading" : `${count} account${count === 1 ? "" : "s"}`}
+            {filtersActive && !loading && " matching your filters"}
           </p>
         </div>
       </div>
@@ -187,10 +188,10 @@ function CustomerListPage() {
           value={role}
           onChange={(v) => setParam({ role: v })}
           options={[
-            { value: 'all', label: 'Everyone' },
-            { value: 'customer', label: 'Customers' },
-            { value: 'admin', label: 'Admins' },
-            { value: 'blocked', label: 'Suspended' },
+            { value: "all", label: "Everyone" },
+            { value: "customer", label: "Customers" },
+            { value: "admin", label: "Admins" },
+            { value: "blocked", label: "Suspended" },
           ]}
           className="w-40"
         />
@@ -199,11 +200,11 @@ function CustomerListPage() {
           value={sort}
           onChange={(v) => setParam({ sort: v })}
           options={[
-            { value: 'newest', label: 'Newest first' },
-            { value: 'oldest', label: 'Oldest first' },
-            { value: 'name-asc', label: 'Name A–Z' },
-            { value: 'spend-desc', label: 'Highest spend' },
-            { value: 'orders-desc', label: 'Most orders' },
+            { value: "newest", label: "Newest first" },
+            { value: "oldest", label: "Oldest first" },
+            { value: "name-asc", label: "Name A–Z" },
+            { value: "spend-desc", label: "Highest spend" },
+            { value: "orders-desc", label: "Most orders" },
           ]}
           className="w-44"
           align="right"
@@ -237,12 +238,12 @@ function CustomerListPage() {
         <div className="border rounded-lg py-16 text-center">
           <Users size={36} className="mx-auto text-gray-300" />
           <p className="mt-3 font-medium">
-            {filtersActive ? 'No accounts match' : 'No customers yet'}
+            {filtersActive ? "No accounts match" : "No customers yet"}
           </p>
           <p className="text-sm text-gray-500 mt-1">
             {filtersActive
-              ? 'Try a different search or filter.'
-              : 'Accounts appear here as people register.'}
+              ? "Try a different search or filter."
+              : "Accounts appear here as people register."}
           </p>
         </div>
       ) : (
@@ -266,7 +267,10 @@ function CustomerListPage() {
                   const busy = busyId === customer._id;
 
                   return (
-                    <tr key={customer._id} className="border-t hover:bg-gray-50">
+                    <tr
+                      key={customer._id}
+                      className="border-t hover:bg-gray-50"
+                    >
                       <td className="p-3">
                         <div className="flex items-center gap-3">
                           <span className="w-9 h-9 shrink-0 rounded-full bg-gray-100 flex items-center justify-center text-sm font-medium text-gray-600">
@@ -330,13 +334,13 @@ function CustomerListPage() {
                                 disabled={busy}
                                 title={
                                   customer.isAdmin
-                                    ? 'Remove admin access'
-                                    : 'Make admin'
+                                    ? "Remove admin access"
+                                    : "Make admin"
                                 }
                                 className={`p-2 rounded disabled:opacity-50 cursor-pointer ${
                                   customer.isAdmin
-                                    ? 'text-blue-600 hover:bg-blue-100'
-                                    : 'text-gray-400 hover:bg-gray-200'
+                                    ? "text-blue-600 hover:bg-blue-100"
+                                    : "text-gray-400 hover:bg-gray-200"
                                 }`}
                               >
                                 {busy ? (
@@ -351,15 +355,15 @@ function CustomerListPage() {
                                 disabled={busy || customer.isAdmin}
                                 title={
                                   customer.isAdmin
-                                    ? 'Remove admin access first'
+                                    ? "Remove admin access first"
                                     : customer.isBlocked
-                                    ? 'Restore access'
-                                    : 'Suspend account'
+                                      ? "Restore access"
+                                      : "Suspend account"
                                 }
                                 className={`p-2 rounded disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer ${
                                   customer.isBlocked
-                                    ? 'text-red-600 hover:bg-red-100'
-                                    : 'text-gray-400 hover:bg-red-100 hover:text-red-600'
+                                    ? "text-red-600 hover:bg-red-100"
+                                    : "text-gray-400 hover:bg-red-100 hover:text-red-600"
                                 }`}
                               >
                                 <Ban size={16} />

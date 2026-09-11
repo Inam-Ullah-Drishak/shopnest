@@ -25,20 +25,21 @@ import Pagination from '../../components/Pagination.jsx';
 import ProductImportModal from '../../components/admin/ProductImportModal.jsx';
 import { formatPrice } from '../../utils/format.js';
 import { PAGE_SIZE } from '../../utils/constants.js';
+import { usePageTitle } from "../../hooks/usePageTitle.js";
 
 function ProductListPage() {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
-
   const keyword = searchParams.get('keyword') || '';
   const category = searchParams.get('category') || 'All';
   const stock = searchParams.get('stock') || 'all';
   const sort = searchParams.get('sort') || 'newest';
   const page = Number(searchParams.get('page')) || 1;
-
   const [searchInput, setSearchInput] = useState(keyword);
   const [lastKeyword, setLastKeyword] = useState(keyword);
+
+  usePageTitle('Products');
 
   if (keyword !== lastKeyword) {
     setLastKeyword(keyword);

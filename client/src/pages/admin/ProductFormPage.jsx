@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import {
   ArrowLeft,
   Upload,
@@ -10,40 +10,39 @@ import {
   Loader2,
   AlertCircle,
   Link2,
-} from 'lucide-react';
-import { useAuth } from '../../context/AuthContext.jsx';
-import VariantEditor from '../../components/admin/VariantEditor.jsx';
-import Dropdown from '../../components/Dropdown.jsx';
-import { uploadImages, thumb } from '../../utils/upload.js';
+} from "lucide-react";
+import { useAuth } from "../../context/AuthContext.jsx";
+import VariantEditor from "../../components/admin/VariantEditor.jsx";
+import Dropdown from "../../components/Dropdown.jsx";
+import { uploadImages, thumb } from "../../utils/upload.js";
+import { usePageTitle } from "../../hooks/usePageTitle.js";
 
 function ProductFormPage() {
   const { id } = useParams();
   const isEdit = Boolean(id);
-
   const { userInfo } = useAuth();
   const navigate = useNavigate();
-
   const [form, setForm] = useState({
-    name: '',
-    description: '',
-    price: '',
-    compareAtPrice: '',
-    category: '',
-    countInStock: '',
-    status: 'active',
+    name: "",
+    description: "",
+    price: "",
+    compareAtPrice: "",
+    category: "",
+    countInStock: "",
+    status: "active",
     isFeatured: false,
   });
-
+  usePageTitle(isEdit ? "Edit product" : "New product");
   const [images, setImages] = useState([]);
   const [tags, setTags] = useState([]);
-  const [tagInput, setTagInput] = useState('');
+  const [tagInput, setTagInput] = useState("");
   const [optionTypes, setOptionTypes] = useState([]);
   const [variants, setVariants] = useState([]);
 
-  const [urlInput, setUrlInput] = useState('');
+  const [urlInput, setUrlInput] = useState("");
   const [categories, setCategories] = useState([]);
 
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
@@ -54,12 +53,12 @@ function ProductFormPage() {
     setForm((prev) => ({ ...prev, [field]: value }));
 
   useEffect(() => {
-    if (!userInfo || !userInfo.isAdmin) navigate('/login');
+    if (!userInfo || !userInfo.isAdmin) navigate("/login");
   }, [userInfo, navigate]);
 
   useEffect(() => {
     axios
-      .get('/api/categories')
+      .get("/api/categories")
       .then(({ data }) => setCategories(data))
       .catch(() => {});
   }, []);
@@ -75,10 +74,10 @@ function ProductFormPage() {
           name: data.name,
           description: data.description,
           price: data.price,
-          compareAtPrice: data.compareAtPrice ?? '',
-          category: data.categoryName || data.category?.name || '',
+          compareAtPrice: data.compareAtPrice ?? "",
+          category: data.categoryName || data.category?.name || "",
           countInStock: data.countInStock,
-          status: data.status || 'active',
+          status: data.status || "active",
           isFeatured: Boolean(data.isFeatured),
         });
 
@@ -89,20 +88,20 @@ function ProductFormPage() {
           (data.optionTypes || []).map((t) => ({
             name: t.name,
             values: [...t.values],
-          }))
+          })),
         );
 
         setVariants(
           (data.variants || []).map((v) => ({
             options: v.options.map((o) => ({ name: o.name, value: o.value })),
-            sku: v.sku || '',
+            sku: v.sku || "",
             price: v.price,
             countInStock: v.countInStock,
-            image: v.image || '',
-          }))
+            image: v.image || "",
+          })),
         );
       } catch (err) {
-        setError(err.response?.data?.message || 'Could not load this product');
+        setError(err.response?.data?.message || "Could not load this product");
       } finally {
         setLoading(false);
       }
@@ -115,20 +114,20 @@ function ProductFormPage() {
     const files = Array.from(e.target.files);
     if (files.length === 0) return;
 
-    setError('');
+    setError("");
     setUploading(true);
 
     try {
       // One request for all of them; the server uploads in parallel
-      const urls = await uploadImages(files, 'products');
+      const urls = await uploadImages(files, "products");
       setImages((prev) => [...prev, ...urls]);
     } catch (err) {
       setError(
-        err.response?.data?.message || 'Upload failed. Try another file.'
+        err.response?.data?.message || "Upload failed. Try another file.",
       );
     } finally {
       setUploading(false);
-      e.target.value = '';
+      e.target.value = "";
     }
   };
 
@@ -137,13 +136,13 @@ function ProductFormPage() {
     if (!url) return;
 
     if (images.includes(url)) {
-      setError('That image is already added');
+      setError("That image is already added");
       return;
     }
 
     setImages((prev) => [...prev, url]);
-    setUrlInput('');
-    setError('');
+    setUrlInput("");
+    setError("");
   };
 
   const removeImage = (index) => {
@@ -151,7 +150,7 @@ function ProductFormPage() {
     setImages((prev) => prev.filter((_, i) => i !== index));
 
     setVariants((prev) =>
-      prev.map((v) => (v.image === removed ? { ...v, image: '' } : v))
+      prev.map((v) => (v.image === removed ? { ...v, image: "" } : v)),
     );
   };
 
@@ -161,20 +160,20 @@ function ProductFormPage() {
   const addTag = () => {
     const tag = tagInput.trim().toLowerCase();
     if (!tag || tags.includes(tag)) {
-      setTagInput('');
+      setTagInput("");
       return;
     }
 
     setTags((prev) => [...prev, tag]);
-    setTagInput('');
+    setTagInput("");
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
 
     if (hasVariants && variants.some((v) => v.price <= 0)) {
-      setError('Every variant needs a price above zero');
+      setError("Every variant needs a price above zero");
       return;
     }
 
@@ -189,7 +188,7 @@ function ProductFormPage() {
       description: form.description,
       price: basePrice,
       compareAtPrice:
-        form.compareAtPrice === '' ? null : Number(form.compareAtPrice),
+        form.compareAtPrice === "" ? null : Number(form.compareAtPrice),
       category: form.category,
       countInStock: hasVariants
         ? variants.reduce((sum, v) => sum + v.countInStock, 0)
@@ -208,12 +207,12 @@ function ProductFormPage() {
       if (isEdit) {
         await axios.put(`/api/products/${id}`, payload);
       } else {
-        await axios.post('/api/products', payload);
+        await axios.post("/api/products", payload);
       }
 
-      navigate('/admin/products');
+      navigate("/admin/products");
     } catch (err) {
-      setError(err.response?.data?.message || 'Could not save this product');
+      setError(err.response?.data?.message || "Could not save this product");
       setSaving(false);
     }
   };
@@ -229,7 +228,7 @@ function ProductFormPage() {
 
   // Nested categories, indented so the tree is readable in a flat dropdown
   const categoryOptions = [
-    { value: '', label: 'Choose a category' },
+    { value: "", label: "Choose a category" },
     ...categories
       .filter((c) => !c.parent)
       .flatMap((parent) => [
@@ -254,7 +253,7 @@ function ProductFormPage() {
       </Link>
 
       <h1 className="text-2xl font-bold mt-4 mb-6">
-        {isEdit ? 'Edit product' : 'New product'}
+        {isEdit ? "Edit product" : "New product"}
       </h1>
 
       {error && (
@@ -322,8 +321,8 @@ function ProductFormPage() {
           <label
             className={`inline-flex items-center gap-2 border rounded-lg px-4 py-2 text-sm ${
               uploading
-                ? 'opacity-50 cursor-wait'
-                : 'cursor-pointer hover:bg-gray-50'
+                ? "opacity-50 cursor-wait"
+                : "cursor-pointer hover:bg-gray-50"
             }`}
           >
             {uploading ? (
@@ -331,7 +330,7 @@ function ProductFormPage() {
             ) : (
               <Upload size={16} />
             )}
-            {uploading ? 'Uploading' : 'Upload images'}
+            {uploading ? "Uploading" : "Upload images"}
             <input
               type="file"
               accept="image/jpeg,image/png,image/webp"
@@ -353,7 +352,7 @@ function ProductFormPage() {
                 value={urlInput}
                 onChange={(e) => setUrlInput(e.target.value)}
                 onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
+                  if (e.key === "Enter") {
                     e.preventDefault();
                     addUrlHandler();
                   }
@@ -386,7 +385,7 @@ function ProductFormPage() {
             id="name"
             type="text"
             value={form.name}
-            onChange={(e) => setField('name', e.target.value)}
+            onChange={(e) => setField("name", e.target.value)}
             className="w-full border rounded-lg p-2.5"
             required
           />
@@ -402,7 +401,7 @@ function ProductFormPage() {
           <textarea
             id="description"
             value={form.description}
-            onChange={(e) => setField('description', e.target.value)}
+            onChange={(e) => setField("description", e.target.value)}
             rows="4"
             className="w-full border rounded-lg p-2.5"
             required
@@ -414,7 +413,7 @@ function ProductFormPage() {
             <p className="block mb-1 font-medium text-sm">Category</p>
             <Dropdown
               value={form.category}
-              onChange={(v) => setField('category', v)}
+              onChange={(v) => setField("category", v)}
               options={categoryOptions}
               placeholder="Choose a category"
             />
@@ -424,10 +423,10 @@ function ProductFormPage() {
             <p className="block mb-1 font-medium text-sm">Status</p>
             <Dropdown
               value={form.status}
-              onChange={(v) => setField('status', v)}
+              onChange={(v) => setField("status", v)}
               options={[
-                { value: 'active', label: 'Active — visible in store' },
-                { value: 'draft', label: 'Draft — hidden' },
+                { value: "active", label: "Active — visible in store" },
+                { value: "draft", label: "Draft — hidden" },
               ]}
             />
           </div>
@@ -465,7 +464,7 @@ function ProductFormPage() {
               value={tagInput}
               onChange={(e) => setTagInput(e.target.value)}
               onKeyDown={(e) => {
-                if (e.key === 'Enter') {
+                if (e.key === "Enter") {
                   e.preventDefault();
                   addTag();
                 }
@@ -500,7 +499,7 @@ function ProductFormPage() {
                   ? Math.min(...variants.map((v) => v.price))
                   : form.price
               }
-              onChange={(e) => setField('price', e.target.value)}
+              onChange={(e) => setField("price", e.target.value)}
               disabled={hasVariants}
               className="w-full border rounded-lg p-2.5 disabled:bg-gray-100 disabled:text-gray-500"
               required={!hasVariants}
@@ -521,7 +520,7 @@ function ProductFormPage() {
               type="number"
               min="0"
               value={form.compareAtPrice}
-              onChange={(e) => setField('compareAtPrice', e.target.value)}
+              onChange={(e) => setField("compareAtPrice", e.target.value)}
               placeholder="Optional"
               className="w-full border rounded-lg p-2.5"
             />
@@ -543,7 +542,7 @@ function ProductFormPage() {
                   ? variants.reduce((sum, v) => sum + v.countInStock, 0)
                   : form.countInStock
               }
-              onChange={(e) => setField('countInStock', e.target.value)}
+              onChange={(e) => setField("countInStock", e.target.value)}
               disabled={hasVariants}
               className="w-full border rounded-lg p-2.5 disabled:bg-gray-100 disabled:text-gray-500"
               required={!hasVariants}
@@ -560,7 +559,7 @@ function ProductFormPage() {
           <input
             type="checkbox"
             checked={form.isFeatured}
-            onChange={(e) => setField('isFeatured', e.target.checked)}
+            onChange={(e) => setField("isFeatured", e.target.checked)}
             className="w-4 h-4 cursor-pointer"
           />
           <span className="text-sm">Feature this product on the home page</span>
@@ -582,7 +581,7 @@ function ProductFormPage() {
             className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 disabled:opacity-50 cursor-pointer"
           >
             {saving && <Loader2 size={16} className="animate-spin" />}
-            {isEdit ? 'Save changes' : 'Create product'}
+            {isEdit ? "Save changes" : "Create product"}
           </button>
 
           <Link

@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Link, useParams, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { Link, useParams, useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   ArrowLeft,
   Loader2,
@@ -14,11 +14,12 @@ import {
   Star,
   Package,
   ChevronRight,
-} from 'lucide-react';
-import { useAuth } from '../../context/AuthContext.jsx';
-import AdminNav from '../../components/AdminNav.jsx';
-import OrderStatus from '../../components/OrderStatus.jsx';
-import { formatPrice, formatDate } from '../../utils/format.js';
+} from "lucide-react";
+import { useAuth } from "../../context/AuthContext.jsx";
+import AdminNav from "../../components/AdminNav.jsx";
+import OrderStatus from "../../components/OrderStatus.jsx";
+import { formatPrice, formatDate } from "../../utils/format.js";
+import { usePageTitle } from "../../hooks/usePageTitle.js";
 
 function Stat({ icon: Icon, label, value }) {
   return (
@@ -38,12 +39,12 @@ function CustomerDetailPage() {
   const navigate = useNavigate();
 
   const [data, setData] = useState(null);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [busy, setBusy] = useState(false);
-
+  usePageTitle(data?.user?.name);
   useEffect(() => {
-    if (!userInfo || !userInfo.isAdmin) navigate('/login');
+    if (!userInfo || !userInfo.isAdmin) navigate("/login");
   }, [userInfo, navigate]);
 
   useEffect(() => {
@@ -52,7 +53,7 @@ function CustomerDetailPage() {
         const { data: res } = await axios.get(`/api/customers/${id}`);
         setData(res);
       } catch (err) {
-        setError(err.response?.data?.message || 'Could not load this customer');
+        setError(err.response?.data?.message || "Could not load this customer");
       } finally {
         setLoading(false);
       }
@@ -71,13 +72,13 @@ function CustomerDetailPage() {
       !window.confirm(
         making
           ? `Give ${data.user.name} full admin access?`
-          : `Remove admin access from ${data.user.name}?`
+          : `Remove admin access from ${data.user.name}?`,
       )
     )
       return;
 
     setBusy(true);
-    setError('');
+    setError("");
 
     try {
       const { data: res } = await axios.put(`/api/customers/${id}/role`, {
@@ -86,7 +87,7 @@ function CustomerDetailPage() {
 
       applyUser(res);
     } catch (err) {
-      setError(err.response?.data?.message || 'Could not change the role');
+      setError(err.response?.data?.message || "Could not change the role");
     } finally {
       setBusy(false);
     }
@@ -99,13 +100,13 @@ function CustomerDetailPage() {
       !window.confirm(
         blocking
           ? `Suspend ${data.user.name}? They will not be able to sign in.`
-          : `Restore access for ${data.user.name}?`
+          : `Restore access for ${data.user.name}?`,
       )
     )
       return;
 
     setBusy(true);
-    setError('');
+    setError("");
 
     try {
       const { data: res } = await axios.put(`/api/customers/${id}/block`, {
@@ -114,7 +115,7 @@ function CustomerDetailPage() {
 
       applyUser(res);
     } catch (err) {
-      setError(err.response?.data?.message || 'Could not update this account');
+      setError(err.response?.data?.message || "Could not update this account");
     } finally {
       setBusy(false);
     }
@@ -216,18 +217,18 @@ function CustomerDetailPage() {
               ) : (
                 <Shield size={15} />
               )}
-              {user.isAdmin ? 'Remove admin' : 'Make admin'}
+              {user.isAdmin ? "Remove admin" : "Make admin"}
             </button>
 
             <button
               type="button"
               onClick={blockHandler}
               disabled={busy || user.isAdmin}
-              title={user.isAdmin ? 'Remove admin access first' : undefined}
+              title={user.isAdmin ? "Remove admin access first" : undefined}
               className="inline-flex items-center gap-2 border border-red-200 text-red-600 rounded-lg px-4 py-2.5 text-sm hover:bg-red-50 disabled:opacity-30 disabled:cursor-not-allowed cursor-pointer"
             >
               <Ban size={15} />
-              {user.isBlocked ? 'Restore access' : 'Suspend'}
+              {user.isBlocked ? "Restore access" : "Suspend"}
             </button>
           </div>
         )}
@@ -296,9 +297,9 @@ function CustomerDetailPage() {
                       {formatPrice(order.totalPrice)}
                     </p>
                     <p className="text-xs text-gray-500">
-                      {formatDate(order.createdAt)} ·{' '}
-                      {order.orderItems.length} item
-                      {order.orderItems.length > 1 ? 's' : ''}
+                      {formatDate(order.createdAt)} · {order.orderItems.length}{" "}
+                      item
+                      {order.orderItems.length > 1 ? "s" : ""}
                       {order.couponCode && ` · ${order.couponCode}`}
                     </p>
                   </div>

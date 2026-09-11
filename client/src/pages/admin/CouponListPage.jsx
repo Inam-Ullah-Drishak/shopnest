@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate, useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+import axios from "axios";
 import {
   Plus,
   Pencil,
@@ -10,37 +10,38 @@ import {
   Ticket,
   Copy,
   Check,
-} from 'lucide-react';
-import { useAuth } from '../../context/AuthContext.jsx';
-import AdminNav from '../../components/AdminNav.jsx';
-import Dropdown from '../../components/Dropdown.jsx';
-import Pagination from '../../components/Pagination.jsx';
-import { formatPrice, formatDate } from '../../utils/format.js';
-import { PAGE_SIZE } from '../../utils/constants.js';
+} from "lucide-react";
+import { useAuth } from "../../context/AuthContext.jsx";
+import AdminNav from "../../components/AdminNav.jsx";
+import Dropdown from "../../components/Dropdown.jsx";
+import Pagination from "../../components/Pagination.jsx";
+import { formatPrice, formatDate } from "../../utils/format.js";
+import { PAGE_SIZE } from "../../utils/constants.js";
+import { usePageTitle } from "../../hooks/usePageTitle.js";
 
 // A coupon can be inactive for several reasons; say which
 const statusOf = (coupon) => {
   const now = new Date();
 
-  if (!coupon.isActive) return { label: 'Paused', tone: 'gray' };
+  if (!coupon.isActive) return { label: "Paused", tone: "gray" };
 
   if (coupon.expiresAt && new Date(coupon.expiresAt) < now)
-    return { label: 'Expired', tone: 'red' };
+    return { label: "Expired", tone: "red" };
 
   if (coupon.startsAt && new Date(coupon.startsAt) > now)
-    return { label: 'Scheduled', tone: 'blue' };
+    return { label: "Scheduled", tone: "blue" };
 
   if (coupon.usageLimit !== null && coupon.usedCount >= coupon.usageLimit)
-    return { label: 'Used up', tone: 'red' };
+    return { label: "Used up", tone: "red" };
 
-  return { label: 'Live', tone: 'green' };
+  return { label: "Live", tone: "green" };
 };
 
 const tones = {
-  green: 'bg-green-100 text-green-700',
-  red: 'bg-red-100 text-red-700',
-  blue: 'bg-blue-100 text-blue-700',
-  gray: 'bg-gray-100 text-gray-600',
+  green: "bg-green-100 text-green-700",
+  red: "bg-red-100 text-red-700",
+  blue: "bg-blue-100 text-blue-700",
+  gray: "bg-gray-100 text-gray-600",
 };
 
 function CouponListPage() {
@@ -48,19 +49,19 @@ function CouponListPage() {
   const navigate = useNavigate();
   const [searchParams, setSearchParams] = useSearchParams();
 
-  const status = searchParams.get('status') || 'all';
-  const page = Number(searchParams.get('page')) || 1;
+  const status = searchParams.get("status") || "all";
+  const page = Number(searchParams.get("page")) || 1;
 
   const [coupons, setCoupons] = useState([]);
   const [pages, setPages] = useState(1);
   const [count, setCount] = useState(0);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
-  const [copied, setCopied] = useState('');
-
+  const [copied, setCopied] = useState("");
+  usePageTitle("Coupons");
   useEffect(() => {
-    if (!userInfo || !userInfo.isAdmin) navigate('/login');
+    if (!userInfo || !userInfo.isAdmin) navigate("/login");
   }, [userInfo, navigate]);
 
   useEffect(() => {
@@ -68,7 +69,7 @@ function CouponListPage() {
       setLoading(true);
 
       try {
-        const { data } = await axios.get('/api/coupons', {
+        const { data } = await axios.get("/api/coupons", {
           params: { status, pageNumber: page, pageSize: PAGE_SIZE },
         });
 
@@ -76,7 +77,7 @@ function CouponListPage() {
         setPages(data.pages);
         setCount(data.count);
       } catch (err) {
-        setError(err.response?.data?.message || 'Could not load coupons');
+        setError(err.response?.data?.message || "Could not load coupons");
       } finally {
         setLoading(false);
       }
@@ -89,7 +90,7 @@ function CouponListPage() {
     const next = { status, page: 1, ...changes };
 
     Object.keys(next).forEach((k) => {
-      if (!next[k] || next[k] === 'all') delete next[k];
+      if (!next[k] || next[k] === "all") delete next[k];
     });
 
     setSearchParams(next);
@@ -99,9 +100,9 @@ function CouponListPage() {
     try {
       await navigator.clipboard.writeText(code);
       setCopied(code);
-      setTimeout(() => setCopied(''), 1500);
+      setTimeout(() => setCopied(""), 1500);
     } catch {
-      setError('Could not copy to clipboard');
+      setError("Could not copy to clipboard");
     }
   };
 
@@ -109,14 +110,14 @@ function CouponListPage() {
     if (!window.confirm(`Delete "${coupon.code}"?`)) return;
 
     setDeletingId(coupon._id);
-    setError('');
+    setError("");
 
     try {
       await axios.delete(`/api/coupons/${coupon._id}`);
       setCoupons((prev) => prev.filter((c) => c._id !== coupon._id));
       setCount((c) => c - 1);
     } catch (err) {
-      setError(err.response?.data?.message || 'Could not delete this coupon');
+      setError(err.response?.data?.message || "Could not delete this coupon");
     } finally {
       setDeletingId(null);
     }
@@ -130,7 +131,7 @@ function CouponListPage() {
         <div>
           <h1 className="text-2xl font-bold">Coupons</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            {loading ? 'Loading' : `${count} code${count === 1 ? '' : 's'}`}
+            {loading ? "Loading" : `${count} code${count === 1 ? "" : "s"}`}
           </p>
         </div>
 
@@ -139,9 +140,9 @@ function CouponListPage() {
             value={status}
             onChange={(v) => setParam({ status: v })}
             options={[
-              { value: 'all', label: 'All coupons' },
-              { value: 'active', label: 'Active' },
-              { value: 'inactive', label: 'Paused' },
+              { value: "all", label: "All coupons" },
+              { value: "active", label: "Active" },
+              { value: "inactive", label: "Paused" },
             ]}
             className="w-40"
             align="right"
@@ -233,7 +234,7 @@ function CouponListPage() {
                       </td>
 
                       <td className="p-3 whitespace-nowrap">
-                        {coupon.type === 'percent'
+                        {coupon.type === "percent"
                           ? `${coupon.value}%`
                           : formatPrice(coupon.value)}
 
@@ -258,7 +259,8 @@ function CouponListPage() {
 
                       <td className="p-3 text-gray-600 whitespace-nowrap">
                         {coupon.usedCount}
-                        {coupon.usageLimit !== null && ` / ${coupon.usageLimit}`}
+                        {coupon.usageLimit !== null &&
+                          ` / ${coupon.usageLimit}`}
                       </td>
 
                       <td className="p-3">
@@ -302,7 +304,11 @@ function CouponListPage() {
             </table>
           </div>
 
-          <Pagination page={page} pages={pages} onChange={(n) => setParam({ page: n })} />
+          <Pagination
+            page={page}
+            pages={pages}
+            onChange={(n) => setParam({ page: n })}
+          />
         </>
       )}
     </div>

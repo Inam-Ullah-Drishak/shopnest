@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { useParams, useNavigate, Link } from 'react-router-dom';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { useParams, useNavigate, Link } from "react-router-dom";
+import axios from "axios";
 import {
   ArrowLeft,
   Loader2,
@@ -11,9 +11,10 @@ import {
   ImageOff,
   Upload,
   Link2,
-} from 'lucide-react';
-import { useAuth } from '../../context/AuthContext.jsx';
-import { formatPrice } from '../../utils/format.js';
+} from "lucide-react";
+import { useAuth } from "../../context/AuthContext.jsx";
+import { formatPrice } from "../../utils/format.js";
+import { usePageTitle } from "../../hooks/usePageTitle.js";
 
 function CollectionFormPage() {
   const { id } = useParams();
@@ -23,29 +24,29 @@ function CollectionFormPage() {
   const navigate = useNavigate();
 
   const [form, setForm] = useState({
-    title: '',
-    description: '',
-    image: '',
+    title: "",
+    description: "",
+    image: "",
     isPublished: true,
     sortOrder: 0,
   });
 
   const [selected, setSelected] = useState([]); // full product objects
-  const [search, setSearch] = useState('');
+  const [search, setSearch] = useState("");
   const [results, setResults] = useState([]);
   const [searching, setSearching] = useState(false);
 
-  const [urlInput, setUrlInput] = useState('');
-  const [error, setError] = useState('');
+  const [urlInput, setUrlInput] = useState("");
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(isEdit);
   const [saving, setSaving] = useState(false);
   const [uploading, setUploading] = useState(false);
-
+  usePageTitle(isEdit ? "Edit collection" : "New collection");
   const setField = (field, value) =>
     setForm((prev) => ({ ...prev, [field]: value }));
 
   useEffect(() => {
-    if (!userInfo || !userInfo.isAdmin) navigate('/login');
+    if (!userInfo || !userInfo.isAdmin) navigate("/login");
   }, [userInfo, navigate]);
 
   useEffect(() => {
@@ -57,8 +58,8 @@ function CollectionFormPage() {
 
         setForm({
           title: data.title,
-          description: data.description || '',
-          image: data.image || '',
+          description: data.description || "",
+          image: data.image || "",
           isPublished: data.isPublished,
           sortOrder: data.sortOrder || 0,
         });
@@ -66,7 +67,7 @@ function CollectionFormPage() {
         setSelected(data.products || []);
       } catch (err) {
         setError(
-          err.response?.data?.message || 'Could not load this collection'
+          err.response?.data?.message || "Could not load this collection",
         );
       } finally {
         setLoading(false);
@@ -76,7 +77,7 @@ function CollectionFormPage() {
     fetchCollection();
   }, [id, isEdit]);
 
-    // Debounced product search — waits for a pause in typing
+  // Debounced product search — waits for a pause in typing
   useEffect(() => {
     const term = search.trim();
 
@@ -90,7 +91,7 @@ function CollectionFormPage() {
       setSearching(true);
 
       try {
-        const { data } = await axios.get('/api/products', {
+        const { data } = await axios.get("/api/products", {
           params: { keyword: term, pageSize: 10 },
         });
         setResults(data.products);
@@ -117,27 +118,27 @@ function CollectionFormPage() {
     if (!file) return;
 
     const formData = new FormData();
-    formData.append('image', file);
+    formData.append("image", file);
 
-    setError('');
+    setError("");
     setUploading(true);
 
     try {
-      const { data } = await axios.post('/api/upload', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+      const { data } = await axios.post("/api/upload", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
       });
-      setField('image', data.image);
+      setField("image", data.image);
     } catch (err) {
-      setError(err.response?.data?.message || 'Upload failed');
+      setError(err.response?.data?.message || "Upload failed");
     } finally {
       setUploading(false);
-      e.target.value = '';
+      e.target.value = "";
     }
   };
 
   const submitHandler = async (e) => {
     e.preventDefault();
-    setError('');
+    setError("");
     setSaving(true);
 
     const payload = {
@@ -153,12 +154,12 @@ function CollectionFormPage() {
       if (isEdit) {
         await axios.put(`/api/collections/${id}`, payload);
       } else {
-        await axios.post('/api/collections', payload);
+        await axios.post("/api/collections", payload);
       }
 
-      navigate('/admin/collections');
+      navigate("/admin/collections");
     } catch (err) {
-      setError(err.response?.data?.message || 'Could not save this collection');
+      setError(err.response?.data?.message || "Could not save this collection");
       setSaving(false);
     }
   };
@@ -183,7 +184,7 @@ function CollectionFormPage() {
       </Link>
 
       <h1 className="text-2xl font-bold mt-4 mb-6">
-        {isEdit ? 'Edit collection' : 'New collection'}
+        {isEdit ? "Edit collection" : "New collection"}
       </h1>
 
       {error && (
@@ -202,7 +203,7 @@ function CollectionFormPage() {
             id="title"
             type="text"
             value={form.title}
-            onChange={(e) => setField('title', e.target.value)}
+            onChange={(e) => setField("title", e.target.value)}
             placeholder="Summer Sale"
             className="w-full border rounded-lg p-2.5"
             required
@@ -219,7 +220,7 @@ function CollectionFormPage() {
           <textarea
             id="description"
             value={form.description}
-            onChange={(e) => setField('description', e.target.value)}
+            onChange={(e) => setField("description", e.target.value)}
             rows="3"
             placeholder="Shown at the top of the collection page."
             className="w-full border rounded-lg p-2.5"
@@ -246,8 +247,8 @@ function CollectionFormPage() {
               <label
                 className={`inline-flex items-center gap-2 border rounded-lg px-4 py-2 text-sm ${
                   uploading
-                    ? 'opacity-50 cursor-wait'
-                    : 'cursor-pointer hover:bg-gray-50'
+                    ? "opacity-50 cursor-wait"
+                    : "cursor-pointer hover:bg-gray-50"
                 }`}
               >
                 {uploading ? (
@@ -255,7 +256,7 @@ function CollectionFormPage() {
                 ) : (
                   <Upload size={16} />
                 )}
-                {uploading ? 'Uploading' : 'Upload'}
+                {uploading ? "Uploading" : "Upload"}
                 <input
                   type="file"
                   accept="image/jpeg,image/png,image/webp"
@@ -284,8 +285,8 @@ function CollectionFormPage() {
                   type="button"
                   onClick={() => {
                     if (urlInput.trim()) {
-                      setField('image', urlInput.trim());
-                      setUrlInput('');
+                      setField("image", urlInput.trim());
+                      setUrlInput("");
                     }
                   }}
                   className="border rounded-lg px-4 text-sm hover:bg-gray-50 cursor-pointer"
@@ -297,7 +298,7 @@ function CollectionFormPage() {
               {form.image && (
                 <button
                   type="button"
-                  onClick={() => setField('image', '')}
+                  onClick={() => setField("image", "")}
                   className="text-sm text-red-600 hover:text-red-800 cursor-pointer"
                 >
                   Remove image
@@ -312,7 +313,7 @@ function CollectionFormPage() {
             <p className="font-medium text-sm">
               Products
               <span className="text-gray-500 font-normal">
-                {' '}
+                {" "}
                 · {selected.length} selected
               </span>
             </p>
@@ -432,7 +433,7 @@ function CollectionFormPage() {
               id="order"
               type="number"
               value={form.sortOrder}
-              onChange={(e) => setField('sortOrder', e.target.value)}
+              onChange={(e) => setField("sortOrder", e.target.value)}
               className="w-full border rounded-lg p-2.5"
             />
             <p className="text-xs text-gray-500 mt-1">
@@ -445,7 +446,7 @@ function CollectionFormPage() {
               <input
                 type="checkbox"
                 checked={form.isPublished}
-                onChange={(e) => setField('isPublished', e.target.checked)}
+                onChange={(e) => setField("isPublished", e.target.checked)}
                 className="w-4 h-4 cursor-pointer"
               />
               <span className="text-sm">Visible to customers</span>
@@ -460,7 +461,7 @@ function CollectionFormPage() {
             className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 disabled:opacity-50 cursor-pointer"
           >
             {saving && <Loader2 size={16} className="animate-spin" />}
-            {isEdit ? 'Save changes' : 'Create collection'}
+            {isEdit ? "Save changes" : "Create collection"}
           </button>
 
           <Link

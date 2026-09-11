@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import axios from "axios";
 import {
   Plus,
   Pencil,
@@ -11,31 +11,32 @@ import {
   Eye,
   EyeOff,
   ImageOff,
-} from 'lucide-react';
-import { useAuth } from '../../context/AuthContext.jsx';
-import AdminNav from '../../components/AdminNav.jsx';
+} from "lucide-react";
+import { useAuth } from "../../context/AuthContext.jsx";
+import AdminNav from "../../components/AdminNav.jsx";
+import { usePageTitle } from "../../hooks/usePageTitle.js";
 
 function CollectionListPage() {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
 
   const [collections, setCollections] = useState([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
   const [loading, setLoading] = useState(true);
   const [deletingId, setDeletingId] = useState(null);
-
+  usePageTitle("Collections");
   useEffect(() => {
     if (!userInfo || !userInfo.isAdmin) {
-      navigate('/login');
+      navigate("/login");
       return;
     }
 
     const fetchCollections = async () => {
       try {
-        const { data } = await axios.get('/api/collections');
+        const { data } = await axios.get("/api/collections");
         setCollections(data);
       } catch (err) {
-        setError(err.response?.data?.message || 'Could not load collections');
+        setError(err.response?.data?.message || "Could not load collections");
       } finally {
         setLoading(false);
       }
@@ -48,14 +49,14 @@ function CollectionListPage() {
     if (!window.confirm(`Delete "${collection.title}"?`)) return;
 
     setDeletingId(collection._id);
-    setError('');
+    setError("");
 
     try {
       await axios.delete(`/api/collections/${collection._id}`);
       setCollections((prev) => prev.filter((c) => c._id !== collection._id));
     } catch (err) {
       setError(
-        err.response?.data?.message || 'Could not delete this collection'
+        err.response?.data?.message || "Could not delete this collection",
       );
     } finally {
       setDeletingId(null);
@@ -153,15 +154,17 @@ function CollectionListPage() {
                   </td>
 
                   <td className="p-3 text-gray-600">
-                    {collection.productCount ?? collection.products?.length ?? 0}
+                    {collection.productCount ??
+                      collection.products?.length ??
+                      0}
                   </td>
 
                   <td className="p-3">
                     <span
                       className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded text-xs ${
                         collection.isPublished
-                          ? 'bg-green-100 text-green-700'
-                          : 'bg-gray-100 text-gray-600'
+                          ? "bg-green-100 text-green-700"
+                          : "bg-gray-100 text-gray-600"
                       }`}
                     >
                       {collection.isPublished ? (
@@ -169,7 +172,7 @@ function CollectionListPage() {
                       ) : (
                         <EyeOff size={13} />
                       )}
-                      {collection.isPublished ? 'Live' : 'Hidden'}
+                      {collection.isPublished ? "Live" : "Hidden"}
                     </span>
                   </td>
 

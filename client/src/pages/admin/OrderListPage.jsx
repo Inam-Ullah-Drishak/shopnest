@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import {
@@ -61,8 +61,16 @@ function OrderListPage() {
     if (!userInfo || !userInfo.isAdmin) navigate("/login");
   }, [userInfo, navigate]);
 
+  // Filters change faster than the network answers. Each call takes a
+  // ticket; a response whose ticket is no longer the newest is dropped,
+  // so a slow earlier request cannot overwrite fresher results.
+  const latestRequest = useRef(0);
+
   useEffect(() => {
     const fetchOrders = async () => {
+      const requestId = latestRequest.current + 1;
+      latestRequest.current = requestId;
+
       setLoading(true);
 
       try {
@@ -76,13 +84,17 @@ function OrderListPage() {
           },
         });
 
+        if (requestId !== latestRequest.current) return;
+
         setOrders(data.orders);
         setPages(data.pages);
         setCount(data.count);
       } catch (err) {
+        if (requestId !== latestRequest.current) return;
+
         setError(err.response?.data?.message || "Could not load orders");
       } finally {
-        setLoading(false);
+        if (requestId === latestRequest.current) setLoading(false);
       }
     };
 

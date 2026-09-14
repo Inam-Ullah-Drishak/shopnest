@@ -115,7 +115,7 @@ function ReviewForm({ productId, onDone }) {
       <button
         type="submit"
         disabled={saving}
-        className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 disabled:opacity-50 cursor-pointer"
+        className="inline-flex items-center gap-2 bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-dark disabled:opacity-50 cursor-pointer"
       >
         {saving && <Loader2 size={16} className="animate-spin" />}
         Post review
@@ -280,7 +280,7 @@ function ProductReviews({ productId, rating, numReviews }) {
                   setStarFilter(0);
                   setPage(1);
                 }}
-                className="text-sm text-blue-600 hover:underline mt-3 cursor-pointer"
+                className="text-sm text-teal hover:underline mt-3 cursor-pointer"
               >
                 Show all reviews
               </button>
@@ -290,7 +290,7 @@ function ProductReviews({ productId, rating, numReviews }) {
           <div className="mt-4">
             {!userInfo ? (
               <p className="text-sm text-gray-600">
-                <Link to="/login" className="text-blue-600 hover:underline">
+                <Link to="/login" className="text-teal hover:underline">
                   Sign in
                 </Link>{" "}
                 to write a review.

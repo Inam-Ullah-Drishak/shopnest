@@ -30,7 +30,7 @@ function AdminNav() {
           className={({ isActive }) =>
             `inline-flex items-center gap-2 px-4 py-2 rounded-lg text-sm ${
               isActive
-                ? 'bg-gray-900 text-white'
+                ? 'bg-navy text-white'
                 : 'bg-gray-100 hover:bg-gray-200'
             }`
           }

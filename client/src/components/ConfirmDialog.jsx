@@ -50,7 +50,7 @@ function ConfirmDialog({
         type="button"
         onClick={busy ? undefined : onCancel}
         aria-label="Cancel"
-        className="absolute inset-0 bg-gray-900/50"
+        className="absolute inset-0 bg-navy/50"
       />
 
       <div
@@ -119,7 +119,7 @@ function ConfirmDialog({
             className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm text-white disabled:opacity-50 cursor-pointer ${
               danger
                 ? 'bg-red-600 hover:bg-red-500'
-                : 'bg-gray-900 hover:bg-gray-700'
+                : 'bg-navy hover:bg-navy-dark'
             }`}
           >
             {busy && <Loader2 size={15} className="animate-spin" />}

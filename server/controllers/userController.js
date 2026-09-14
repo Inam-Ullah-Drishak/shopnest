@@ -1,6 +1,6 @@
 import asyncHandler from '../utils/asyncHandler.js';
 import User from '../models/userModel.js';
-import generateToken from '../utils/generateToken.js';
+import generateToken, { cookieOptions } from '../utils/generateToken.js';
 
 // POST /api/users  — register
 export const registerUser = asyncHandler(async (req, res) => {
@@ -71,8 +71,10 @@ export const loginUser = asyncHandler(async (req, res) => {
 
 // POST /api/users/logout
 export const logoutUser = (req, res) => {
+  // Must carry the same httpOnly, secure, sameSite and path the cookie was
+  // set with, or the browser sees a different cookie and keeps the real one
   res.cookie('jwt', '', {
-    httpOnly: true,
+    ...cookieOptions,
     expires: new Date(0),
   });
 

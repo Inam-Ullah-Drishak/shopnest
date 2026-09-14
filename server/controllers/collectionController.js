@@ -1,4 +1,6 @@
 import asyncHandler from '../utils/asyncHandler.js';
+import { getPaging } from '../utils/pagination.js';
+import escapeRegex from '../utils/escapeRegex.js';
 import Collection from '../models/collectionModel.js';
 import Product from '../models/productModel.js';
 
@@ -34,8 +36,7 @@ export const getCollectionBySlug = asyncHandler(async (req, res) => {
     throw new Error('Collection not found');
   }
 
-  const pageSize = Number(req.query.pageSize) || 8;
-  const page = Number(req.query.pageNumber) || 1;
+  const { page, pageSize, skip } = getPaging(req.query, 8);
 
   const filter = { _id: { $in: collection.products } };
 
@@ -53,7 +54,7 @@ export const getCollectionBySlug = asyncHandler(async (req, res) => {
   const products = await Product.find(filter)
     .sort(sort)
     .limit(pageSize)
-    .skip(pageSize * (page - 1));
+    .skip(skip);
 
   res.json({
     collection,
@@ -90,7 +91,7 @@ export const createCollection = asyncHandler(async (req, res) => {
   }
 
   const exists = await Collection.findOne({
-    title: { $regex: `^${title.trim()}$`, $options: 'i' },
+    title: { $regex: `^${escapeRegex(title.trim())}$`, $options: 'i' },
   });
 
   if (exists) {
@@ -125,7 +126,7 @@ export const updateCollection = asyncHandler(async (req, res) => {
   if (title?.trim() && title.trim() !== collection.title) {
     const exists = await Collection.findOne({
       _id: { $ne: collection._id },
-      title: { $regex: `^${title.trim()}$`, $options: 'i' },
+      title: { $regex: `^${escapeRegex(title.trim())}$`, $options: 'i' },
     });
 
     if (exists) {

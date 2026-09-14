@@ -1,6 +1,12 @@
 import asyncHandler from '../utils/asyncHandler.js';
+import { getPaging } from '../utils/pagination.js';
+import escapeRegex from '../utils/escapeRegex.js';
 import Product from '../models/productModel.js';
 import Category from '../models/categoryModel.js';
+import Review from '../models/reviewModel.js';
+import Wishlist from '../models/wishlistModel.js';
+import Collection from '../models/collectionModel.js';
+import { deleteImage, publicIdFromUrl } from '../config/cloudinary.js';
 
 const DEFAULT_PAGE_SIZE = 8;
 
@@ -105,7 +111,7 @@ const resolveCategory = async (name) => {
   if (!name?.trim()) return { category: null, categoryName: '' };
 
   const found = await Category.findOne({
-    name: { $regex: `^${name.trim()}$`, $options: 'i' },
+    name: { $regex: `^${escapeRegex(name.trim())}$`, $options: 'i' },
   });
 
   return {
@@ -133,8 +139,7 @@ const withDescendants = async (categoryId) => {
 
 // GET /api/products
 export const getProducts = asyncHandler(async (req, res) => {
-  const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
-  const page = Number(req.query.pageNumber) || 1;
+  const { page, pageSize, skip } = getPaging(req.query, DEFAULT_PAGE_SIZE);
 
   const filter = {};
 
@@ -144,15 +149,18 @@ export const getProducts = asyncHandler(async (req, res) => {
   }
 
   if (req.query.keyword) {
+    // Escaped: the keyword is treated as literal text, not a pattern
+    const keyword = escapeRegex(req.query.keyword);
+
     filter.$or = [
-      { name: { $regex: req.query.keyword, $options: 'i' } },
-      { tags: { $regex: req.query.keyword, $options: 'i' } },
+      { name: { $regex: keyword, $options: 'i' } },
+      { tags: { $regex: keyword, $options: 'i' } },
     ];
   }
 
   if (req.query.category && req.query.category !== 'All') {
     const found = await Category.findOne({
-      name: { $regex: `^${req.query.category}$`, $options: 'i' },
+      name: { $regex: `^${escapeRegex(req.query.category)}$`, $options: 'i' },
     });
 
     if (found) {
@@ -175,6 +183,12 @@ export const getProducts = asyncHandler(async (req, res) => {
 
   if (req.query.onSale === 'true') {
     filter.compareAtPrice = { $ne: null };
+  }
+
+  // The home page needs featured products on their own. Picking them out of a
+  // page of recent products only finds the ones added recently.
+  if (req.query.featured === 'true') {
+    filter.isFeatured = true;
   }
 
   const minPrice = Number(req.query.minPrice);
@@ -206,7 +220,7 @@ export const getProducts = asyncHandler(async (req, res) => {
   const products = await Product.find(filter)
     .sort(sort)
     .limit(pageSize)
-    .skip(pageSize * (page - 1));
+    .skip(skip);
 
   res.json({
     products,
@@ -390,6 +404,38 @@ export const updateProduct = asyncHandler(async (req, res) => {
   res.json(updated);
 });
 
+// Deleting the product row alone leaves its reviews orphaned, dead ids in
+// every collection that listed it, wishlist rows pointing at nothing, and the
+// images sitting in Cloudinary forever.
+//
+// Orders are deliberately untouched: an order item keeps its own name, price
+// and image, so past orders stay readable after the product is gone.
+const removeRelatedData = async (products) => {
+  if (products.length === 0) return;
+
+  const ids = products.map((p) => p._id);
+
+  await Promise.all([
+    Review.deleteMany({ product: { $in: ids } }),
+    Wishlist.deleteMany({ product: { $in: ids } }),
+    Collection.updateMany(
+      { products: { $in: ids } },
+      { $pull: { products: { $in: ids } } }
+    ),
+  ]);
+
+  const publicIds = products
+    .flatMap((p) => [
+      ...(p.images || []),
+      ...(p.variants || []).map((v) => v.image),
+    ])
+    .map(publicIdFromUrl)
+    .filter(Boolean);
+
+  // Best effort: a Cloudinary hiccup shouldn't block the delete, and an
+  // already-missing image is not a problem worth reporting
+  await Promise.allSettled(publicIds.map((publicId) => deleteImage(publicId)));
+};
 // DELETE /api/products/:id  — admin
 export const deleteProduct = asyncHandler(async (req, res) => {
   const product = await Product.findById(req.params.id);
@@ -399,7 +445,9 @@ export const deleteProduct = asyncHandler(async (req, res) => {
     throw new Error('Product not found');
   }
 
+  await removeRelatedData([product]);
   await product.deleteOne();
+
   res.json({ message: 'Product removed' });
 });
 // POST /api/products/bulk  — admin
@@ -413,7 +461,14 @@ export const bulkAction = asyncHandler(async (req, res) => {
   }
 
   if (action === 'delete') {
-    const result = await Product.deleteMany({ _id: { $in: ids } });
+    // Fetched first so the cleanup can see their images and variants
+    const products = await Product.find({ _id: { $in: ids } });
+
+    await removeRelatedData(products);
+
+    const result = await Product.deleteMany({
+      _id: { $in: products.map((p) => p._id) },
+    });
 
     return res.json({
       message: `${result.deletedCount} product${

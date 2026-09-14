@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import axios from "axios";
 import {
@@ -54,8 +54,16 @@ function CustomerListPage() {
     if (!userInfo || !userInfo.isAdmin) navigate("/login");
   }, [userInfo, navigate]);
 
+  // Filters change faster than the network answers. Each call takes a
+  // ticket; a response whose ticket is no longer the newest is dropped,
+  // so a slow earlier request cannot overwrite fresher results.
+  const latestRequest = useRef(0);
+
   useEffect(() => {
     const load = async () => {
+      const requestId = latestRequest.current + 1;
+      latestRequest.current = requestId;
+
       setLoading(true);
 
       try {
@@ -69,13 +77,17 @@ function CustomerListPage() {
           },
         });
 
+        if (requestId !== latestRequest.current) return;
+
         setCustomers(data.customers);
         setPages(data.pages);
         setCount(data.count);
       } catch (err) {
+        if (requestId !== latestRequest.current) return;
+
         setError(err.response?.data?.message || "Could not load customers");
       } finally {
-        setLoading(false);
+        if (requestId === latestRequest.current) setLoading(false);
       }
     };
 
@@ -353,7 +365,7 @@ function CustomerListPage() {
                                 }
                                 className={`p-2 rounded disabled:opacity-50 cursor-pointer ${
                                   customer.isAdmin
-                                    ? "text-blue-600 hover:bg-blue-100"
+                                    ? "text-teal hover:bg-teal/10"
                                     : "text-gray-400 hover:bg-gray-200"
                                 }`}
                               >

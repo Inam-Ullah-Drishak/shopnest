@@ -64,7 +64,7 @@ function Pagination({ page, pages, onChange, windowSize = 5 }) {
           aria-current={n === page ? 'page' : undefined}
           className={`w-10 h-10 rounded-lg cursor-pointer ${
             n === page
-              ? 'bg-gray-900 text-white'
+              ? 'bg-navy text-white'
               : 'border hover:bg-gray-50'
           }`}
         >

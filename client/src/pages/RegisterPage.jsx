@@ -43,7 +43,7 @@ function RegisterPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-8">
+    <div className="max-w-md mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">Register</h1>
 
       {error && (
@@ -98,7 +98,7 @@ function RegisterPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-gray-900 text-white p-2 rounded hover:bg-gray-700 disabled:opacity-50"
+          className="w-full bg-navy text-white p-2 rounded hover:bg-navy-dark disabled:opacity-50"
         >
           {loading ? "Creating account..." : "Register"}
         </button>
@@ -106,7 +106,7 @@ function RegisterPage() {
 
       <p className="mt-4 text-sm">
         Have an account?{" "}
-        <Link to="/login" className="text-blue-600 underline">
+        <Link to="/login" className="text-teal underline">
           Sign In
         </Link>
       </p>

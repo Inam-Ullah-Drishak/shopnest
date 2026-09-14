@@ -47,7 +47,7 @@ function ImageGallery({ images = [], alt = '' }) {
               <ChevronRight size={18} />
             </button>
 
-            <span className="absolute bottom-2 right-2 bg-gray-900/70 text-white text-xs px-2 py-1 rounded">
+            <span className="absolute bottom-2 right-2 bg-navy/70 text-white text-xs px-2 py-1 rounded">
               {index + 1} / {images.length}
             </span>
           </>
@@ -64,7 +64,7 @@ function ImageGallery({ images = [], alt = '' }) {
               aria-label={`Show image ${i + 1}`}
               className={`w-16 h-16 shrink-0 rounded-lg border-2 overflow-hidden cursor-pointer ${
                 i === index
-                  ? 'border-gray-900'
+                  ? 'border-navy'
                   : 'border-transparent hover:border-gray-300'
               }`}
             >

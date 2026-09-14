@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 import axios from "axios";
 import { useAuth } from "../context/AuthContext.jsx";
 import { usePageTitle } from "../hooks/usePageTitle.js";
@@ -12,6 +12,10 @@ function LoginPage() {
   usePageTitle("Sign in");
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // ProtectedRoute records the page that sent them here
+  const redirectTo = location.state?.from || "/";
 
   const submitHandler = async (e) => {
     e.preventDefault();
@@ -25,7 +29,7 @@ function LoginPage() {
       });
 
       login(data);
-      navigate("/");
+      navigate(redirectTo, { replace: true });
     } catch (err) {
       setError(err.response?.data?.message || "Something went wrong");
     } finally {
@@ -34,7 +38,7 @@ function LoginPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-8">
+    <div className="max-w-md mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">Sign In</h1>
 
       {error && (
@@ -67,7 +71,7 @@ function LoginPage() {
         <button
           type="submit"
           disabled={loading}
-          className="w-full bg-gray-900 text-white p-2 rounded hover:bg-gray-700 disabled:opacity-50"
+          className="w-full bg-navy text-white p-2 rounded hover:bg-navy-dark disabled:opacity-50"
         >
           {loading ? "Signing in..." : "Sign In"}
         </button>
@@ -75,7 +79,7 @@ function LoginPage() {
 
       <p className="mt-4 text-sm">
         New customer?{" "}
-        <Link to="/register" className="text-blue-600 underline">
+        <Link to="/register" className="text-teal underline">
           Register
         </Link>
       </p>

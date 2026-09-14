@@ -1,6 +1,39 @@
 import asyncHandler from '../utils/asyncHandler.js';
-import Category from '../models/categoryModel.js';
+import escapeRegex from '../utils/escapeRegex.js';
+import Category, { slugify } from '../models/categoryModel.js';
 import Product from '../models/productModel.js';
+
+// Slugs are unique across the whole collection, but two categories can
+// legitimately share a name under different parents ("Bangles" under Gold
+// and under Silver). Without this the second one fails with a raw duplicate
+// key error. Mirrors the seeder: plain slug, then prefixed with the parent's
+// slug, then numbered.
+const uniqueCategorySlug = async (name, parentId, excludeId = null) => {
+  const base = slugify(name) || 'category';
+
+  const taken = async (slug) => {
+    const filter = { slug };
+    if (excludeId) filter._id = { $ne: excludeId };
+
+    return Boolean(await Category.findOne(filter).select('_id'));
+  };
+
+  if (!(await taken(base))) return base;
+
+  if (parentId) {
+    const parent = await Category.findById(parentId).select('slug');
+
+    if (parent?.slug) {
+      const combined = `${parent.slug}-${base}`;
+      if (!(await taken(combined))) return combined;
+    }
+  }
+
+  let n = 2;
+  while (await taken(`${base}-${n}`)) n += 1;
+
+  return `${base}-${n}`;
+};
 
 // GET /api/categories
 export const getCategories = asyncHandler(async (req, res) => {
@@ -59,7 +92,7 @@ export const createCategory = asyncHandler(async (req, res) => {
 
   const siblingExists = await Category.findOne({
     parent: parent || null,
-    name: { $regex: `^${name.trim()}$`, $options: 'i' },
+    name: { $regex: `^${escapeRegex(name.trim())}$`, $options: 'i' },
   });
 
   if (siblingExists) {
@@ -69,6 +102,7 @@ export const createCategory = asyncHandler(async (req, res) => {
 
   const category = await Category.create({
     name: name.trim(),
+    slug: await uniqueCategorySlug(name.trim(), parent || null),
     description: description?.trim() || '',
     image: image || '',
     parent: parent || null,
@@ -94,7 +128,7 @@ export const updateCategory = asyncHandler(async (req, res) => {
     const siblingExists = await Category.findOne({
       _id: { $ne: category._id },
       parent: category.parent,
-      name: { $regex: `^${name.trim()}$`, $options: 'i' },
+      name: { $regex: `^${escapeRegex(name.trim())}$`, $options: 'i' },
     });
 
     if (siblingExists) {

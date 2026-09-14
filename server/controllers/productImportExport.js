@@ -1,14 +1,9 @@
 import asyncHandler from '../utils/asyncHandler.js';
+import escapeRegex from '../utils/escapeRegex.js';
 import Product from '../models/productModel.js';
 import Category from '../models/categoryModel.js';
-import { parseCsv } from '../utils/csv.js';
+import { parseCsv, csvCell as cell } from '../utils/csv.js';
 
-// Wrap in quotes and double any inner quotes, so a comma in a description
-// doesn't split the column
-const cell = (value) => {
-  const text = value === null || value === undefined ? '' : String(value);
-  return `"${text.replace(/"/g, '""')}"`;
-};
 
 const slugify = (str) =>
   String(str)
@@ -32,8 +27,21 @@ const splitList = (value) =>
     .map((v) => v.trim())
     .filter(Boolean);
 
+// Strips currency symbols and thousands separators, so "Rs 3,200" reads as
+// 3200. Anything that isn't a number comes back as null, never 0 -- the old
+// version fed '' into Number() for a blank or garbage cell, got 0 back, and
+// silently imported the product priced at zero while the check below for a
+// missing price could never fire.
 const num = (value) => {
-  const n = Number(String(value).replace(/[^0-9.-]/g, ''));
+  if (value === null || value === undefined) return null;
+
+  const cleaned = String(value).replace(/[^0-9.-]/g, '');
+
+  // Rejects '', 'abc', '12-34', '3.' and similar half-numbers
+  if (!/^-?\d*\.?\d+$/.test(cleaned)) return null;
+
+  const n = Number(cleaned);
+
   return Number.isFinite(n) ? n : null;
 };
 
@@ -87,7 +95,7 @@ export const exportProducts = asyncHandler(async (req, res) => {
     }
 
     if (req.query.keyword) {
-      filter.name = { $regex: req.query.keyword, $options: 'i' };
+      filter.name = { $regex: escapeRegex(req.query.keyword), $options: 'i' };
     }
 
     if (req.query.stock === 'out') {

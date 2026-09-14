@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSearchParams } from "react-router-dom";
 import axios from "axios";
 import { Search, X, Loader2, PackageOpen, Tag } from "lucide-react";
@@ -49,8 +49,16 @@ function ShopPage() {
       .catch(() => {});
   }, []);
 
+  // Filters change faster than the network answers. Each call takes a
+  // ticket; a response whose ticket is no longer the newest is dropped,
+  // so a slow earlier request cannot overwrite fresher results.
+  const latestRequest = useRef(0);
+
   useEffect(() => {
     const fetchProducts = async () => {
+      const requestId = latestRequest.current + 1;
+      latestRequest.current = requestId;
+
       setLoading(true);
 
       try {
@@ -66,13 +74,17 @@ function ShopPage() {
           },
         });
 
+        if (requestId !== latestRequest.current) return;
+
         setProducts(data.products);
         setPages(data.pages);
         setCount(data.count);
       } catch (err) {
+        if (requestId !== latestRequest.current) return;
+
         setError(err.response?.data?.message || "Could not load products");
       } finally {
-        setLoading(false);
+        if (requestId === latestRequest.current) setLoading(false);
       }
     };
 
@@ -106,7 +118,7 @@ function ShopPage() {
   const clearFilters = () => setSearchParams({});
 
   return (
-    <div className="p-8">
+    <div className="p-4">
       <h1 className="text-3xl font-bold mb-5">
         {onSale ? "On sale" : "Shop all"}
       </h1>
@@ -137,7 +149,7 @@ function ShopPage() {
           onClick={() => setParam({ onSale: onSale ? "" : "true" })}
           className={`inline-flex items-center gap-1.5 border rounded-lg px-4 py-2.5 text-sm cursor-pointer ${
             onSale
-              ? "bg-gray-900 text-white border-gray-900"
+              ? "bg-navy text-white border-navy"
               : "hover:bg-gray-50"
           }`}
         >
@@ -190,7 +202,7 @@ function ShopPage() {
           <button
             type="button"
             onClick={clearFilters}
-            className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 cursor-pointer"
+            className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-navy cursor-pointer"
           >
             <X size={14} />
             Clear filters

@@ -1,4 +1,5 @@
 import asyncHandler from '../utils/asyncHandler.js';
+import { getPaging } from '../utils/pagination.js';
 import Wishlist from '../models/wishlistModel.js';
 import Product from '../models/productModel.js';
 
@@ -6,8 +7,7 @@ const DEFAULT_PAGE_SIZE = 8;
 
 // GET /api/wishlist?pageNumber=&pageSize=  — protected
 export const getWishlist = asyncHandler(async (req, res) => {
-  const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
-  const page = Number(req.query.pageNumber) || 1;
+  const { page, pageSize, skip } = getPaging(req.query, DEFAULT_PAGE_SIZE);
 
   const filter = { user: req.user._id };
 
@@ -16,7 +16,7 @@ export const getWishlist = asyncHandler(async (req, res) => {
   const rows = await Wishlist.find(filter)
     .sort({ createdAt: -1 })
     .limit(pageSize)
-    .skip(pageSize * (page - 1))
+    .skip(skip)
     .populate('product');
 
   // A product may have been deleted since it was saved

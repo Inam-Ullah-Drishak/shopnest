@@ -1,5 +1,5 @@
-import { useState, useRef, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   User,
   Heart,
@@ -7,7 +7,7 @@ import {
   LayoutDashboard,
   LogOut,
   ChevronDown,
-} from 'lucide-react';
+} from "lucide-react";
 
 function UserMenu({ userInfo, onLogout }) {
   const [open, setOpen] = useState(false);
@@ -17,66 +17,98 @@ function UserMenu({ userInfo, onLogout }) {
     if (!open) return;
 
     const handleClick = (e) => {
-      if (!wrapperRef.current?.contains(e.target)) setOpen(false);
+      if (!wrapperRef.current?.contains(e.target)) {
+        setOpen(false);
+      }
     };
 
     const handleEscape = (e) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === "Escape") {
+        setOpen(false);
+      }
     };
 
-    document.addEventListener('mousedown', handleClick);
-    document.addEventListener('keydown', handleEscape);
+    document.addEventListener("mousedown", handleClick);
+    document.addEventListener("keydown", handleEscape);
 
     return () => {
-      document.removeEventListener('mousedown', handleClick);
-      document.removeEventListener('keydown', handleEscape);
+      document.removeEventListener("mousedown", handleClick);
+      document.removeEventListener("keydown", handleEscape);
     };
   }, [open]);
 
   const items = [
-    { to: '/wishlist', label: 'Saved items', icon: Heart },
-    { to: '/profile', label: 'Profile', icon: User },
-    { to: '/myorders', label: 'My orders', icon: Package },
+    {
+      to: "/wishlist",
+      label: "Saved items",
+      icon: Heart,
+    },
+    {
+      to: "/profile",
+      label: "Profile",
+      icon: User,
+    },
+    {
+      to: "/myorders",
+      label: "My orders",
+      icon: Package,
+    },
   ];
 
   if (userInfo.isAdmin) {
     items.push({
-      to: '/admin',
-      label: 'Dashboard',
+      to: "/admin",
+      label: "Dashboard",
       icon: LayoutDashboard,
     });
   }
 
+  // Navy text, underline only on hover
   const itemClass =
-    'flex items-center gap-2.5 w-full px-3 py-2 text-sm text-gray-700 hover:bg-gray-100';
+    "flex items-center gap-2.5 w-full px-3 py-2 text-sm text-navy hover:underline";
 
   return (
     <div ref={wrapperRef} className="relative">
+      {/* User Button */}
       <button
         type="button"
         onClick={() => setOpen((o) => !o)}
         aria-haspopup="menu"
         aria-expanded={open}
-        className="inline-flex items-center gap-1.5 text-sm text-gray-300 hover:text-white cursor-pointer"
+        className="inline-flex items-center gap-1.5 text-sm text-navy hover:underline cursor-pointer"
       >
-        <User size={16} />
-        <span className="max-w-24 truncate">{userInfo.name}</span>
+        <User size={16} className="text-navy" />
+
+        <span className="max-w-24 truncate">
+          {userInfo.name}
+        </span>
+
         <ChevronDown
           size={14}
-          className={`transition-transform ${open ? 'rotate-180' : ''}`}
+          className={`text-navy transition-transform ${
+            open ? "rotate-180" : ""
+          }`}
         />
       </button>
 
+      {/* Dropdown */}
       {open && (
         <div
           role="menu"
-          className="absolute right-0 z-30 mt-2 w-52 bg-white text-gray-900 border rounded-lg shadow-lg py-1"
+          className="absolute right-0 z-30 mt-2 w-52 bg-white text-navy border border-gray-200 rounded-lg shadow-lg py-1"
         >
-          <div className="px-3 py-2 border-b">
-            <p className="text-sm font-medium truncate">{userInfo.name}</p>
-            <p className="text-xs text-gray-500 truncate">{userInfo.email}</p>
+          {/* User Information */}
+          <div className="px-3 py-2 border-b border-gray-200">
+            <p className="text-sm font-medium text-navy truncate">
+              {userInfo.name}
+            </p>
+
+            <p className="text-xs text-navy/60 truncate">
+              {userInfo.email}
+            </p>
           </div>
 
+          {/* Menu Items */}
           <div className="py-1">
             {items.map(({ to, label, icon: Icon }) => (
               <Link
@@ -86,13 +118,18 @@ function UserMenu({ userInfo, onLogout }) {
                 onClick={() => setOpen(false)}
                 className={itemClass}
               >
-                <Icon size={15} className="text-gray-400" />
+                <Icon
+                  size={15}
+                  className="text-navy"
+                />
+
                 {label}
               </Link>
             ))}
           </div>
 
-          <div className="border-t py-1">
+          {/* Logout */}
+          <div className="border-t border-gray-200 py-1">
             <button
               type="button"
               role="menuitem"
@@ -100,9 +137,13 @@ function UserMenu({ userInfo, onLogout }) {
                 setOpen(false);
                 onLogout();
               }}
-              className={`${itemClass} text-red-600 cursor-pointer`}
+              className="flex items-center gap-2.5 w-full px-3 py-2 text-sm text-red-600 hover:underline cursor-pointer"
             >
-              <LogOut size={15} className="text-red-400" />
+              <LogOut
+                size={15}
+                className="text-red-500"
+              />
+
               Log out
             </button>
           </div>

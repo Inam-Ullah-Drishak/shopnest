@@ -115,14 +115,14 @@ function ProfilePage() {
 
   if (loading) {
     return (
-      <div className="p-8 flex items-center gap-2 text-gray-500">
+      <div className="p-4 flex items-center gap-2 text-gray-500">
         <Loader2 size={18} className="animate-spin" />
         Loading your profile
       </div>
     );
   }
 
-  if (!profile) return <p className="p-8 text-red-600">{error}</p>;
+  if (!profile) return <p className="p-4 text-red-600">{error}</p>;
 
   const dirty =
     form.name !== profile.name ||
@@ -130,7 +130,7 @@ function ProfilePage() {
     Boolean(passwords.newPassword);
 
   return (
-    <div className="max-w-3xl mx-auto p-8">
+    <div className="max-w-3xl mx-auto p-4">
       <div className="flex items-center gap-4 mb-6">
         <span className="w-14 h-14 shrink-0 rounded-full bg-gray-100 flex items-center justify-center text-xl font-medium text-gray-600">
           {profile.name.charAt(0).toUpperCase()}
@@ -302,7 +302,7 @@ function ProfilePage() {
           <button
             type="submit"
             disabled={saving || !dirty}
-            className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+            className="inline-flex items-center gap-2 bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-dark disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
           >
             {saving && <Loader2 size={16} className="animate-spin" />}
             Save changes

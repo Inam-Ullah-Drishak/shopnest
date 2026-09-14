@@ -17,13 +17,41 @@ const LOW_STOCK = {
   ],
 };
 
+// Which calendar a day belongs to. Mongo's $dateToString defaults to UTC, so
+// on a UTC+5 server an order placed at 1am local lands in the previous day's
+// bucket and the chart is a day out. Set REPORT_TIMEZONE to override.
+const REPORT_TIMEZONE =
+  process.env.REPORT_TIMEZONE ||
+  Intl.DateTimeFormat().resolvedOptions().timeZone ||
+  'UTC';
+
+// YYYY-MM-DD for an instant, in the reporting timezone
+const dayKey = (date) =>
+  new Intl.DateTimeFormat('en-CA', {
+    timeZone: REPORT_TIMEZONE,
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit',
+  }).format(date);
+
+// A date-only filter like to=2026-03-01 means the whole of that day, not the
+// midnight at the start of it. Built from the parts rather than setHours on a
+// parsed string, which lands on the wrong day west of Greenwich.
+const endOfDay = (value) => {
+  const [y, m, d] = String(value).slice(0, 10).split('-').map(Number);
+
+  if (!y || !m || !d) return new Date(value);
+
+  return new Date(y, m - 1, d, 23, 59, 59, 999);
+};
+
 const rangeFilter = (from, to) => {
   const filter = {};
 
   if (from || to) {
     filter.createdAt = {};
     if (from) filter.createdAt.$gte = new Date(from);
-    if (to) filter.createdAt.$lte = new Date(to);
+    if (to) filter.createdAt.$lte = endOfDay(to);
   }
 
   return filter;
@@ -48,7 +76,12 @@ export const getSummary = asyncHandler(async (req, res) => {
         },
       ]),
       Order.countDocuments(range),
-      Order.countDocuments({ isDelivered: false, ...range }),
+      // "Awaiting delivery" means still moving. isDelivered: false alone also
+      // counted every cancelled order.
+      Order.countDocuments({
+        status: { $nin: ['delivered', 'cancelled'] },
+        ...range,
+      }),
       User.countDocuments({ isAdmin: false }),
       Product.countDocuments({ status: 'active' }),
       Product.countDocuments(LOW_STOCK),
@@ -76,15 +109,36 @@ export const getSummary = asyncHandler(async (req, res) => {
 export const getRevenueSeries = asyncHandler(async (req, res) => {
   const days = Math.min(Number(req.query.days) || 30, 365);
 
-  const start = new Date();
-  start.setHours(0, 0, 0, 0);
-  start.setDate(start.getDate() - (days - 1));
+  // The days we want, oldest first, ending today in the reporting timezone.
+  // Stepping over UTC midnights of a plain calendar date keeps this immune to
+  // DST, which adding 24h at a time is not.
+  const today = dayKey(new Date());
+  const [ty, tm, td] = today.split('-').map(Number);
+  const todayUtc = Date.UTC(ty, tm - 1, td);
+  const DAY = 24 * 60 * 60 * 1000;
+
+  const keys = [];
+
+  for (let i = days - 1; i >= 0; i -= 1) {
+    keys.push(new Date(todayUtc - i * DAY).toISOString().slice(0, 10));
+  }
+
+  // Reach back an extra day: the start of the oldest local day can sit up to
+  // 14 hours either side of its UTC midnight. Anything extra that comes back
+  // simply isn't in `keys` and gets dropped.
+  const start = new Date(todayUtc - (days - 1) * DAY - DAY);
 
   const rows = await Order.aggregate([
     { $match: { ...PAID, createdAt: { $gte: start } } },
     {
       $group: {
-        _id: { $dateToString: { format: '%Y-%m-%d', date: '$createdAt' } },
+        _id: {
+          $dateToString: {
+            format: '%Y-%m-%d',
+            date: '$createdAt',
+            timezone: REPORT_TIMEZONE,
+          },
+        },
         revenue: { $sum: '$totalPrice' },
         orders: { $sum: 1 },
       },
@@ -93,22 +147,13 @@ export const getRevenueSeries = asyncHandler(async (req, res) => {
   ]);
 
   const map = new Map(rows.map((r) => [r._id, r]));
-  const series = [];
 
   // Fill gaps, otherwise a chart would join across missing days
-  for (let i = 0; i < days; i += 1) {
-    const date = new Date(start);
-    date.setDate(start.getDate() + i);
-
-    const key = date.toISOString().slice(0, 10);
-    const row = map.get(key);
-
-    series.push({
-      date: key,
-      revenue: row?.revenue || 0,
-      orders: row?.orders || 0,
-    });
-  }
+  const series = keys.map((key) => ({
+    date: key,
+    revenue: map.get(key)?.revenue || 0,
+    orders: map.get(key)?.orders || 0,
+  }));
 
   res.json(series);
 });

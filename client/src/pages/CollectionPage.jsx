@@ -56,7 +56,7 @@ function CollectionPage() {
 
   if (loading) {
     return (
-      <div className="p-8 flex items-center gap-2 text-gray-500">
+      <div className="p-4 flex items-center gap-2 text-gray-500">
         <Loader2 size={18} className="animate-spin" />
         Loading
       </div>
@@ -65,11 +65,11 @@ function CollectionPage() {
 
   if (error) {
     return (
-      <div className="p-8">
+      <div className="p-4">
         <p className="text-red-600">{error}</p>
         <Link
           to="/shop"
-          className="inline-flex items-center gap-1 text-sm text-blue-600 hover:underline mt-3"
+          className="inline-flex items-center gap-1 text-sm text-teal hover:underline mt-3"
         >
           <ArrowLeft size={15} />
           Back to the shop
@@ -81,7 +81,7 @@ function CollectionPage() {
   if (!collection) return null;
 
   return (
-    <div className="p-8">
+    <div className="p-4">
       {collection.image ? (
         <div className="h-48 md:h-60 rounded-lg overflow-hidden mb-6 relative">
           <img
@@ -89,7 +89,7 @@ function CollectionPage() {
             alt=""
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-gray-900/40 flex items-end p-6">
+          <div className="absolute inset-0 bg-navy/40 flex items-end p-6">
             <h1 className="text-3xl font-bold text-white">
               {collection.title}
             </h1>
@@ -135,7 +135,7 @@ function CollectionPage() {
           </p>
           <Link
             to="/shop"
-            className="inline-block bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 mt-5"
+            className="inline-block bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-dark mt-5"
           >
             Browse all products
           </Link>

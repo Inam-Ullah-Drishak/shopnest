@@ -1,7 +1,33 @@
 import asyncHandler from '../utils/asyncHandler.js';
+import { getPaging } from '../utils/pagination.js';
 import Coupon from '../models/couponModel.js';
 
 const DEFAULT_PAGE_SIZE = 8;
+
+// Limit fields are three-state: a positive number, or null for "unlimited".
+// Blank from the admin form is an intentional null. A missing or malformed
+// value must not quietly become unlimited, so it either falls back to a safe
+// default or is rejected.
+const parseOptionalLimit = (raw, { fallback, integer = true }) => {
+  if (raw === undefined) return { ok: true, value: fallback };
+  if (raw === null || String(raw).trim() === '') return { ok: true, value: null };
+
+  const n = Number(raw);
+  const valid = integer ? Number.isInteger(n) : Number.isFinite(n);
+
+  if (!valid || n < 1) return { ok: false };
+
+  return { ok: true, value: n };
+};
+
+const USES_ERROR =
+  'Total uses must be a whole number of 1 or more, or blank for unlimited';
+
+const PER_USER_ERROR =
+  'Uses per customer must be a whole number of 1 or more, or blank for unlimited';
+
+const MAX_DISCOUNT_ERROR =
+  'Maximum discount must be above zero, or blank for no cap';
 
 // POST /api/coupons/validate  — protected
 // Checks a code against a subtotal without consuming it
@@ -41,8 +67,7 @@ export const validateCoupon = asyncHandler(async (req, res) => {
 
 // GET /api/coupons  — admin
 export const getCoupons = asyncHandler(async (req, res) => {
-  const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
-  const page = Number(req.query.pageNumber) || 1;
+  const { page, pageSize, skip } = getPaging(req.query, DEFAULT_PAGE_SIZE);
 
   const filter = {};
 
@@ -57,7 +82,7 @@ export const getCoupons = asyncHandler(async (req, res) => {
   const coupons = await Coupon.find(filter)
     .sort({ createdAt: -1 })
     .limit(pageSize)
-    .skip(pageSize * (page - 1))
+    .skip(skip)
     .select('-usedBy');
 
   res.json({
@@ -116,6 +141,32 @@ export const createCoupon = asyncHandler(async (req, res) => {
     throw new Error('A percentage cannot be above 100');
   }
 
+  // A missing or malformed limit falls back to a safe default rather than
+  // becoming unlimited. Only an explicit blank means unlimited.
+  const totalUses = parseOptionalLimit(usageLimit, { fallback: null });
+
+  if (!totalUses.ok) {
+    res.status(400);
+    throw new Error(USES_ERROR);
+  }
+
+  const perCustomer = parseOptionalLimit(perUserLimit, { fallback: 1 });
+
+  if (!perCustomer.ok) {
+    res.status(400);
+    throw new Error(PER_USER_ERROR);
+  }
+
+  const cap = parseOptionalLimit(maxDiscount, {
+    fallback: null,
+    integer: false,
+  });
+
+  if (!cap.ok) {
+    res.status(400);
+    throw new Error(MAX_DISCOUNT_ERROR);
+  }
+
   const exists = await Coupon.findOne({ code: code.trim().toUpperCase() });
 
   if (exists) {
@@ -128,12 +179,12 @@ export const createCoupon = asyncHandler(async (req, res) => {
     description: description?.trim() || '',
     type: type === 'fixed' ? 'fixed' : 'percent',
     value: numericValue,
-    maxDiscount: Number(maxDiscount) > 0 ? Number(maxDiscount) : null,
+    maxDiscount: cap.value,
     minOrderValue: Number(minOrderValue) || 0,
     startsAt: startsAt ? new Date(startsAt) : Date.now(),
     expiresAt: expiresAt ? new Date(expiresAt) : null,
-    usageLimit: Number(usageLimit) > 0 ? Number(usageLimit) : null,
-    perUserLimit: Number(perUserLimit) > 0 ? Number(perUserLimit) : null,
+    usageLimit: totalUses.value,
+    perUserLimit: perCustomer.value,
     isActive: isActive !== false,
   });
 
@@ -196,8 +247,21 @@ export const updateCoupon = asyncHandler(async (req, res) => {
     coupon.value = numericValue;
   }
 
-  if (maxDiscount !== undefined)
-    coupon.maxDiscount = Number(maxDiscount) > 0 ? Number(maxDiscount) : null;
+  // Each limit keeps its current value unless a valid replacement arrives.
+  // Garbage is rejected instead of silently lifting the limit.
+  if (maxDiscount !== undefined) {
+    const cap = parseOptionalLimit(maxDiscount, {
+      fallback: coupon.maxDiscount,
+      integer: false,
+    });
+
+    if (!cap.ok) {
+      res.status(400);
+      throw new Error(MAX_DISCOUNT_ERROR);
+    }
+
+    coupon.maxDiscount = cap.value;
+  }
 
   if (minOrderValue !== undefined)
     coupon.minOrderValue = Number(minOrderValue) || 0;
@@ -208,11 +272,31 @@ export const updateCoupon = asyncHandler(async (req, res) => {
   if (expiresAt !== undefined)
     coupon.expiresAt = expiresAt ? new Date(expiresAt) : null;
 
-  if (usageLimit !== undefined)
-    coupon.usageLimit = Number(usageLimit) > 0 ? Number(usageLimit) : null;
+  if (usageLimit !== undefined) {
+    const totalUses = parseOptionalLimit(usageLimit, {
+      fallback: coupon.usageLimit,
+    });
 
-  if (perUserLimit !== undefined)
-    coupon.perUserLimit = Number(perUserLimit) > 0 ? Number(perUserLimit) : null;
+    if (!totalUses.ok) {
+      res.status(400);
+      throw new Error(USES_ERROR);
+    }
+
+    coupon.usageLimit = totalUses.value;
+  }
+
+  if (perUserLimit !== undefined) {
+    const perCustomer = parseOptionalLimit(perUserLimit, {
+      fallback: coupon.perUserLimit,
+    });
+
+    if (!perCustomer.ok) {
+      res.status(400);
+      throw new Error(PER_USER_ERROR);
+    }
+
+    coupon.perUserLimit = perCustomer.value;
+  }
 
   if (isActive !== undefined) coupon.isActive = Boolean(isActive);
 

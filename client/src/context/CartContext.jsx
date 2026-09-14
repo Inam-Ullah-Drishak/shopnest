@@ -1,5 +1,14 @@
 /* eslint-disable react-refresh/only-export-components */
-import { createContext, useContext, useState, useEffect } from 'react';
+import {
+  createContext,
+  useContext,
+  useState,
+  useEffect,
+  useCallback,
+  useRef,
+} from 'react';
+import axios from 'axios';
+import { useToast } from './ToastContext.jsx';
 
 const CartContext = createContext();
 
@@ -10,14 +19,36 @@ const lineKey = (productId, variantId) =>
 
 export function CartProvider({ children }) {
   const [cartItems, setCartItems] = useState(() => {
-    const stored = localStorage.getItem('cartItems');
-    return stored ? JSON.parse(stored) : [];
+    try {
+      const stored = localStorage.getItem('cartItems');
+      const parsed = stored ? JSON.parse(stored) : [];
+
+      return Array.isArray(parsed) ? parsed : [];
+    } catch {
+      localStorage.removeItem('cartItems');
+      return [];
+    }
   });
 
   const [shippingAddress, setShippingAddressState] = useState(() => {
-    const stored = localStorage.getItem('shippingAddress');
-    return stored ? JSON.parse(stored) : null;
+    try {
+      const stored = localStorage.getItem('shippingAddress');
+      return stored ? JSON.parse(stored) : null;
+    } catch {
+      localStorage.removeItem('shippingAddress');
+      return null;
+    }
   });
+
+  const toast = useToast();
+
+  // Read these inside refreshCart without making it a new function on every
+  // render, which would restart the effect that calls it
+  const cartRef = useRef(cartItems);
+  cartRef.current = cartItems;
+
+  const toastRef = useRef(toast);
+  toastRef.current = toast;
 
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));
@@ -54,6 +85,86 @@ export function CartProvider({ children }) {
       ];
     });
   };
+
+  // Price and stock are copied into the line when it's added and then sit in
+  // localStorage indefinitely. A cart left for a week shows last week's prices,
+  // while createOrder recalculates from the database -- so the customer could
+  // review one total and be charged another. Re-reading the products on the way
+  // into the cart and the review page keeps the two honest.
+  const refreshCart = useCallback(async () => {
+    const items = cartRef.current;
+
+    if (items.length === 0) return;
+
+    const results = await Promise.all(
+      items.map(async (item) => {
+        try {
+          const { data } = await axios.get(`/api/products/${item._id}`);
+
+          const variant = item.variantId
+            ? data.variants?.find(
+                (v) => String(v._id) === String(item.variantId)
+              )
+            : null;
+
+          // Hidden since it was added, or the chosen option was removed. Zero
+          // stock keeps the line visible but unbuyable, and createOrder gives
+          // the precise reason if they push on.
+          if (data.status === 'draft' || (item.variantId && !variant)) {
+            return { line: { ...item, countInStock: 0 }, priceChanged: false };
+          }
+
+          const price = variant ? variant.price : data.price;
+
+          return {
+            line: {
+              ...item,
+              name: data.name,
+              price,
+              countInStock: variant ? variant.countInStock : data.countInStock,
+              image: variant?.image || data.image || item.image,
+            },
+            priceChanged: price !== item.price,
+          };
+        } catch {
+          // Deleted, or the request failed. Either way don't let it be ordered
+          return { line: { ...item, countInStock: 0 }, priceChanged: false };
+        }
+      })
+    );
+
+    const fresh = results.map((r) => r.line);
+
+    // Only write when something actually moved, so we don't churn localStorage
+    // or retrigger effects watching the cart
+    const changed = fresh.some(
+      (line, i) =>
+        line.price !== items[i].price ||
+        line.countInStock !== items[i].countInStock ||
+        line.name !== items[i].name
+    );
+
+    if (changed) setCartItems(fresh);
+
+    const repriced = results.filter((r) => r.priceChanged).map((r) => r.line);
+    const unavailable = fresh.filter((line) => line.countInStock === 0);
+
+    if (repriced.length === 1) {
+      toastRef.current?.info(`${repriced[0].name} has changed price.`);
+    } else if (repriced.length > 1) {
+      toastRef.current?.info(
+        `${repriced.length} items in your cart have changed price.`
+      );
+    }
+
+    if (unavailable.length === 1) {
+      toastRef.current?.error(`${unavailable[0].name} is no longer available.`);
+    } else if (unavailable.length > 1) {
+      toastRef.current?.error(
+        `${unavailable.length} items in your cart are no longer available.`
+      );
+    }
+  }, []);
 
   const updateQty = (key, qty) => {
     setCartItems((prev) =>
@@ -95,6 +206,7 @@ export function CartProvider({ children }) {
         addToCart,
         updateQty,
         removeFromCart,
+        refreshCart,
         saveShippingAddress,
         clearCart,
         itemsCount,

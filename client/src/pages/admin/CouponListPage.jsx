@@ -161,7 +161,7 @@ function CouponListPage() {
 
           <Link
             to="/admin/coupon/new"
-            className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700"
+            className="inline-flex items-center gap-2 bg-navy text-white px-4 py-2.5 rounded-lg hover:bg-navy-dark"
           >
             <Plus size={18} />
             New coupon
@@ -190,7 +190,7 @@ function CouponListPage() {
           </p>
           <Link
             to="/admin/coupon/new"
-            className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700 mt-5"
+            className="inline-flex items-center gap-2 bg-navy text-white px-4 py-2.5 rounded-lg hover:bg-navy-dark mt-5"
           >
             <Plus size={18} />
             New coupon
@@ -227,7 +227,7 @@ function CouponListPage() {
                             type="button"
                             onClick={() => copyCode(coupon.code)}
                             title="Copy code"
-                            className="p-1 rounded text-gray-400 hover:text-gray-900 hover:bg-gray-200 cursor-pointer"
+                            className="p-1 rounded text-gray-400 hover:text-navy hover:bg-gray-200 cursor-pointer"
                           >
                             {copied === coupon.code ? (
                               <Check size={13} className="text-green-600" />

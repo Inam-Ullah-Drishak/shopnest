@@ -132,7 +132,7 @@ function Dropdown({
                 >
                   <span className="truncate">{option.label}</span>
                   {isSelected && (
-                    <Check size={15} className="shrink-0 text-gray-900" />
+                    <Check size={15} className="shrink-0 text-navy" />
                   )}
                 </button>
               </li>

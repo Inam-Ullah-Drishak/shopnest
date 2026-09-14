@@ -167,7 +167,7 @@ function CustomerDetailPage() {
 
       <Link
         to="/admin/customers"
-        className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
+        className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-navy"
       >
         <ArrowLeft size={16} />
         All customers

@@ -20,7 +20,12 @@ function fileFilter(req, file, cb) {
 
   if (extOk && mimeOk) return cb(null, true);
 
-  cb(new Error('Only JPG, PNG and WEBP images are allowed'));
+  // Tagged so the error handler answers 400 rather than 500: the file being
+  // the wrong type is the uploader's mistake, not the server's
+  const error = new Error('Only JPG, PNG and WEBP images are allowed');
+  error.status = 400;
+
+  cb(error);
 }
 
 const upload = multer({

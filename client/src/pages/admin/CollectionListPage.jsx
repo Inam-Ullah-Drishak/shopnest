@@ -90,7 +90,7 @@ function CollectionListPage() {
 
         <Link
           to="/admin/collection/new"
-          className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700"
+          className="inline-flex items-center gap-2 bg-navy text-white px-4 py-2.5 rounded-lg hover:bg-navy-dark"
         >
           <Plus size={18} />
           New collection
@@ -119,7 +119,7 @@ function CollectionListPage() {
           </p>
           <Link
             to="/admin/collection/new"
-            className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700 mt-5"
+            className="inline-flex items-center gap-2 bg-navy text-white px-4 py-2.5 rounded-lg hover:bg-navy-dark mt-5"
           >
             <Plus size={18} />
             New collection

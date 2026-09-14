@@ -149,7 +149,7 @@ function ProductImportModal({ open, onClose, onImported }) {
         type="button"
         onClick={busy ? undefined : closeAndReset}
         aria-label="Close"
-        className="absolute inset-0 bg-gray-900/50"
+        className="absolute inset-0 bg-navy/50"
       />
 
       <div className="relative bg-white rounded-lg shadow-xl w-full max-w-2xl max-h-[85vh] flex flex-col">
@@ -319,7 +319,7 @@ function ProductImportModal({ open, onClose, onImported }) {
                                 : 'cursor-pointer'
                             } ${
                               mode === m.value && n > 0
-                                ? 'border-gray-900 bg-gray-50'
+                                ? 'border-navy bg-gray-50'
                                 : 'hover:bg-gray-50'
                             }`}
                           >
@@ -387,7 +387,7 @@ function ProductImportModal({ open, onClose, onImported }) {
                 className={`inline-flex items-center gap-2 px-4 py-2.5 rounded-lg text-sm disabled:opacity-50 cursor-pointer ${
                   preview
                     ? 'border hover:bg-gray-50'
-                    : 'bg-gray-900 text-white hover:bg-gray-700'
+                    : 'bg-navy text-white hover:bg-navy-dark'
                 }`}
               >
                 {busy && !preview && (
@@ -402,7 +402,7 @@ function ProductImportModal({ open, onClose, onImported }) {
                 type="button"
                 onClick={doImport}
                 disabled={busy}
-                className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg text-sm hover:bg-gray-700 disabled:opacity-50 cursor-pointer"
+                className="inline-flex items-center gap-2 bg-navy text-white px-4 py-2.5 rounded-lg text-sm hover:bg-navy-dark disabled:opacity-50 cursor-pointer"
               >
                 {busy && <Loader2 size={15} className="animate-spin" />}
                 Import {counts[mode]} product

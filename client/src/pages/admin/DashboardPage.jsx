@@ -279,7 +279,7 @@ function DashboardPage() {
 
                       <div className="h-2 bg-gray-100 rounded-full overflow-hidden">
                         <div
-                          className="h-full bg-gray-900"
+                          className="h-full bg-navy"
                           style={{ width: `${percent}%` }}
                         />
                       </div>
@@ -298,7 +298,7 @@ function DashboardPage() {
             <h2 className="font-bold">Running low</h2>
             <Link
               to="/admin/products?stock=low"
-              className="text-sm text-gray-600 hover:text-gray-900"
+              className="text-sm text-gray-600 hover:text-navy"
             >
               See all
             </Link>
@@ -381,7 +381,7 @@ function DashboardPage() {
             <h2 className="font-bold">Recent orders</h2>
             <Link
               to="/admin/orders"
-              className="text-sm text-gray-600 hover:text-gray-900"
+              className="text-sm text-gray-600 hover:text-navy"
             >
               See all
             </Link>

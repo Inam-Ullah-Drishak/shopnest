@@ -280,7 +280,7 @@ function CategoryListPage() {
         <button
           type="submit"
           disabled={creating || !newName.trim()}
-          className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700 disabled:opacity-50 cursor-pointer"
+          className="inline-flex items-center gap-2 bg-navy text-white px-4 py-2.5 rounded-lg hover:bg-navy-dark disabled:opacity-50 cursor-pointer"
         >
           {creating ? (
             <Loader2 size={16} className="animate-spin" />

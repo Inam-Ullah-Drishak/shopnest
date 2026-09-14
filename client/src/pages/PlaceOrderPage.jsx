@@ -8,13 +8,16 @@ import CouponInput from '../components/CouponInput.jsx';
 import { formatPrice } from '../utils/format.js';
 import { usePageTitle } from "../hooks/usePageTitle.js";
 
-const SHIPPING_PRICE = 200;
-const FREE_SHIPPING_OVER = 5000;
+// Only used until GET /api/config answers. The server is the authority on
+// these; keeping a local pair in step by hand is what caused the review page
+// and the invoice to be able to disagree.
+const FALLBACK_CONFIG = { shippingPrice: 200, freeShippingOver: 5000 };
 
 function PlaceOrderPage() {
   usePageTitle('Review your order');
 
-  const { cartItems, shippingAddress, totalPrice, clearCart } = useCart();
+  const { cartItems, shippingAddress, totalPrice, refreshCart, clearCart } =
+    useCart();
   const { userInfo } = useAuth();
   const navigate = useNavigate();
 
@@ -31,7 +34,32 @@ function PlaceOrderPage() {
 
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
+  const [config, setConfig] = useState(FALLBACK_CONFIG);
+
+  useEffect(() => {
+    let active = true;
+
+    axios
+      .get('/api/config')
+      .then(({ data }) => {
+        if (active) setConfig(data);
+      })
+      .catch(() => {
+        // Keep the fallback: a total that's briefly off beats a blank page,
+        // and the server recalculates the real figure when the order is placed
+      });
+
+    return () => {
+      active = false;
+    };
+  }, []);
   usePageTitle('Review your order')
+  // Last check before they commit: a price that moved while the cart sat in
+  // localStorage would otherwise only surface on the invoice
+  useEffect(() => {
+    refreshCart();
+  }, [refreshCart]);
+
   useEffect(() => {
     if (!userInfo) {
       navigate('/login');
@@ -46,7 +74,7 @@ function PlaceOrderPage() {
   const discountedSubtotal = totalPrice - discount;
 
   const shippingPrice =
-    discountedSubtotal > FREE_SHIPPING_OVER ? 0 : SHIPPING_PRICE;
+    discountedSubtotal > config.freeShippingOver ? 0 : config.shippingPrice;
 
   const grandTotal = discountedSubtotal + shippingPrice;
 
@@ -77,7 +105,7 @@ function PlaceOrderPage() {
   if (!shippingAddress || cartItems.length === 0) return null;
 
   return (
-    <div className="p-8">
+    <div className="p-4">
       <h1 className="text-2xl font-bold mb-6">Review your order</h1>
 
       {error && (
@@ -105,7 +133,7 @@ function PlaceOrderPage() {
 
             <Link
               to="/shipping"
-              className="text-blue-600 hover:underline text-sm inline-block mt-2"
+              className="text-teal hover:underline text-sm inline-block mt-2"
             >
               Change address
             </Link>
@@ -202,9 +230,9 @@ function PlaceOrderPage() {
             <span>{formatPrice(grandTotal)}</span>
           </div>
 
-          {shippingPrice > 0 && discountedSubtotal < FREE_SHIPPING_OVER && (
+          {shippingPrice > 0 && discountedSubtotal < config.freeShippingOver && (
             <p className="text-xs text-gray-500 mt-2">
-              Spend {formatPrice(FREE_SHIPPING_OVER - discountedSubtotal + 1)}{' '}
+              Spend {formatPrice(config.freeShippingOver - discountedSubtotal + 1)}{' '}
               more for free delivery.
             </p>
           )}
@@ -212,7 +240,7 @@ function PlaceOrderPage() {
           <button
             onClick={placeOrderHandler}
             disabled={loading}
-            className="w-full inline-flex items-center justify-center gap-2 bg-gray-900 text-white p-3 rounded-lg mt-6 hover:bg-gray-700 disabled:opacity-50 cursor-pointer"
+            className="w-full inline-flex items-center justify-center gap-2 bg-navy text-white p-3 rounded-lg mt-6 hover:bg-navy-dark disabled:opacity-50 cursor-pointer"
           >
             {loading && <Loader2 size={16} className="animate-spin" />}
             Place order

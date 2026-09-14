@@ -71,17 +71,17 @@ function MyOrdersPage() {
 
   if (loading) {
     return (
-      <div className="p-8 flex items-center gap-2 text-gray-500">
+      <div className="p-4 flex items-center gap-2 text-gray-500">
         <Loader2 size={18} className="animate-spin" />
         Loading your orders
       </div>
     );
   }
 
-  if (error) return <p className="p-8 text-red-600">{error}</p>;
+  if (error) return <p className="p-4 text-red-600">{error}</p>;
 
   return (
-    <div className="p-8">
+    <div className="p-4">
       <div className="flex flex-wrap justify-between items-center gap-4 mb-6">
         <div>
           <h1 className="text-2xl font-bold">Your orders</h1>
@@ -147,7 +147,7 @@ function MyOrdersPage() {
           ) : (
             <Link
               to="/shop"
-              className="inline-block bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 mt-5"
+              className="inline-block bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-dark mt-5"
             >
               Start shopping
             </Link>

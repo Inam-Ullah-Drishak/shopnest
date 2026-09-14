@@ -65,7 +65,7 @@ function CouponInput({ subtotal, applied, onApply, onRemove }) {
       <button
         type="button"
         onClick={() => setOpen(true)}
-        className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-gray-900 cursor-pointer"
+        className="inline-flex items-center gap-1.5 text-sm text-gray-600 hover:text-navy cursor-pointer"
       >
         <Tag size={15} />
         Have a discount code?

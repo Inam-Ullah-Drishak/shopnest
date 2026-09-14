@@ -99,7 +99,7 @@ function ProductPage() {
 
   if (loading) {
     return (
-      <div className="p-8 flex items-center gap-2 text-gray-500">
+      <div className="p-4 flex items-center gap-2 text-gray-500">
         <Loader2 size={18} className="animate-spin" />
         Loading
       </div>
@@ -117,11 +117,11 @@ function ProductPage() {
       : product.images;
 
   return (
-    <div className="p-8">
+    <div className="p-4">
       <div className="flex items-center gap-2 text-sm text-gray-500 flex-wrap">
         <Link
           to="/shop"
-          className="inline-flex items-center gap-1 hover:text-gray-900"
+          className="inline-flex items-center gap-1 hover:text-navy"
         >
           <ArrowLeft size={15} />
           Shop
@@ -132,7 +132,7 @@ function ProductPage() {
             <span>/</span>
             <Link
               to={`/shop?category=${encodeURIComponent(categoryName)}`}
-              className="hover:text-gray-900"
+              className="hover:text-navy"
             >
               {categoryName}
             </Link>
@@ -166,7 +166,7 @@ function ProductPage() {
                 <p className="text-lg text-gray-400 line-through">
                   {formatPrice(compareAt)}
                 </p>
-                <span className="bg-red-600 text-white text-xs px-2 py-1 rounded">
+                <span className="bg-amber text-navy font-medium text-xs px-2 py-1 rounded">
                   {discount}% off
                 </span>
               </>
@@ -229,7 +229,7 @@ function ProductPage() {
             <button
               onClick={addToCartHandler}
               disabled={!canBuy}
-              className="flex-1 inline-flex items-center justify-center gap-2 bg-gray-900 text-white p-3 rounded-lg hover:bg-gray-700 disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
+              className="flex-1 inline-flex items-center justify-center gap-2 bg-navy text-white p-3 rounded-lg hover:bg-navy-dark disabled:opacity-50 disabled:cursor-not-allowed cursor-pointer"
             >
               <ShoppingCart size={18} />
               {canBuy ? "Add to cart" : "Out of stock"}

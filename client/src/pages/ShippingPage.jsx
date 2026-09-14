@@ -30,7 +30,7 @@ function ShippingPage() {
   };
 
   return (
-    <div className="max-w-md mx-auto p-8">
+    <div className="max-w-md mx-auto p-4">
       <h1 className="text-3xl font-bold mb-6">Shipping Address</h1>
 
       <form onSubmit={submitHandler} className="space-y-4">
@@ -91,7 +91,7 @@ function ShippingPage() {
 
         <button
           type="submit"
-          className="w-full bg-gray-900 text-white p-3 rounded hover:bg-gray-700 cursor-pointer"
+          className="w-full bg-navy text-white p-3 rounded hover:bg-navy-dark cursor-pointer"
         >
           Continue
         </button>

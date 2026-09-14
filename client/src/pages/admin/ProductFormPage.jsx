@@ -96,6 +96,9 @@ function ProductFormPage() {
             options: v.options.map((o) => ({ name: o.name, value: o.value })),
             sku: v.sku || "",
             price: v.price,
+            // Carried through even though there's no field for it yet: drop
+            // it here and saving an imported product wipes its sale prices
+            compareAtPrice: v.compareAtPrice ?? null,
             countInStock: v.countInStock,
             image: v.image || "",
           })),
@@ -246,7 +249,7 @@ function ProductFormPage() {
     <div className="max-w-3xl mx-auto p-8">
       <Link
         to="/admin/products"
-        className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
+        className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-navy"
       >
         <ArrowLeft size={16} />
         All products
@@ -282,7 +285,7 @@ function ProductFormPage() {
                   />
 
                   {index === 0 && (
-                    <span className="absolute bottom-0 inset-x-0 bg-gray-900/75 text-white text-[11px] text-center py-0.5">
+                    <span className="absolute bottom-0 inset-x-0 bg-navy/75 text-white text-[11px] text-center py-0.5">
                       Main
                     </span>
                   )}
@@ -578,7 +581,7 @@ function ProductFormPage() {
           <button
             type="submit"
             disabled={saving || uploading}
-            className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-2 bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-dark disabled:opacity-50 cursor-pointer"
           >
             {saving && <Loader2 size={16} className="animate-spin" />}
             {isEdit ? "Save changes" : "Create product"}

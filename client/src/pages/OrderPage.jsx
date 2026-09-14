@@ -37,7 +37,7 @@ function Timeline({ order }) {
   });
 
   return (
-    <div className="border rounded-lg p-5">
+    <div className="border rounded-lg p-4">
       <div className="flex">
         {FLOW.map((step, i) => {
           const meta = STATUS_META[step];
@@ -49,7 +49,7 @@ function Timeline({ order }) {
               {i > 0 && (
                 <span
                   className={`absolute top-4 right-1/2 w-full h-0.5 ${
-                    i <= currentIndex ? 'bg-gray-900' : 'bg-gray-200'
+                    i <= currentIndex ? 'bg-navy' : 'bg-gray-200'
                   }`}
                 />
               )}
@@ -58,7 +58,7 @@ function Timeline({ order }) {
                 <span
                   className={`w-8 h-8 rounded-full flex items-center justify-center shrink-0 ${
                     done
-                      ? 'bg-gray-900 text-white'
+                      ? 'bg-navy text-white'
                       : 'bg-gray-100 text-gray-400'
                   }`}
                 >
@@ -145,7 +145,7 @@ function OrderPage() {
 
   if (loading) {
     return (
-      <div className="p-8 flex items-center gap-2 text-gray-500">
+      <div className="p-4 flex items-center gap-2 text-gray-500">
         <Loader2 size={18} className="animate-spin" />
         Loading order
       </div>
@@ -159,7 +159,7 @@ function OrderPage() {
   const canCancel = isOwner && ['pending', 'confirmed'].includes(order.status);
 
   return (
-    <div className="p-8">
+    <div className="p-4">
       <div className="flex flex-wrap items-center gap-3">
         <h1 className="text-2xl font-bold">
           {userInfo?.isAdmin && !isOwner ? 'Order' : 'Your order'}
@@ -207,7 +207,7 @@ function OrderPage() {
                   type="button"
                   onClick={copyTracking}
                   title="Copy"
-                  className="p-1.5 rounded text-gray-400 hover:text-gray-900 hover:bg-gray-100 cursor-pointer"
+                  className="p-1.5 rounded text-gray-400 hover:text-navy hover:bg-gray-100 cursor-pointer"
                 >
                   {copied ? (
                     <Check size={14} className="text-green-600" />

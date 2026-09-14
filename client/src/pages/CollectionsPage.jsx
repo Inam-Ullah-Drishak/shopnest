@@ -29,17 +29,17 @@ function CollectionsPage() {
 
   if (loading) {
     return (
-      <div className="p-8 flex items-center gap-2 text-gray-500">
+      <div className="p-4 flex items-center gap-2 text-gray-500">
         <Loader2 size={18} className="animate-spin" />
         Loading collections
       </div>
     );
   }
 
-  if (error) return <p className="p-8 text-red-600">{error}</p>;
+  if (error) return <p className="p-4 text-red-600">{error}</p>;
 
   return (
-    <div className="p-8">
+    <div className="p-4">
       <h1 className="text-3xl font-bold mb-2">Collections</h1>
       <p className="text-gray-600 mb-6">
         Curated groups of products, picked by hand.
@@ -54,7 +54,7 @@ function CollectionsPage() {
           </p>
           <Link
             to="/"
-            className="inline-block bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 mt-5"
+            className="inline-block bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-dark mt-5"
           >
             Browse all products
           </Link>

@@ -20,22 +20,22 @@ function Footer() {
             <p className="font-medium text-sm mb-3">Shop</p>
             <ul className="space-y-2 text-sm text-gray-500">
               <li>
-                <Link to="/shop" className="hover:text-gray-900">
+                <Link to="/shop" className="hover:text-navy">
                   All products
                 </Link>
               </li>
               <li>
-                <Link to="/collections" className="hover:text-gray-900">
+                <Link to="/collections" className="hover:text-navy">
                   Collections
                 </Link>
               </li>
               <li>
-                <Link to="/shop?onSale=true" className="hover:text-gray-900">
+                <Link to="/shop?onSale=true" className="hover:text-navy">
                   On sale
                 </Link>
               </li>
               <li>
-                <Link to="/shop?sort=newest" className="hover:text-gray-900">
+                <Link to="/shop?sort=newest" className="hover:text-navy">
                   New arrivals
                 </Link>
               </li>
@@ -46,17 +46,17 @@ function Footer() {
             <p className="font-medium text-sm mb-3">Account</p>
             <ul className="space-y-2 text-sm text-gray-500">
               <li>
-                <Link to="/profile" className="hover:text-gray-900">
+                <Link to="/profile" className="hover:text-navy">
                   Your profile
                 </Link>
               </li>
               <li>
-                <Link to="/myorders" className="hover:text-gray-900">
+                <Link to="/myorders" className="hover:text-navy">
                   Your orders
                 </Link>
               </li>
               <li>
-                <Link to="/cart" className="hover:text-gray-900">
+                <Link to="/cart" className="hover:text-navy">
                   Your cart
                 </Link>
               </li>

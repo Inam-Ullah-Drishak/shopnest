@@ -1,5 +1,6 @@
 import mongoose from 'mongoose';
 import asyncHandler from '../utils/asyncHandler.js';
+import { getPaging } from '../utils/pagination.js';
 import Review from '../models/reviewModel.js';
 import Product from '../models/productModel.js';
 import Order from '../models/orderModel.js';
@@ -34,8 +35,16 @@ const syncProductRating = async (productId) => {
 
 // GET /api/products/:id/reviews?pageNumber=&pageSize=&sort=&rating=
 export const getProductReviews = asyncHandler(async (req, res) => {
-  const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
-  const page = Number(req.query.pageNumber) || 1;
+  const { page, pageSize, skip } = getPaging(req.query, DEFAULT_PAGE_SIZE);
+
+  // The aggregate below needs a real ObjectId, and the constructor throws a
+  // BSONError on a malformed id -- which is not a Mongoose CastError, so the
+  // error handler's ObjectId branch misses it and the client gets a 500.
+  // Check the shape first and answer with the same 404 a missing product gets.
+  if (!mongoose.isValidObjectId(req.params.id)) {
+    res.status(404);
+    throw new Error('Product not found');
+  }
 
   const productId = new mongoose.Types.ObjectId(req.params.id);
   const filter = { product: productId };
@@ -63,7 +72,7 @@ export const getProductReviews = asyncHandler(async (req, res) => {
   const reviews = await Review.find(filter)
     .sort(sort)
     .limit(pageSize)
-    .skip(pageSize * (page - 1));
+    .skip(skip);
 
   // Star breakdown across all reviews, not just this page.
   // Aggregate doesn't auto-cast strings to ObjectIds like find does.

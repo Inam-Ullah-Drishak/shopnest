@@ -84,7 +84,7 @@ function Carousel({ children, itemClass = 'w-40', gap = 'gap-4' }) {
               aria-current={i === current ? 'true' : undefined}
               className={`h-2 rounded-full transition-all cursor-pointer ${
                 i === current
-                  ? 'w-6 bg-gray-900'
+                  ? 'w-6 bg-navy'
                   : 'w-2 bg-gray-300 hover:bg-gray-400'
               }`}
             />

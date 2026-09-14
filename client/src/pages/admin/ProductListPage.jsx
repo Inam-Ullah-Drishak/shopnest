@@ -1,5 +1,5 @@
 /* eslint-disable react-hooks/set-state-in-effect */
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, useRef } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import axios from 'axios';
 import {
@@ -79,7 +79,16 @@ function ProductListPage() {
       .catch(() => {});
   }, []);
 
+  // Filters change faster than the network answers, and this is also called
+  // after deletes and bulk actions. Each call takes a ticket; a response whose
+  // ticket is no longer the newest is dropped rather than overwriting fresher
+  // results.
+  const latestRequest = useRef(0);
+
   const fetchProducts = useCallback(async () => {
+    const requestId = latestRequest.current + 1;
+    latestRequest.current = requestId;
+
     setLoading(true);
 
     try {
@@ -95,13 +104,17 @@ function ProductListPage() {
         },
       });
 
+      if (requestId !== latestRequest.current) return;
+
       setProducts(data.products);
       setPages(data.pages);
       setCount(data.count);
     } catch (err) {
+      if (requestId !== latestRequest.current) return;
+
       setError(err.response?.data?.message || 'Could not load products');
     } finally {
-      setLoading(false);
+      if (requestId === latestRequest.current) setLoading(false);
     }
   }, [keyword, category, stock, sort, page]);
 
@@ -263,7 +276,7 @@ function ProductListPage() {
 
           <Link
             to="/admin/product/new"
-            className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700"
+            className="inline-flex items-center gap-2 bg-navy text-white px-4 py-2.5 rounded-lg hover:bg-navy-dark"
           >
             <Plus size={18} />
             New product
@@ -352,7 +365,7 @@ function ProductListPage() {
       </div>
 
       {selected.size > 0 && (
-        <div className="flex flex-wrap items-center gap-3 bg-gray-900 text-white rounded-lg px-4 py-3 mb-4">
+        <div className="flex flex-wrap items-center gap-3 bg-navy text-white rounded-lg px-4 py-3 mb-4">
           <p className="text-sm font-medium">
             {selected.size} selected
           </p>
@@ -461,7 +474,7 @@ function ProductListPage() {
 
                 <Link
                   to="/admin/product/new"
-                  className="inline-flex items-center gap-2 bg-gray-900 text-white px-4 py-2.5 rounded-lg hover:bg-gray-700"
+                  className="inline-flex items-center gap-2 bg-navy text-white px-4 py-2.5 rounded-lg hover:bg-navy-dark"
                 >
                   <Plus size={18} />
                   New product

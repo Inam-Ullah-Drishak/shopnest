@@ -1,5 +1,7 @@
 import mongoose from 'mongoose';
 import asyncHandler from '../utils/asyncHandler.js';
+import { getPaging } from '../utils/pagination.js';
+import escapeRegex from '../utils/escapeRegex.js';
 import User from '../models/userModel.js';
 import Order from '../models/orderModel.js';
 import Review from '../models/reviewModel.js';
@@ -8,8 +10,7 @@ const DEFAULT_PAGE_SIZE = 8;
 
 // GET /api/customers?keyword=&role=&sort=&pageNumber=  — admin
 export const getCustomers = asyncHandler(async (req, res) => {
-  const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
-  const page = Number(req.query.pageNumber) || 1;
+  const { page, pageSize, skip } = getPaging(req.query, DEFAULT_PAGE_SIZE);
 
   const match = {};
 
@@ -18,7 +19,7 @@ export const getCustomers = asyncHandler(async (req, res) => {
   else if (req.query.role === 'blocked') match.isBlocked = true;
 
   if (req.query.keyword) {
-    const rx = { $regex: req.query.keyword, $options: 'i' };
+    const rx = { $regex: escapeRegex(req.query.keyword), $options: 'i' };
     match.$or = [{ name: rx }, { email: rx }];
   }
 
@@ -71,7 +72,7 @@ export const getCustomers = asyncHandler(async (req, res) => {
     },
     { $project: { password: 0, orders: 0 } },
     { $sort: sort },
-    { $skip: pageSize * (page - 1) },
+    { $skip: skip },
     { $limit: pageSize },
   ]);
 

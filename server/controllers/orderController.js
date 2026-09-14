@@ -1,31 +1,100 @@
 import asyncHandler from '../utils/asyncHandler.js';
+import { getPaging } from '../utils/pagination.js';
 import Order, { NEXT_STATUSES } from '../models/orderModel.js';
 import Product from '../models/productModel.js';
 import Coupon from '../models/couponModel.js';
+import { csvCell as cell } from '../utils/csv.js';
+import { SHIPPING_PRICE, FREE_SHIPPING_OVER } from '../config/store.js';
 
-const SHIPPING_PRICE = 200;
-const FREE_SHIPPING_OVER = 5000;
 const DEFAULT_PAGE_SIZE = 8;
 
-// Stock leaves when the order ships and comes back if it's cancelled.
-// direction is -1 to take, +1 to return.
-const adjustStock = async (order, direction) => {
-  for (const item of order.orderItems) {
-    const change = direction * item.qty;
-
+// Puts stock back. Used when an order is cancelled, and to unwind a partial
+// reservation. For a variant line the product-level countInStock mirrors the
+// sum across variants, so both move together.
+const releaseStock = async (items) => {
+  for (const item of items) {
     if (item.variantId) {
       // Positional operator: touch the matched variant only
       await Product.updateOne(
         { _id: item.product, 'variants._id': item.variantId },
-        { $inc: { 'variants.$.countInStock': change } }
+        { $inc: { 'variants.$.countInStock': item.qty } }
       );
     }
 
     await Product.updateOne(
       { _id: item.product },
-      { $inc: { countInStock: change } }
+      { $inc: { countInStock: item.qty } }
     );
   }
+};
+
+// Hands a coupon redemption back when an order is cancelled. Without this a
+// customer who cancels has still burned their one allowed use, and a limited
+// code quietly loses inventory to orders that never happened.
+//
+// Matched on the code string rather than an id, because the order stores the
+// code as text on purpose. A coupon deleted since then simply matches nothing.
+const releaseCoupon = async (order) => {
+  if (!order.couponCode) return;
+
+  await Coupon.updateOne(
+    {
+      code: order.couponCode,
+      usedCount: { $gt: 0 },
+      usedBy: { $elemMatch: { user: order.user, count: { $gt: 0 } } },
+    },
+    { $inc: { usedCount: -1, 'usedBy.$.count': -1 } }
+  );
+
+  // Drop the row once it reaches zero, so timesUsedBy stays honest
+  await Coupon.updateOne(
+    { code: order.couponCode },
+    { $pull: { usedBy: { count: { $lte: 0 } } } }
+  );
+};
+// Takes stock at the moment the order is placed. The quantity check is part
+// of the update filter, so the read and the write are a single atomic
+// operation -- two customers racing for the last unit cannot both win. A
+// separate check-then-write would let both through.
+//
+// There is no transaction here because that needs a replica set, so a failure
+// partway through unwinds the lines already taken by hand.
+const reserveStock = async (items) => {
+  const taken = [];
+
+  for (const item of items) {
+    const filter = item.variantId
+      ? {
+          _id: item.product,
+          variants: {
+            $elemMatch: {
+              _id: item.variantId,
+              countInStock: { $gte: item.qty },
+            },
+          },
+        }
+      : { _id: item.product, countInStock: { $gte: item.qty } };
+
+    const update = item.variantId
+      ? {
+          $inc: {
+            'variants.$.countInStock': -item.qty,
+            countInStock: -item.qty,
+          },
+        }
+      : { $inc: { countInStock: -item.qty } };
+
+    const result = await Product.updateOne(filter, update);
+
+    if (result.modifiedCount === 0) {
+      await releaseStock(taken);
+      return { ok: false, item };
+    }
+
+    taken.push(item);
+  }
+
+  return { ok: true };
 };
 
 const pushHistory = (order, status, note, userId) => {
@@ -37,6 +106,16 @@ const pushHistory = (order, status, note, userId) => {
   });
 };
 
+// A date-only filter like to=2026-03-01 means the whole of that day. Built
+// from the parts rather than setHours on a parsed string, which lands on the
+// wrong day west of Greenwich.
+const endOfDay = (value) => {
+  const [y, m, d] = String(value).slice(0, 10).split('-').map(Number);
+
+  if (!y || !m || !d) return new Date(value);
+
+  return new Date(y, m - 1, d, 23, 59, 59, 999);
+};
 // Shared by the list and the CSV export
 const buildOrderFilter = (query) => {
   const filter = {};
@@ -54,11 +133,7 @@ const buildOrderFilter = (query) => {
   if (query.from || query.to) {
     filter.createdAt = {};
     if (query.from) filter.createdAt.$gte = new Date(query.from);
-    if (query.to) {
-      const end = new Date(query.to);
-      end.setHours(23, 59, 59, 999);
-      filter.createdAt.$lte = end;
-    }
+    if (query.to) filter.createdAt.$lte = endOfDay(query.to);
   }
 
   return filter;
@@ -192,25 +267,52 @@ export const createOrder = asyncHandler(async (req, res) => {
 
   const totalPrice = discountedSubtotal + shippingPrice;
 
-  const order = await Order.create({
-    user: req.user._id,
-    orderItems: finalItems,
-    shippingAddress,
-    paymentMethod: paymentMethod || 'Cash on Delivery',
-    itemsPrice,
-    couponCode: appliedCode,
-    discountAmount,
-    shippingPrice,
-    totalPrice,
-    status: 'pending',
-    statusHistory: [{ status: 'pending', note: 'Order placed', at: new Date() }],
-  });
+  // Take the stock before the order exists. The checks further up ran against
+  // a snapshot that another customer may already have invalidated; this is the
+  // one that actually decides who gets the last unit.
+  const reservation = await reserveStock(finalItems);
+
+  if (!reservation.ok) {
+    const { item } = reservation;
+
+    res.status(409);
+    throw new Error(
+      `${item.name}${
+        item.variantLabel ? ` (${item.variantLabel})` : ''
+      } just sold out. Please adjust your cart and try again.`
+    );
+  }
+
+  let order;
+
+  try {
+    order = await Order.create({
+      user: req.user._id,
+      orderItems: finalItems,
+      shippingAddress,
+      paymentMethod: paymentMethod || 'Cash on Delivery',
+      itemsPrice,
+      couponCode: appliedCode,
+      discountAmount,
+      shippingPrice,
+      totalPrice,
+      status: 'pending',
+      stockAdjusted: true,
+      statusHistory: [
+        { status: 'pending', note: 'Order placed', at: new Date() },
+      ],
+    });
+  } catch (error) {
+    // Don't strand the stock if the order itself fails to save
+    await releaseStock(finalItems);
+    throw error;
+  }
 
   // Record the redemption only after the order exists, so a failed order
   // doesn't burn someone's one allowed use
   if (coupon) {
     const existing = coupon.usedBy.find(
-      (u) => u.user.toString() === req.user._id.toString()
+      (u) => u.user && u.user.toString() === req.user._id.toString()
     );
 
     if (existing) {
@@ -234,8 +336,7 @@ export const createOrder = asyncHandler(async (req, res) => {
 
 // GET /api/orders/mine  — protected
 export const getMyOrders = asyncHandler(async (req, res) => {
-  const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
-  const page = Number(req.query.pageNumber) || 1;
+  const { page, pageSize, skip } = getPaging(req.query, DEFAULT_PAGE_SIZE);
 
   const filter = { user: req.user._id };
 
@@ -248,7 +349,7 @@ export const getMyOrders = asyncHandler(async (req, res) => {
   const orders = await Order.find(filter)
     .sort({ createdAt: -1 })
     .limit(pageSize)
-    .skip(pageSize * (page - 1));
+    .skip(skip);
 
   res.json({
     orders,
@@ -260,8 +361,7 @@ export const getMyOrders = asyncHandler(async (req, res) => {
 
 // GET /api/orders  — admin
 export const getAllOrders = asyncHandler(async (req, res) => {
-  const pageSize = Number(req.query.pageSize) || DEFAULT_PAGE_SIZE;
-  const page = Number(req.query.pageNumber) || 1;
+  const { page, pageSize, skip } = getPaging(req.query, DEFAULT_PAGE_SIZE);
 
   const filter = buildOrderFilter(req.query);
 
@@ -271,7 +371,7 @@ export const getAllOrders = asyncHandler(async (req, res) => {
     .populate('user', 'name email')
     .sort({ createdAt: -1 })
     .limit(pageSize)
-    .skip(pageSize * (page - 1));
+    .skip(skip);
 
   res.json({
     orders,
@@ -290,12 +390,6 @@ export const exportOrders = asyncHandler(async (req, res) => {
     .sort({ createdAt: -1 })
     .limit(5000);
 
-  // Wrap every field in quotes and double any inner quotes, so a comma in
-  // an address doesn't split the column
-  const cell = (value) => {
-    const text = String(value ?? '');
-    return `"${text.replace(/"/g, '""')}"`;
-  };
 
   const headers = [
     'Order ID',
@@ -375,7 +469,10 @@ export const getOrderById = asyncHandler(async (req, res) => {
     throw new Error('Order not found');
   }
 
-  const isOwner = order.user._id.toString() === req.user._id.toString();
+  // populate() yields null if the account has since been removed, and reading
+  // ._id off that threw a 500 on an order an admin can legitimately view
+  const isOwner =
+    order.user?._id?.toString() === req.user._id.toString();
 
   if (!isOwner && !req.user.isAdmin) {
     res.status(401);
@@ -414,16 +511,15 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
     );
   }
 
-  // Stock leaves the warehouse when the order ships
-  if (status === 'shipped' && !order.stockAdjusted) {
-    await adjustStock(order, -1);
-    order.stockAdjusted = true;
-  }
+  // Stock was taken when the order was placed, so shipping doesn't move it.
+  // Cancelling gives it back.
+  if (status === 'cancelled') {
+    if (order.stockAdjusted) {
+      await releaseStock(order.orderItems);
+      order.stockAdjusted = false;
+    }
 
-  // Put it back if the order is cancelled after stock was already taken
-  if (status === 'cancelled' && order.stockAdjusted) {
-    await adjustStock(order, 1);
-    order.stockAdjusted = false;
+    await releaseCoupon(order);
   }
 
   if (status === 'delivered') {
@@ -470,9 +566,11 @@ export const cancelOrder = asyncHandler(async (req, res) => {
   }
 
   if (order.stockAdjusted) {
-    await adjustStock(order, 1);
+    await releaseStock(order.orderItems);
     order.stockAdjusted = false;
   }
+
+  await releaseCoupon(order);
 
   order.status = 'cancelled';
   order.cancelledAt = new Date();

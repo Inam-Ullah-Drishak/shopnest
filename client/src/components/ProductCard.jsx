@@ -37,13 +37,13 @@ function ProductCard({ product }) {
         )}
 
         {outOfStock && (
-          <span className="absolute top-2 left-2 bg-gray-900 text-white text-xs px-2 py-1 rounded">
+          <span className="absolute top-2 left-2 bg-navy text-white text-xs px-2 py-1 rounded">
             Out of stock
           </span>
         )}
 
         {!outOfStock && onSale && (
-          <span className="absolute top-2 left-2 bg-red-600 text-white text-xs px-2 py-1 rounded">
+          <span className="absolute top-2 left-2 bg-amber text-navy font-medium text-xs px-2 py-1 rounded">
             {discount}% off
           </span>
         )}
@@ -54,7 +54,7 @@ function ProductCard({ product }) {
         />
 
         {product.images?.length > 1 && (
-          <span className="absolute bottom-2 right-2 bg-gray-900/70 text-white text-xs px-2 py-0.5 rounded">
+          <span className="absolute bottom-2 right-2 bg-navy/70 text-white text-xs px-2 py-0.5 rounded">
             {product.images.length} photos
           </span>
         )}

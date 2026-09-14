@@ -1,3 +1,19 @@
+// Excel and Google Sheets execute any cell whose text begins with =, +, -
+// or @. Customers control their own name, address and phone, so an export is
+// a direct path from a form field to code running on whoever opens the file.
+// An apostrophe forces the cell to be read as text. It also stops a phone
+// number like +923001234567 being silently turned into a number.
+const FORMULA_START = /^[=+\-@\t\r]/;
+
+export const csvCell = (value) => {
+  let text = value === null || value === undefined ? '' : String(value);
+
+  if (FORMULA_START.test(text)) text = `'${text}`;
+
+  // Wrap in quotes and double any inner quotes, so a comma in a description
+  // doesn't split the column
+  return `"${text.replace(/"/g, '""')}"`;
+};
 // A small CSV parser. Handles quoted fields, escaped quotes and newlines
 // inside quotes, which a naive split(',') would break on.
 export const parseCsv = (text) => {

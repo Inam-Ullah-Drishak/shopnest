@@ -149,7 +149,7 @@ function CouponFormPage() {
     <div className="max-w-2xl mx-auto p-8">
       <Link
         to="/admin/coupons"
-        className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-gray-900"
+        className="inline-flex items-center gap-1 text-sm text-gray-600 hover:text-navy"
       >
         <ArrowLeft size={16} />
         All coupons
@@ -387,7 +387,7 @@ function CouponFormPage() {
           <button
             type="submit"
             disabled={saving}
-            className="inline-flex items-center gap-2 bg-gray-900 text-white px-5 py-2.5 rounded-lg hover:bg-gray-700 disabled:opacity-50 cursor-pointer"
+            className="inline-flex items-center gap-2 bg-navy text-white px-5 py-2.5 rounded-lg hover:bg-navy-dark disabled:opacity-50 cursor-pointer"
           >
             {saving && <Loader2 size={16} className="animate-spin" />}
             {isEdit ? 'Save changes' : 'Create coupon'}

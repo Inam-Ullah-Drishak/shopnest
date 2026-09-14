@@ -8,6 +8,7 @@ import cors from 'cors';
 import helmet from 'helmet';
 import cookieParser from 'cookie-parser';
 import connectDB from './config/db.js';
+import { storeConfig } from './config/store.js';
 import productRoutes from './routes/productRoutes.js';
 import userRoutes from './routes/userRoutes.js';
 import orderRoutes from './routes/orderRoutes.js';
@@ -69,6 +70,12 @@ app.use('/api/customers', customerRoutes);
 // Legacy: images uploaded before Cloudinary still live on disk.
 // Safe to remove once no product references a /uploads path.
 app.use('/uploads', express.static(path.join(process.cwd(), 'uploads')));
+
+// Checkout rules the storefront needs before an order exists, so the total on
+// the review page is derived from the same numbers the server charges with
+app.get('/api/config', (req, res) => {
+  res.json(storeConfig);
+});
 
 app.get('/', (req, res) => {
   res.json({ message: 'API is running' });

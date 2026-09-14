@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import {LineChart,Line,BarChart,Bar,XAxis,YAxis,CartesianGrid,Tooltip,ResponsiveContainer,} from 'recharts';
@@ -9,6 +9,26 @@ import Dropdown from '../../components/Dropdown.jsx';
 import { formatPrice, formatDate } from '../../utils/format.js';
 import { usePageTitle } from "../../hooks/usePageTitle.js";
 
+// YYYY-MM-DD for a Date, in the browser's own timezone. toISOString would
+// give the UTC date, which is the wrong day for anyone east of Greenwich
+// after 7pm.
+const dayKey = (date) => {
+  const pad = (n) => String(n).padStart(2, '0');
+
+  return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(
+    date.getDate()
+  )}`;
+};
+
+// Step a whole number of calendar days from a key, via UTC midnights so a
+// DST change cannot swallow or repeat a day
+const shiftKey = (key, deltaDays) => {
+  const [y, m, d] = key.split('-').map(Number);
+
+  return new Date(Date.UTC(y, m - 1, d) + deltaDays * 86400000)
+    .toISOString()
+    .slice(0, 10);
+};
 function StatCard({ icon: Icon, label, value, sub, tone = 'default' }) {
   const tones = {
     default: 'text-gray-400',
@@ -32,7 +52,9 @@ function StatCard({ icon: Icon, label, value, sub, tone = 'default' }) {
 function DashboardPage() {
   const { userInfo } = useAuth();
   const navigate = useNavigate();
-  const [days, setDays] = useState(30);
+  const [preset, setPreset] = useState('30');
+  const [customFrom, setCustomFrom] = useState('');
+  const [customTo, setCustomTo] = useState('');
   const [summary, setSummary] = useState(null);
   const [revenue, setRevenue] = useState([]);
   const [topProducts, setTopProducts] = useState([]);
@@ -47,16 +69,41 @@ function DashboardPage() {
     if (!userInfo || !userInfo.isAdmin) navigate('/login');
   }, [userInfo, navigate]);
 
+  // One window drives every panel. Presets are turned into real dates here
+  // rather than sent as a day count, so the server only deals with one shape.
+  const { from, to } = useMemo(() => {
+    if (preset === 'custom') {
+      if (!customFrom || !customTo) return { from: '', to: '' };
+
+      // Picking the end before the start is an easy slip, so read it either way
+      return customFrom <= customTo
+        ? { from: customFrom, to: customTo }
+        : { from: customTo, to: customFrom };
+    }
+
+    const end = dayKey(new Date());
+
+    return { from: shiftKey(end, -(Number(preset) - 1)), to: end };
+  }, [preset, customFrom, customTo]);
+
   useEffect(() => {
+    // A half-finished custom range would ask for everything; wait for both
+    if (!from || !to) return;
+
     const load = async () => {
       setLoading(true);
 
       try {
+        const range = { from, to };
+
+        // Low stock and recent orders are "right now" panels, so no range
         const [s, r, t, c, l, o] = await Promise.all([
-          axios.get('/api/dashboard/summary'),
-          axios.get('/api/dashboard/revenue', { params: { days } }),
-          axios.get('/api/dashboard/top-products', { params: { limit: 8 } }),
-          axios.get('/api/dashboard/by-category'),
+          axios.get('/api/dashboard/summary', { params: range }),
+          axios.get('/api/dashboard/revenue', { params: range }),
+          axios.get('/api/dashboard/top-products', {
+            params: { ...range, limit: 8 },
+          }),
+          axios.get('/api/dashboard/by-category', { params: range }),
           axios.get('/api/dashboard/low-stock', { params: { limit: 6 } }),
           axios.get('/api/dashboard/recent-orders', { params: { limit: 5 } }),
         ]);
@@ -75,7 +122,7 @@ function DashboardPage() {
     };
 
     load();
-  }, [days]);
+  }, [from, to]);
 
   if (loading) {
     return (
@@ -120,22 +167,58 @@ function DashboardPage() {
         <div>
           <h1 className="text-2xl font-bold">Dashboard</h1>
           <p className="text-sm text-gray-500 mt-0.5">
-            How the store is doing right now.
+            {from && to
+              ? `${formatDate(from)} to ${formatDate(to)}`
+              : 'Pick both dates to see the range'}
           </p>
         </div>
 
-        <Dropdown
-          value={String(days)}
-          onChange={(v) => setDays(Number(v))}
-          options={[
-            { value: '7', label: 'Last 7 days' },
-            { value: '30', label: 'Last 30 days' },
-            { value: '90', label: 'Last 90 days' },
-            { value: '365', label: 'Last year' },
-          ]}
-          className="w-44"
-          align="right"
-        />
+        <div className="flex flex-wrap items-center gap-2">
+          {preset === 'custom' && (
+            <>
+              <input
+                type="date"
+                value={customFrom}
+                max={dayKey(new Date())}
+                onChange={(e) => setCustomFrom(e.target.value)}
+                aria-label="From date"
+                className="border rounded-lg px-3 py-2.5 text-sm"
+              />
+
+              <input
+                type="date"
+                value={customTo}
+                max={dayKey(new Date())}
+                onChange={(e) => setCustomTo(e.target.value)}
+                aria-label="To date"
+                className="border rounded-lg px-3 py-2.5 text-sm"
+              />
+            </>
+          )}
+
+          <Dropdown
+            value={preset}
+            onChange={(v) => {
+              setPreset(v);
+
+              // Open the custom pickers on the window they were just looking
+              // at, so the dashboard does not blank out
+              if (v === 'custom' && !customFrom && !customTo) {
+                setCustomFrom(from);
+                setCustomTo(to);
+              }
+            }}
+            options={[
+              { value: '7', label: 'Last 7 days' },
+              { value: '30', label: 'Last 30 days' },
+              { value: '90', label: 'Last 90 days' },
+              { value: '365', label: 'Last year' },
+              { value: 'custom', label: 'Custom range' },
+            ]}
+            className="w-44"
+            align="right"
+          />
+        </div>
       </div>
 
       <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">

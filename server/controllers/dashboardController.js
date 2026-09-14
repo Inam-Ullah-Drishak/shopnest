@@ -45,6 +45,15 @@ const endOfDay = (value) => {
   return new Date(y, m - 1, d, 23, 59, 59, 999);
 };
 
+// A YYYY-MM-DD key as the UTC midnight of that calendar date. Used only for
+// stepping between days, never for display, so UTC is the right frame here.
+const keyToUtc = (key) => {
+  const [y, m, d] = String(key).slice(0, 10).split('-').map(Number);
+
+  return Number.isFinite(y) && Number.isFinite(m) && Number.isFinite(d)
+    ? Date.UTC(y, m - 1, d)
+    : null;
+};
 const rangeFilter = (from, to) => {
   const filter = {};
 
@@ -104,32 +113,39 @@ export const getSummary = asyncHandler(async (req, res) => {
   });
 });
 
-// GET /api/dashboard/revenue?days=30  — admin
+// GET /api/dashboard/revenue?days=30 | ?from=&to=  — admin
 // Revenue per day, with empty days filled in
 export const getRevenueSeries = asyncHandler(async (req, res) => {
-  const days = Math.min(Number(req.query.days) || 30, 365);
-
-  // The days we want, oldest first, ending today in the reporting timezone.
-  // Stepping over UTC midnights of a plain calendar date keeps this immune to
-  // DST, which adding 24h at a time is not.
-  const today = dayKey(new Date());
-  const [ty, tm, td] = today.split('-').map(Number);
-  const todayUtc = Date.UTC(ty, tm - 1, td);
   const DAY = 24 * 60 * 60 * 1000;
+
+  // The window ends on `to` when one is given, otherwise today. Stepping over
+  // UTC midnights of a plain calendar date keeps this immune to DST, which
+  // adding 24h at a time is not.
+  const endUtc = keyToUtc(req.query.to) ?? keyToUtc(dayKey(new Date()));
+  const startUtc = keyToUtc(req.query.from);
+
+  // An explicit range sets the length; otherwise fall back to ?days
+  const requested =
+    startUtc !== null && startUtc <= endUtc
+      ? Math.round((endUtc - startUtc) / DAY) + 1
+      : Number(req.query.days) || 30;
+
+  const days = Math.min(Math.max(requested, 1), 365);
 
   const keys = [];
 
   for (let i = days - 1; i >= 0; i -= 1) {
-    keys.push(new Date(todayUtc - i * DAY).toISOString().slice(0, 10));
+    keys.push(new Date(endUtc - i * DAY).toISOString().slice(0, 10));
   }
 
-  // Reach back an extra day: the start of the oldest local day can sit up to
-  // 14 hours either side of its UTC midnight. Anything extra that comes back
+  // Reach a day past each edge: the start of a local day can sit up to 14
+  // hours either side of its UTC midnight. Anything extra that comes back
   // simply isn't in `keys` and gets dropped.
-  const start = new Date(todayUtc - (days - 1) * DAY - DAY);
+  const start = new Date(endUtc - (days - 1) * DAY - DAY);
+  const end = new Date(endUtc + 2 * DAY);
 
   const rows = await Order.aggregate([
-    { $match: { ...PAID, createdAt: { $gte: start } } },
+    { $match: { ...PAID, createdAt: { $gte: start, $lte: end } } },
     {
       $group: {
         _id: {
@@ -161,9 +177,10 @@ export const getRevenueSeries = asyncHandler(async (req, res) => {
 // GET /api/dashboard/top-products?limit=8  — admin
 export const getTopProducts = asyncHandler(async (req, res) => {
   const limit = Math.min(Number(req.query.limit) || 8, 50);
+  const range = rangeFilter(req.query.from, req.query.to);
 
   const rows = await Order.aggregate([
-    { $match: PAID },
+    { $match: { ...PAID, ...range } },
     { $unwind: '$orderItems' },
     {
       $group: {
@@ -185,8 +202,10 @@ export const getTopProducts = asyncHandler(async (req, res) => {
 
 // GET /api/dashboard/by-category  — admin
 export const getRevenueByCategory = asyncHandler(async (req, res) => {
+  const range = rangeFilter(req.query.from, req.query.to);
+
   const rows = await Order.aggregate([
-    { $match: PAID },
+    { $match: { ...PAID, ...range } },
     { $unwind: '$orderItems' },
     {
       $lookup: {

@@ -16,6 +16,8 @@ function ShopPage() {
   const stock = searchParams.get("stock") || "all";
   const sort = searchParams.get("sort") || "newest";
   const onSale = searchParams.get("onSale") === "true";
+  const minPrice = searchParams.get("minPrice") || "";
+  const maxPrice = searchParams.get("maxPrice") || "";
   const page = Number(searchParams.get("page")) || 1;
 
   const [searchInput, setSearchInput] = useState(keyword);
@@ -26,6 +28,18 @@ function ShopPage() {
   if (keyword !== lastKeyword) {
     setLastKeyword(keyword);
     setSearchInput(keyword);
+  }
+
+  // Same idea for the price boxes: they type freely, the URL only changes
+  // when they submit, and the back button puts the boxes back in step
+  const [minInput, setMinInput] = useState(minPrice);
+  const [maxInput, setMaxInput] = useState(maxPrice);
+  const [lastRange, setLastRange] = useState(`${minPrice}|${maxPrice}`);
+
+  if (`${minPrice}|${maxPrice}` !== lastRange) {
+    setLastRange(`${minPrice}|${maxPrice}`);
+    setMinInput(minPrice);
+    setMaxInput(maxPrice);
   }
 
   const [products, setProducts] = useState([]);
@@ -40,7 +54,9 @@ function ShopPage() {
     category !== "All" ||
     stock !== "all" ||
     sort !== "newest" ||
-    onSale;
+    onSale ||
+    minPrice ||
+    maxPrice;
 
   useEffect(() => {
     axios
@@ -69,6 +85,8 @@ function ShopPage() {
             stock,
             sort,
             onSale: onSale ? "true" : undefined,
+            minPrice: minPrice || undefined,
+            maxPrice: maxPrice || undefined,
             pageNumber: page,
             pageSize: PAGE_SIZE,
           },
@@ -89,7 +107,7 @@ function ShopPage() {
     };
 
     fetchProducts();
-  }, [keyword, category, stock, sort, onSale, page]);
+  }, [keyword, category, stock, sort, onSale, minPrice, maxPrice, page]);
 
   // Merge one change into the URL, resetting to page 1
   const setParam = (changes) => {
@@ -99,6 +117,8 @@ function ShopPage() {
       stock,
       sort,
       onSale: onSale ? "true" : "",
+      minPrice,
+      maxPrice,
       page: 1,
       ...changes,
     };
@@ -156,6 +176,51 @@ function ShopPage() {
           <Tag size={15} />
           On sale
         </button>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+
+            // A backwards range returns nothing and looks broken, so swap it
+            const from = Number(minInput);
+            const to = Number(maxInput);
+            const flip = minInput && maxInput && from > to;
+
+            setParam({
+              minPrice: flip ? maxInput : minInput,
+              maxPrice: flip ? minInput : maxInput,
+            });
+          }}
+          className="flex gap-2"
+        >
+          <input
+            type="number"
+            min="0"
+            inputMode="numeric"
+            value={minInput}
+            onChange={(e) => setMinInput(e.target.value)}
+            placeholder="Min price"
+            aria-label="Minimum price"
+            className="w-28 border rounded-lg px-3 py-2.5 text-sm outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          />
+
+          <input
+            type="number"
+            min="0"
+            inputMode="numeric"
+            value={maxInput}
+            onChange={(e) => setMaxInput(e.target.value)}
+            placeholder="Max price"
+            aria-label="Maximum price"
+            className="w-28 border rounded-lg px-3 py-2.5 text-sm outline-none [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none"
+          />
+
+          <button
+            type="submit"
+            className="border rounded-lg px-4 py-2.5 text-sm hover:bg-gray-50 cursor-pointer"
+          >
+            Go
+          </button>
+        </form>
 
         <Dropdown
           value={category}

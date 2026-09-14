@@ -7,7 +7,7 @@ function CollectionGrid({ collections = [], title = "Collections", seeAllLink = 
   if (!collections || collections.length === 0) return null;
 
   return (
-    <section className="px-8 py-10 border-t">
+    <section className="px-8 py-10 ">
       <SectionHeader title={title} to={seeAllLink} />
 
       <Carousel itemClass="w-72 sm:w-80">

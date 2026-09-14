@@ -66,11 +66,15 @@ function ProductCard({ product }) {
           {product.categoryName || product.category}
         </p>
 
-        {product.numReviews > 0 && (
-          <div className="mt-1.5">
-            <StarRating value={product.rating} count={product.numReviews} />
-          </div>
-        )}
+        {/* Always rendered, even with nothing to show. An unreviewed product
+            used to drop this row entirely, which made its card shorter than
+            its neighbours and left the grid ragged. */}
+        <div className="mt-1.5">
+          <StarRating
+            value={product.rating || 0}
+            count={product.numReviews || 0}
+          />
+        </div>
 
         <div className="flex items-baseline gap-2 mt-2 flex-wrap">
           <p className="text-lg font-bold">

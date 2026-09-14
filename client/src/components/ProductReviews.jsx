@@ -206,7 +206,7 @@ function ProductReviews({ productId, rating, numReviews }) {
   };
 
   return (
-    <section className="border-t mt-12 pt-10">
+    <section className="mt-12 pt-10">
       <h2 className="text-2xl font-bold mb-6">Reviews</h2>
 
       {error && (

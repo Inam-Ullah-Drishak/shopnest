@@ -14,7 +14,7 @@ function CategoryCarousel({ categories = [] }) {
   }
 
   return (
-    <section className="px-8 py-10 border-t">
+    <section className="px-8 py-10">
       <div className="flex items-baseline justify-between mb-6">
         <h2 className="text-2xl font-bold">Shop by category</h2>
 

@@ -25,7 +25,7 @@ const DEFAULT_FEATURES = [
 
 function FeatureHighlights({ features = DEFAULT_FEATURES }) {
   return (
-    <section className="px-8 py-12 border-t">
+    <section className="px-8 py-12">
       <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {features.map(({ icon: Icon, title, text }) => (
           <div

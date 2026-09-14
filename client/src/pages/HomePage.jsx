@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { Loader2, AlertCircle, RefreshCw } from "lucide-react";
 
@@ -20,47 +20,57 @@ function HomePage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
-  const load = useCallback(async () => {
-    setLoading(true);
-    setError("");
-
-    try {
-      // Featured is its own request now. Filtering the newest twelve for
-      // isFeatured meant an older featured product could never appear.
-      const [newest, sale, picks, cats, cols] = await Promise.all([
-        axios.get("/api/products", {
-          params: { sort: "newest", pageSize: 12 },
-        }),
-        axios.get("/api/products", {
-          params: { onSale: "true", pageSize: 12 },
-        }),
-        axios.get("/api/products", {
-          params: { featured: "true", pageSize: 12 },
-        }),
-        axios.get("/api/categories"),
-        axios.get("/api/collections", { params: { published: "true" } }),
-      ]);
-
-      setArrivals(newest.data.products);
-      setOnSale(sale.data.products);
-      setFeatured(picks.data.products);
-      setCategories(cats.data);
-      setCollections(cols.data);
-    } catch (err) {
-      // Every section returns null on empty data, so without this the page
-      // renders completely blank and looks like the store has nothing in it
-      setError(
-        err.response?.data?.message ||
-          "We couldn't load the store just now. Please try again.",
-      );
-    } finally {
-      setLoading(false);
-    }
-  }, []);
+  // Bumped by "Try again" to re-run the effect below. Keeping the fetch inside
+  // the effect avoids calling a setState-bearing callback from it.
+  const [attempt, setAttempt] = useState(0);
 
   useEffect(() => {
+    let active = true;
+
+    const load = async () => {
+      setLoading(true);
+      setError("");
+
+      try {
+        // Featured is its own request now. Filtering the newest twelve for
+        // isFeatured meant an older featured product could never appear.
+        const [newest, sale, picks, cats, cols] = await Promise.all([
+          axios.get("/api/products", {
+            params: { sort: "newest", pageSize: 12 },
+          }),
+          axios.get("/api/products", {
+            params: { onSale: "true", pageSize: 12 },
+          }),
+          axios.get("/api/products", {
+            params: { featured: "true", pageSize: 12 },
+          }),
+          axios.get("/api/categories"),
+          axios.get("/api/collections", { params: { published: "true" } }),
+        ]);
+
+        setArrivals(newest.data.products);
+        setOnSale(sale.data.products);
+        setFeatured(picks.data.products);
+        setCategories(cats.data);
+        setCollections(cols.data);
+      } catch (err) {
+        // Every section returns null on empty data, so without this the page
+        // renders completely blank and looks like the store has nothing in it
+        setError(
+          err.response?.data?.message ||
+            "We couldn't load the store just now. Please try again.",
+        );
+      } finally {
+        if (active) setLoading(false);
+      }
+    };
+
     load();
-  }, [load]);
+
+    return () => {
+      active = false;
+    };
+  }, [attempt]);
 
   if (loading) {
     return (
@@ -80,7 +90,7 @@ function HomePage() {
 
         <button
           type="button"
-          onClick={load}
+          onClick={() => setAttempt((n) => n + 1)}
           className="inline-flex items-center gap-2 bg-navy text-white px-5 py-2.5 rounded-lg text-sm hover:bg-navy-dark cursor-pointer"
         >
           <RefreshCw size={15} />

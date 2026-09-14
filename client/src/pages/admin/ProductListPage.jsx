@@ -333,6 +333,7 @@ function ProductListPage() {
           options={[
             { value: 'newest', label: 'Newest first' },
             { value: 'oldest', label: 'Oldest first' },
+            { value: 'best-selling', label: 'Best selling' },
             { value: 'name-asc', label: 'Name A-Z' },
             { value: 'name-desc', label: 'Name Z-A' },
             { value: 'price-asc', label: 'Price low to high' },

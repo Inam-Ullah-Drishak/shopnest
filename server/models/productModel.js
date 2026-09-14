@@ -40,6 +40,12 @@ const productSchema = new mongoose.Schema(
     countInStock: { type: Number, required: true, default: 0, min: 0 },
     tags: { type: [String], default: [] },
 
+    // Denormalised from orders. Moved in the same atomic write that reserves
+    // stock, and put back if the order is cancelled, so it counts units that
+    // were actually bought and kept. Sorting the shop by sales needs a plain
+    // field -- an aggregation can't be combined with the filters and paging.
+    unitsSold: { type: Number, default: 0, min: 0, index: true },
+
     // Denormalised from reviews, recalculated when one is added or removed
     rating: { type: Number, default: 0, min: 0, max: 5 },
     numReviews: { type: Number, default: 0 },

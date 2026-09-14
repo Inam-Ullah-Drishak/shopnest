@@ -23,7 +23,7 @@ const releaseStock = async (items) => {
 
     await Product.updateOne(
       { _id: item.product },
-      { $inc: { countInStock: item.qty } }
+      { $inc: { countInStock: item.qty, unitsSold: -item.qty } }
     );
   }
 };
@@ -80,9 +80,10 @@ const reserveStock = async (items) => {
           $inc: {
             'variants.$.countInStock': -item.qty,
             countInStock: -item.qty,
+            unitsSold: item.qty,
           },
         }
-      : { $inc: { countInStock: -item.qty } };
+      : { $inc: { countInStock: -item.qty, unitsSold: item.qty } };
 
     const result = await Product.updateOne(filter, update);
 
@@ -541,6 +542,7 @@ export const updateOrderStatus = asyncHandler(async (req, res) => {
   pushHistory(order, status, note, req.user._id);
 
   const updated = await order.save();
+
   res.json(updated);
 });
 

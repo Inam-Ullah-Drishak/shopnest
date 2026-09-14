@@ -9,6 +9,7 @@ import QuantityInput from "../components/QuantityInput.jsx";
 import StarRating from "../components/StarRating.jsx";
 import WishlistButton from "../components/WishlistButton.jsx";
 import ProductReviews from "../components/ProductReviews.jsx";
+import ProductSlider from "../components/ProductSlider.jsx";
 import { formatPrice } from "../utils/format.js";
 import { usePageTitle } from "../hooks/usePageTitle.js";
 
@@ -22,6 +23,7 @@ function ProductPage() {
   const [error, setError] = useState("");
   const [qty, setQty] = useState(1);
   const [selected, setSelected] = useState({});
+  const [related, setRelated] = useState({ id: null, items: [] });
   usePageTitle(product?.name);
   useEffect(() => {
     const fetchProduct = async () => {
@@ -56,6 +58,27 @@ function ProductPage() {
 
     fetchProduct();
   }, [id]);
+
+  // Separate from the product fetch on purpose: this row is a nicety, so a
+  // slow or failed call here should not delay or break the page itself
+  useEffect(() => {
+    let active = true;
+
+    axios
+      .get(`/api/products/${id}/related`, { params: { limit: 8 } })
+      .then(({ data }) => {
+        if (active) setRelated({ id, items: data });
+      })
+      .catch(() => {});
+
+    return () => {
+      active = false;
+    };
+  }, [id]);
+
+  // Tied to the id it was fetched for, so moving to another product shows an
+  // empty row instead of the previous product's suggestions
+  const relatedItems = related.id === id ? related.items : [];
 
   const hasVariants = product?.variants?.length > 0;
 
@@ -262,6 +285,16 @@ function ProductPage() {
         productId={product._id}
         rating={product.rating || 0}
         numReviews={product.numReviews || 0}
+      />
+
+      <ProductSlider
+        title="You may also like"
+        seeAllLink={
+          categoryName
+            ? `/shop?category=${encodeURIComponent(categoryName)}`
+            : "/shop"
+        }
+        products={relatedItems}
       />
     </div>
   );

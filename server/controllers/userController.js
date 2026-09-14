@@ -161,3 +161,156 @@ export const updateUserProfile = asyncHandler(async (req, res) => {
     createdAt: updated.createdAt,
   });
 });
+
+// --- Saved addresses -------------------------------------------------------
+
+const REQUIRED_ADDRESS_FIELDS = ['address', 'city', 'postalCode', 'phone'];
+
+// Trims, defaults the country, and rejects a half-filled form before it
+// reaches Mongoose, so the message names the missing field.
+const cleanAddress = (body) => {
+  const missing = REQUIRED_ADDRESS_FIELDS.filter(
+    (field) => !String(body?.[field] ?? '').trim()
+  );
+
+  if (missing.length) {
+    return { ok: false, missing };
+  }
+
+  return {
+    ok: true,
+    value: {
+      label: String(body.label || '').trim(),
+      address: String(body.address).trim(),
+      city: String(body.city).trim(),
+      postalCode: String(body.postalCode).trim(),
+      country: String(body.country || 'Pakistan').trim(),
+      phone: String(body.phone).trim(),
+    },
+  };
+};
+
+// Exactly one default, always. Called after any change that could disturb it.
+const settleDefault = (user, preferredId = null) => {
+  if (user.addresses.length === 0) return;
+
+  const preferred =
+    (preferredId && user.addresses.id(preferredId)) ||
+    user.addresses.find((a) => a.isDefault) ||
+    user.addresses[0];
+
+  user.addresses.forEach((entry) => {
+    entry.isDefault = entry._id.toString() === preferred._id.toString();
+  });
+};
+
+// GET /api/users/addresses  — protected
+export const getAddresses = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id).select('addresses');
+
+  if (!user) {
+    res.status(404);
+    throw new Error('Account not found');
+  }
+
+  res.json(user.addresses);
+});
+
+// POST /api/users/addresses  — protected
+export const addAddress = asyncHandler(async (req, res) => {
+  const cleaned = cleanAddress(req.body);
+
+  if (!cleaned.ok) {
+    res.status(400);
+    throw new Error(`Please fill in: ${cleaned.missing.join(', ')}`);
+  }
+
+  const user = await User.findById(req.user._id);
+
+  if (!user) {
+    res.status(404);
+    throw new Error('Account not found');
+  }
+
+  // A cap keeps the document small and the picker usable
+  if (user.addresses.length >= 10) {
+    res.status(400);
+    throw new Error('You can save up to 10 addresses. Remove one first.');
+  }
+
+  user.addresses.push(cleaned.value);
+
+  const added = user.addresses[user.addresses.length - 1];
+
+  // The first one saved becomes the default whether they asked or not
+  const makeDefault = req.body.isDefault === true || user.addresses.length === 1;
+
+  settleDefault(user, makeDefault ? added._id : null);
+
+  await user.save();
+
+  res.status(201).json(user.addresses);
+});
+
+// PUT /api/users/addresses/:addressId  — protected
+export const updateAddress = asyncHandler(async (req, res) => {
+  const cleaned = cleanAddress(req.body);
+
+  if (!cleaned.ok) {
+    res.status(400);
+    throw new Error(`Please fill in: ${cleaned.missing.join(', ')}`);
+  }
+
+  const user = await User.findById(req.user._id);
+  const entry = user?.addresses.id(req.params.addressId);
+
+  if (!entry) {
+    res.status(404);
+    throw new Error('Address not found');
+  }
+
+  entry.set(cleaned.value);
+
+  settleDefault(user, req.body.isDefault === true ? entry._id : null);
+
+  await user.save();
+
+  res.json(user.addresses);
+});
+
+// DELETE /api/users/addresses/:addressId  — protected
+export const deleteAddress = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const entry = user?.addresses.id(req.params.addressId);
+
+  if (!entry) {
+    res.status(404);
+    throw new Error('Address not found');
+  }
+
+  entry.deleteOne();
+
+  // Removing the default promotes whichever is left
+  settleDefault(user);
+
+  await user.save();
+
+  res.json(user.addresses);
+});
+
+// PUT /api/users/addresses/:addressId/default  — protected
+export const setDefaultAddress = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.user._id);
+  const entry = user?.addresses.id(req.params.addressId);
+
+  if (!entry) {
+    res.status(404);
+    throw new Error('Address not found');
+  }
+
+  settleDefault(user, entry._id);
+
+  await user.save();
+
+  res.json(user.addresses);
+});

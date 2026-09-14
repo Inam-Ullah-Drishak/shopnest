@@ -7,6 +7,7 @@ import {
   deleteProduct,
   getProductCategories,
   bulkAction,
+  getRelatedProducts,
 } from '../controllers/productController.js';
 import {
   exportProducts,
@@ -32,6 +33,8 @@ router.get('/export', protect, admin, exportProducts);
 router.get('/template', protect, admin, downloadTemplate);
 router.post('/import', protect, admin, importProducts);
 router.post('/bulk', protect, admin, bulkAction);
+
+router.get('/:id/related', getRelatedProducts);
 
 // Reviews live under the product they belong to
 router.get('/:id/reviews', getProductReviews);

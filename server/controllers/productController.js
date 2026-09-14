@@ -211,6 +211,7 @@ export const getProducts = asyncHandler(async (req, res) => {
     'stock-asc': { countInStock: 1 },
     'stock-desc': { countInStock: -1 },
     'rating-desc': { rating: -1, numReviews: -1 },
+    'best-selling': { unitsSold: -1, rating: -1 },
   };
 
   const sort = sortMap[req.query.sort] || sortMap.newest;
@@ -254,6 +255,57 @@ export const getProductById = asyncHandler(async (req, res) => {
   res.json(product);
 });
 
+// GET /api/products/:id/related?limit=8
+// Three passes, widening each time: same category, then shared tags, then
+// simply recent. A thin catalogue still fills the row rather than showing an
+// empty section, and nothing is ever repeated.
+export const getRelatedProducts = asyncHandler(async (req, res) => {
+  const limit = Math.min(Number(req.query.limit) || 8, 20);
+
+  const product = await Product.findById(req.params.id);
+
+  if (!product) {
+    res.status(404);
+    throw new Error('Product not found');
+  }
+
+  const seen = [product._id];
+  const picked = [];
+
+  const take = async (extra) => {
+    const remaining = limit - picked.length;
+
+    if (remaining <= 0) return;
+
+    const found = await Product.find({
+      status: 'active',
+      _id: { $nin: seen },
+      ...extra,
+    })
+      .sort({ rating: -1, numReviews: -1, createdAt: -1 })
+      .limit(remaining);
+
+    for (const doc of found) {
+      seen.push(doc._id);
+      picked.push(doc);
+    }
+  };
+
+  // Older products may have only the denormalised name and no category ref
+  if (product.category) {
+    await take({ category: product.category });
+  } else if (product.categoryName) {
+    await take({ categoryName: product.categoryName });
+  }
+
+  if (product.tags?.length) {
+    await take({ tags: { $in: product.tags } });
+  }
+
+  await take({});
+
+  res.json(picked);
+});
 // POST /api/products  — admin
 export const createProduct = asyncHandler(async (req, res) => {
   const {

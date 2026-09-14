@@ -48,9 +48,14 @@ export function AuthProvider({ children }) {
   const [userInfo, setUserInfo] = useState(readStoredUser);
   const toast = useToast();
 
-  // Read inside the interceptor without re-registering it on every change
+  // Read inside the interceptor without re-registering it on every change.
+  // Written in an effect, not during render: React treats a render-time ref
+  // write as a side effect and it can be lost under concurrent rendering.
   const userRef = useRef(userInfo);
-  userRef.current = userInfo;
+
+  useEffect(() => {
+    userRef.current = userInfo;
+  }, [userInfo]);
 
   const login = (data) => {
     setUserInfo(data);

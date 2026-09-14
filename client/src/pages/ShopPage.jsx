@@ -247,6 +247,7 @@ function ShopPage() {
           onChange={(v) => setParam({ sort: v })}
           options={[
             { value: "newest", label: "Newest first" },
+            { value: "best-selling", label: "Best selling" },
             { value: "rating-desc", label: "Best rated" },
             { value: "name-asc", label: "Name A–Z" },
             { value: "name-desc", label: "Name Z–A" },

@@ -43,12 +43,20 @@ export function CartProvider({ children }) {
   const toast = useToast();
 
   // Read these inside refreshCart without making it a new function on every
-  // render, which would restart the effect that calls it
+  // render, which would restart the effect that calls it. Written in effects
+  // rather than during render, which React treats as a side effect.
   const cartRef = useRef(cartItems);
-  cartRef.current = cartItems;
 
+  useEffect(() => {
+    cartRef.current = cartItems;
+  }, [cartItems]);
+
+  // ToastProvider rebuilds this object every render, so no dependency list
   const toastRef = useRef(toast);
-  toastRef.current = toast;
+
+  useEffect(() => {
+    toastRef.current = toast;
+  });
 
   useEffect(() => {
     localStorage.setItem('cartItems', JSON.stringify(cartItems));

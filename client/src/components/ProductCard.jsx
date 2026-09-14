@@ -1,10 +1,14 @@
 import { Link } from 'react-router-dom';
-import { ImageOff } from 'lucide-react';
+import { ImageOff, ShoppingCart } from 'lucide-react';
 import StarRating from './StarRating.jsx';
 import WishlistButton from './WishlistButton.jsx';
+import { useCart } from '../context/CartContext.jsx';
+import { useToast } from '../context/ToastContext.jsx';
 import { formatPrice } from '../utils/format.js';
 
 function ProductCard({ product }) {
+  const { addToCart } = useCart();
+  const toast = useToast();
   const stock = product.totalStock ?? product.countInStock;
   const outOfStock = stock === 0;
 
@@ -18,6 +22,30 @@ function ProductCard({ product }) {
           100
       )
     : 0;
+
+  const cartHandler = (e) => {
+    // The whole card is a link, so stop the click reaching it and keep the
+    // shopper where they are
+    e.preventDefault();
+    e.stopPropagation();
+
+    // A variant product needs one picked. Take the first that's actually in
+    // stock, and name it in the toast so it isn't a silent guess -- they can
+    // change it on the product page if it isn't the one they wanted.
+    const variant = product.variants?.length
+      ? product.variants.find((v) => v.countInStock > 0) || product.variants[0]
+      : null;
+
+    addToCart(product, 1, variant);
+
+    const label = variant?.options?.map((o) => o.value).join(' / ');
+
+    toast?.success(
+      label
+        ? `${product.name} (${label}) added to your cart`
+        : `${product.name} added to your cart`
+    );
+  };
 
   return (
     <Link
@@ -98,6 +126,22 @@ function ProductCard({ product }) {
             {product.optionTypes[0]?.name.toLowerCase() || 'option'}s
           </p>
         )}
+
+        <button
+          type="button"
+          onClick={cartHandler}
+          disabled={outOfStock}
+          className="w-full inline-flex items-center justify-center gap-2 bg-navy text-white text-sm rounded-lg py-2.5 mt-3 hover:bg-navy-dark disabled:bg-gray-200 disabled:text-gray-500 disabled:cursor-not-allowed cursor-pointer"
+        >
+          {outOfStock ? (
+            'Out of stock'
+          ) : (
+            <>
+              <ShoppingCart size={15} />
+              Add to cart
+            </>
+          )}
+        </button>
       </div>
     </Link>
   );
